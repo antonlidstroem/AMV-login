@@ -11,7 +11,7 @@
         <input type="email" required />
       </div>
 
-      <button class="btn-login">{{ t('sendReset') }}</button>
+      <button class="btn-common">{{ t('sendReset') }}</button>
     </form>
 
     <div class="back-link">

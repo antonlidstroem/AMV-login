@@ -453,3 +453,24 @@ a:hover {
   display: block;
 }
 
+
+.btn-common {
+  @apply w-full flex items-center justify-center gap-2 px-4 py-3 font-bold rounded-md;
+  background-color: #0ea5e9;
+  color: white;
+  transition: background-color 0.2s;
+  margin-bottom: 12px; /* lägger lite mellanrum mellan knapparna */
+}
+
+.btn-common:last-child {
+  margin-bottom: 0; /* tar bort margin på sista knappen */
+}
+
+.btn-common:hover {
+  background-color: #0aa3d6; /* lite mörkare nyans på hover */
+}
+
+.btn-common img {
+  @apply h-6; /* justerar ikonens höjd */
+}
+
