@@ -27,11 +27,11 @@
     </div>
 
     <div class="bankid-options">
-      <button @click="$emit('changeView','mobilebankid')" class="btn-bankid">
+      <button @click="$emit('change-view','mobilebankid')" class="btn-bankid">
         📱 Mobilt BankID
       </button>
 
-      <button @click="$emit('changeView','bankiddevice')" class="btn-bankid-alt">
+      <button @click="$emit('change-view','bankiddevice')" class="btn-bankid-alt">
         💻 BankID på denna enhet
       </button>
     </div>
@@ -40,7 +40,7 @@
 
 <script>
 export default {
-  emits: ['changeView'],
+  emits: ['change-view'],
 
   data() {
     return {

@@ -15,8 +15,8 @@
 </template>
 
 <script>
-import LoginForm from './LoginForm.vue'
-import ForgotPassword from './ForgotPassword.vue'
+import LoginForm from './LeftViews/LoginForm.vue'
+import ForgotPassword from './LeftViews/ForgotPassword.vue'
 
 export default {
   props:['currentView'],
