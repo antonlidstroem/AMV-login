@@ -1,13 +1,9 @@
 <template>
   <div class="vpage">
 
-    <LoginForm
-      v-if="currentView === 'login'"
-      @change-view="$emit('change-view',$event)"
-    />
-
-    <ForgotPassword
-      v-if="currentView === 'forgot'"
+<!-- Dynamically render the component based on currentView prop -->
+    <component
+      :is="currentComponent"
       @change-view="$emit('change-view',$event)"
     />
 
@@ -17,11 +13,41 @@
 <script>
 import LoginForm from './LeftViews/LoginForm.vue'
 import ForgotPassword from './LeftViews/ForgotPassword.vue'
+import MobileBankId from './LeftViews/MobileBankId.vue'
+import BankIdDevice from './LeftViews/BankIdDevice.vue'
+import { useI18n } from '../i18n/useI18n'
+
 
 export default {
   props:['currentView'],
-  components:{ LoginForm, ForgotPassword }
+
+  components:{ 
+    LoginForm, 
+    ForgotPassword, 
+    MobileBankId, 
+    BankIdDevice  
+  },
+
+  setup(){
+    const { t } = useI18n()
+    return{ t }
+  },
+
+  computed:{
+    currentComponent(){
+
+      const views = {
+        login: 'LoginForm',
+        forgot: 'ForgotPassword',
+        mobilebankid: 'MobileBankId',
+        bankiddevice: 'BankIdDevice'
+      }
+
+      return views[this.currentView] || 'LoginForm'
+    }
+  }
 }
+
 </script>
 
 
