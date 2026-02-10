@@ -5,6 +5,7 @@
       <img :src="AMVLogo" alt="AMV Logo" class="amv-logo" />
     </div>
 
+
     <form @submit.prevent="handleLogin" class="login-form" >
       <div class="form-group">
         <label>{{ t('username') }}</label>
