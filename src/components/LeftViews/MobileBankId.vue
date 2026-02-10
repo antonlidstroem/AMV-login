@@ -1,8 +1,8 @@
 <template>
   <div class="mobile-bankid">
 
-    <h2>Logga in med Mobilt BankID</h2>
-    <p>Skanna QR-koden med BankID-appen på din mobil.</p>
+    <h2>{{ t('loginWithMobileBankID') }}</h2>
+    <p>{{ t('scanQRCode') }}</p>
 
     <div class="qr-wrapper">
       <div class="fake-qr"></div>
@@ -10,7 +10,7 @@
 
     <div class="links">
       <a href="#" @click.prevent="$emit('change-view','login')">
-        ← Tillbaka
+        ← {{ t('back') }}
       </a>
 
       <a
@@ -18,21 +18,27 @@
         target="_blank"
         rel="noopener noreferrer"
       >
-        Om BankID
+        {{ t('aboutBankID') }}
       </a>
     </div>
 
-    <div class="divider"><span>Eller</span></div>
+    <div class="divider"><span>{{ t('or') }}</span></div>
 
     <button @click="$emit('change-view','bankiddevice')">
-      💻 BankID på denna enhet
+      💻 {{ t('bankIDThisDevice') }}
     </button>
 
   </div>
 </template>
 
 <script>
+import { useI18n } from '../../i18n/useI18n'
+
 export default {
-  emits:['change-view','about-bankid']
+  emits:['change-view','about-bankid'],
+  setup() {
+    const { t } = useI18n()
+    return { t }
+  }
 }
 </script>

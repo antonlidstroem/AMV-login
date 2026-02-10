@@ -1,25 +1,22 @@
 <template>
   <div class="forgot-password-page">
 
-    <h2>Återställ lösenord</h2>
+    <h2>{{ t('resetPassword') }}</h2>
 
-    <p>
-      Ange din e-postadress så skickar vi instruktioner
-      för att återställa ditt lösenord.
-    </p>
+    <p>{{ t('resetPasswordDescription') }}</p>
 
     <form @submit.prevent="$emit('reset')">
       <div class="form-group">
-        <label>E-post</label>
+        <label>{{ t('email') }}</label>
         <input type="email" required />
       </div>
 
-      <button class="btn-login">Skicka återställning</button>
+      <button class="btn-login">{{ t('sendReset') }}</button>
     </form>
 
     <div class="back-link">
       <a href="#" @click.prevent="$emit('change-view','login')">
-        ← Tillbaka
+        ← {{ t('back') }}
       </a>
     </div>
 
@@ -27,7 +24,13 @@
 </template>
 
 <script>
+import { useI18n } from '../../i18n/useI18n'
+
 export default {
-  name: 'ForgotPassword'
+  name: 'ForgotPassword',
+  setup() {
+    const { t } = useI18n()
+    return { t }
+  }
 }
 </script>

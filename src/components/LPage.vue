@@ -1,5 +1,5 @@
 <template>
-  <div class="vpage">
+  <div class="lpage">
 
 <!-- Dynamically render the component based on currentView prop -->
     <component
@@ -37,13 +37,13 @@ export default {
     currentComponent(){
 
       const views = {
-        login: 'LoginForm',
-        forgot: 'ForgotPassword',
-        mobilebankid: 'MobileBankId',
-        bankiddevice: 'BankIdDevice'
+        login: LoginForm,
+        forgot: ForgotPassword,
+        mobilebankid: MobileBankId,
+        bankiddevice: BankIdDevice
       }
 
-      return views[this.currentView] || 'LoginForm'
+      return views[this.currentView] || LoginForm
     }
   }
 }
@@ -53,7 +53,7 @@ export default {
 
 
 <style scoped>
-.vpage {
+.lpage {
   width: 50%;
   padding: 20px;
   background-color: #f0f0f0;
