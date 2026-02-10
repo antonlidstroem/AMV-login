@@ -29,8 +29,10 @@
 
     <div class="divider"><span>{{ t('or') }}</span></div>
 
-    <button @click="$emit('change-view','mobilebankid')">
-      {{ t('mobileBankId') }}
+    <button @click="$emit('change-view','mobilebankid')" class="btn-bankid-alt" >
+      <img :src="bankIdLogo" alt="BankID" class="bankid-icon" />
+      {{ t('mobileBankID') }}
+      
     </button>
 
   </div>
@@ -38,13 +40,16 @@
 
 <script>
 import { useI18n } from '../../i18n/useI18n'
+import bankIdLogo from '../../assets/BankID_logo_white.png'
+
+
 
 export default {
   emits:['change-view'],
 
   setup() {
     const { t } = useI18n()
-    return { t }
+    return { t, bankIdLogo }
   }
 }
 </script>

@@ -21,31 +21,77 @@ h1 {
   line-height: 1.1;
 }
 
-/* ===== APP LAYOUT ===== */
+/* ===== CONTAINER ===== */
 .container {
   display: flex;
-  height: 100vh;
-  width: 100%;
+  flex-direction: row;          /* Standard: LPage + RPage sida vid sida */
+  border-radius: 16px;
+  background-color: #ffffff;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+  overflow: hidden;
+
+  /* Centrering */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  width: 80vw;                  
+  max-width: 800px;             
+  min-width: 280px;             
+  aspect-ratio: 1/2;           
+  max-height: 60vh;             
 }
 
 /* ===== LEFT PAGE ===== */
 .lpage {
-  width: 50%;
-  background-color: white;
+  flex: 1;                      
+  background-color: #f0f0f0;    
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 40px;
+  padding: 2em;
 }
 
 /* ===== RIGHT PAGE ===== */
 .rpage {
-  width: 50%;
-  position: relative;
-  background: linear-gradient(135deg, #3b82f6, #1e40af);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 2em;
+
   color: white;
-  padding: 20px;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.5);
+
+  /* Bakgrundsbild */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
+
+/* ===== RESPONSIVT: stapla vertikalt på små skärmar ===== */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;     
+    width: 90vw;               
+    height: auto;               
+    aspect-ratio: unset;        
+  }
+
+  .lpage {
+    width: 100%;                
+    flex: 1;                    
+    min-height: 150px;          
+  }
+  .rpage {
+    width: 100%;                
+    flex: 1;                    
+    min-height: 150px;          
+  }
+}
+
 
 /* ===== HEADER BUTTONS ===== */
 .btn-header {
@@ -138,6 +184,7 @@ h1 {
 .forgot-password {
   margin-top: 10px;
   font-size: 14px;
+  text-align: right;
 }
 
 .forgot-password a {
@@ -373,3 +420,32 @@ a:hover {
 .help-content .btn-close:hover {
   background-color: #999;
 }
+
+.btn-bankid,
+.btn-bankid-alt {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  background-color: #0ea5e9;  
+  color: white;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px; 
+}
+
+.btn-bankid img,
+.btn-bankid-alt img {
+  height: 24px; 
+}
+
+.amv-logo {
+  height: 60px;
+  margin: 0 auto 60px auto; /* centrerar horisontellt */
+  display: block;
+}
+

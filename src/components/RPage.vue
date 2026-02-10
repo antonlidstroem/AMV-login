@@ -1,5 +1,5 @@
 <template>
-  <div class="rpage">
+  <div class="rpage" :style="{ backgroundImage: `url(${bgImage})` }">
     <button @click="showContact = true" class="btn-header">{{ t('contact') }}</button>
     <button @click="showHelp = true" class="btn-header">{{ t('help') }}</button>
 
@@ -31,6 +31,7 @@ import { ref } from 'vue'
 import { useI18n } from '../i18n/useI18n'
 import ContactModal from './RightViews/ContactModal.vue'
 import HelpModal from './RightViews/HelpModal.vue'
+import bgImage from '../assets/RPageCard.jpg'
 
 export default {
   components: { ContactModal, HelpModal },
@@ -52,7 +53,8 @@ export default {
       showContact,
       showHelp,
       showLanguageMenu,
-      selectLanguage
+      selectLanguage,
+      bgImage 
     }
   }
 }
