@@ -47,7 +47,9 @@ export const translations = {
     goBack: 'Gå tillbaka',
     forgotPasswordHelp: 'Om du har glömt ditt lösenord kan du återställa det genom att klicka på "Glömt lösenord?" på inloggningssidan.',
     noEmailAccessHelp: 'Om du inte längre har tillgång till den e-postadress som är kopplad till ditt konto, vänligen kontakta vår support.',
-    systemErrorHelp: 'Om du har stött på ett tekniskt fel, vänligen kontakta vår support och beskriv problemet så detaljerat som möjligt.'
+    systemErrorHelp: 'Om du har stött på ett tekniskt fel, vänligen kontakta vår support och beskriv problemet så detaljerat som möjligt.',
+    contactOtherInfo: "I övriga frågor, välkommen att kontakta oss:",
+    contactLoginInfo: "Om det gäller inloggningsuppgifter eller lösenordsåterställning, kontakta i första hand:"
   },
   en: {
     welcome: 'Welcome',
@@ -97,7 +99,10 @@ export const translations = {
     goBack: 'Go back',
     forgotPasswordHelp: 'If you have forgotten your password, you can reset it by clicking "Forgot password?" on the login page.',
     noEmailAccessHelp: 'If you no longer have access to the email address associated with your account, please contact our support.',
-    systemErrorHelp: 'If you have encountered a technical error, please contact our support and describe the problem in as much detail as possible.'
+    systemErrorHelp: 'If you have encountered a technical error, please contact our support and describe the problem in as much detail as possible.',
+
+    contactOtherInfo: "ADD TRANSLATION HERE",
+    contactLoginInfo:  "ADD TRANSLATION HERE"
   },
   no: {
     welcome: 'Velkommen',
@@ -147,7 +152,10 @@ export const translations = {
     goBack: 'Gå tilbake',
     forgotPasswordHelp: 'Hvis du har glemt passordet, kan du tilbakestille det ved å klikke "Glemt passord?" på påloggingssiden.',
     noEmailAccessHelp: 'Hvis du ikke lenger har tilgang til e-postadressen knyttet til kontoen din, vennligst kontakt vår support.',
-    systemErrorHelp: 'Hvis du har støtt på en teknisk feil, vennligst kontakt vår support og beskriv problemet så detaljert som mulig.'
+    systemErrorHelp: 'Hvis du har støtt på en teknisk feil, vennligst kontakt vår support og beskriv problemet så detaljert som mulig.',
+
+        contactOtherInfo: "ADD TRANSLATION HERE",
+    contactLoginInfo:  "ADD TRANSLATION HERE"
   },
   fi: {
     welcome: 'Tervetuloa',
@@ -197,7 +205,10 @@ export const translations = {
     goBack: 'Palaa takaisin',
     forgotPasswordHelp: 'Jos olet unohtanut salasanasi, voit nollata sen klikkaamalla "Unohditko salasanasi?" kirjautumissivulla.',
     noEmailAccessHelp: 'Jos sinulla ei enää ole pääsyä tilisi sähköpostiosoitteeseen, ota yhteyttä tukeemme.',
-    systemErrorHelp: 'Jos kohtaat teknisen virheen, ota yhteyttä tukeemme ja kuvaile ongelma mahdollisimman tarkasti.'
+    systemErrorHelp: 'Jos kohtaat teknisen virheen, ota yhteyttä tukeemme ja kuvaile ongelma mahdollisimman tarkasti.',
+
+        contactOtherInfo: "ADD TRANSLATION HERE",
+    contactLoginInfo:  "ADD TRANSLATION HERE"
   }
 }
 export const languageNames = {
