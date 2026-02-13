@@ -22,7 +22,7 @@
       </a>
     </div>
 
-    <div class="divider"><span>{{ t('or') }}</span></div>
+    <div class="divider"><span>{{ t('orBankId') }}</span></div>
 
     <button @click="$emit('change-view','bankiddevice')" class="btn-bankid-alt">
       <img :src="bankIdLogo" alt="BankID" class="bankid-icon" />

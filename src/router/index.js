@@ -1,10 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { authStore } from '../stores/authStore'
 
 const routes=[
   { path:'/', component:()=>import('../App.vue') },
   { path:'/dashboard',
-    component:()=>import('../components/dashboard.vue'),
+    component:()=>import('../views/LoginView.vue'),
     meta:{ requiresAuth:true }
   }
 ]
@@ -15,8 +14,9 @@ export const router = createRouter({
 })
 
 router.beforeEach((to)=>{
+  const isLoggedIn = localStorage.getItem('mockLogin')
 
-  if(to.meta.requiresAuth && !authStore.isAuthenticated){
+  if(to.meta.requiresAuth && !isLoggedIn){
     return '/'
   }
 })

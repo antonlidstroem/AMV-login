@@ -1,12 +1,12 @@
 <template>
-  <div class="bankid-device">
+  <div>
 
-    <h2>{{ t('loginBankId') }}</h2>
-    <p>{{ t('enterBankIdCode') }}</p>
+    <h2>{{ t('loginWithBankID') }}</h2>
+    <p>{{ t('enterSecurityCode') }}</p>
 
     <div class="waiting-box">
       <div class="spinner"></div>
-      <p>{{ t('waitingBankId') }}</p>
+      <p>{{ t('waitingForBankId') }}</p>
     </div>
 
     <div class="links">
@@ -23,14 +23,14 @@
         target="_blank"
         rel="noopener noreferrer"
       >
-        {{ t('aboutBankId') }}
+        {{ t('aboutMobileBankID') }}
       </a>
     </div>
 
-    <div class="divider"><span>{{ t('or') }}</span></div>
+    <div class="divider"><span>{{ t('orBankId') }}</span></div>
 
-    <button @click="$emit('change-view','mobilebankid')" class="btn-common" >
-      <img :src="bankIdLogo" alt="BankID" class="bankid-icon" />
+    <button @click="$emit('change-view','mobilebankid')" class="btn btn-primary w-100" >
+      <img :src="bankIdLogo" alt="BankID" />
       {{ t('mobileBankID') }}
       
     </button>
@@ -41,6 +41,7 @@
 <script>
 import { useI18n } from '../../i18n/useI18n'
 import bankIdLogo from '../../assets/BankID_logo_white.png'
+import AMVLogo from '../../assets/logo_horizontal.svg'
 
 
 
@@ -49,7 +50,7 @@ export default {
 
   setup() {
     const { t } = useI18n()
-    return { t, bankIdLogo }
+    return { t, bankIdLogo, AMVLogo }
   }
 }
 </script>

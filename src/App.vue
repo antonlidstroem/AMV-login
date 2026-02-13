@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container-fluid vh-100 d-flex">
     <LPage
       :currentView="currentView"
       @change-view="currentView = $event"
@@ -23,9 +23,3 @@ export default {
   }
 };
 </script>
-
-<style>
-.container {
-  display: flex;
-}
-</style>

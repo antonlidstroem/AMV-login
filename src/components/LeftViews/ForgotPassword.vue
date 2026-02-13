@@ -1,36 +1,72 @@
 <template>
-  <div class="forgot-password-page">
+<div>
 
-    <h2>{{ t('resetPassword') }}</h2>
+  <h2>{{ t('resetPassword') }}</h2>
+  <p>{{ t('resetPasswordDescription') }}</p>
 
-    <p>{{ t('resetPasswordDescription') }}</p>
-
-    <form @submit.prevent="$emit('reset')">
-      <div class="form-group">
-        <label>{{ t('email') }}</label>
-        <input type="email" required />
-      </div>
-
-      <button class="btn-common">{{ t('sendReset') }}</button>
-    </form>
-
-    <div class="back-link">
-      <a href="#" @click.prevent="$emit('change-view','login')">
-        ← {{ t('back') }}
-      </a>
-    </div>
-
+  <div v-if="error" class="error-banner">
+    Ange en giltig e-postadress
   </div>
+
+  <input
+    v-model="email"
+    class="form-control mb-3"
+    :class="{ 'error-border': error }"
+  />
+
+  <button class="btn btn-primary w-100" @click="send">
+    Skicka
+  </button>
+
+  <Popup
+    v-if="success"
+    title="✔"
+    text="Ett nytt mail har skickats till den adress du angav."
+    button="Okej, stäng fönster"
+    @close="success=false"
+  />
+
+  <div class="back-link mt-3">
+    <a href="#" @click.prevent="$emit('change-view','login')">
+      ← {{ t('back') }}
+    </a>
+  </div>
+
+</div>
 </template>
+
 
 <script>
 import { useI18n } from '../../i18n/useI18n'
+import Popup from '../common/Popup.vue'
 
 export default {
-  name: 'ForgotPassword',
-  setup() {
+  name:'ForgotPassword',
+  components:{ Popup },
+
+  data(){
+    return{
+      email:'',
+      error:false,
+      success:false
+    }
+  },
+
+  methods:{
+    send(){
+      if(!this.email.includes('@')){
+        this.error=true
+      }else{
+        this.error=false
+        this.success=true
+      }
+    }
+  },
+
+  setup(){
     const { t } = useI18n()
     return { t }
   }
 }
 </script>
+

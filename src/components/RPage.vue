@@ -1,5 +1,7 @@
 <template>
-  <div class="rpage" :style="{ backgroundImage: `url(${bgImage})` }">
+  <div class="col-md-6 text-white d-flex flex-column justify-content-start" 
+    :style="{ backgroundImage: `url(${bgImage})`, backgroundSize: 'cover'}">
+    
     <button @click="showContact = true" class="btn-header">{{ t('contact') }}</button>
     <button @click="showHelp = true" class="btn-header">{{ t('help') }}</button>
 
