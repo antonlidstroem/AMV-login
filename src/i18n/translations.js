@@ -11,6 +11,7 @@ export const translations = {
     forgotPasswordQuestion: 'Glömt lösenord?',
     clickHere: 'Klicka här',
     orBankId: 'Logga in med BankID',
+    or: 'Eller',
     mobileBankID: 'Mobilt BankID',
     bankIDThisDevice: 'BankID på den här enheten',
     resetPassword: 'Återställ lösenord',
@@ -27,7 +28,7 @@ export const translations = {
     newEmailSentMessage: 'Ett nytt e-postmeddelande har skickats till {email}.',
     okayClose: 'Okej, stäng fönster',
     loginWithMobileBankID: 'Logga in med Mobilt BankID',
-    scanQRCode: 'Skanna QR-koden med BankID-appen på din mobil.',
+    scanQRCode: 'Starta BankID-appen i din mobil eller surfplatta och tryck på Skanna QR-kod.',
     aboutMobileBankID: 'Om Mobilt BankID',
     loginWithBankID: 'Logga in med BankID',
     enterSecurityCode: 'Skriv in din säkerhetskod i BankID-appen på din dator.',
@@ -49,7 +50,10 @@ export const translations = {
     noEmailAccessHelp: 'Om du inte längre har tillgång till den e-postadress som är kopplad till ditt konto, vänligen kontakta vår support.',
     systemErrorHelp: 'Om du har stött på ett tekniskt fel, vänligen kontakta vår support och beskriv problemet så detaljerat som möjligt.',
     contactOtherInfo: "I övriga frågor, välkommen att kontakta oss:",
-    contactLoginInfo: "Om det gäller inloggningsuppgifter eller lösenordsåterställning, kontakta i första hand:"
+    contactLoginInfo: "Om det gäller inloggningsuppgifter eller lösenordsåterställning, kontakta i första hand:",
+    waitingForAuth: "Skriv in din säkerhetskod i BankID-appen.",
+    MobileBankIDApproved: "Säkerhetskod godkänd. Loggar in."
+
   },
   en: {
     welcome: 'Welcome',

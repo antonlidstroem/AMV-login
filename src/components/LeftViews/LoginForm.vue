@@ -32,7 +32,7 @@
 
     </div>
 
-<button class="btn btn-primary w-100">Logga in</button>
+<button type="submit" class="btn btn-primary w-100">Logga in</button>
 
 <div class="text-sm text-right">
         <span>{{ t('forgotPasswordQuestion') }}</span>

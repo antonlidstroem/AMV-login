@@ -104,4 +104,22 @@
  margin:0 auto 20px auto;
 }
 
+/* Fake QR */
+.qr-wrapper{
+ display:flex;
+ justify-content:center;
+}
 
+.fake-qr{
+ width:180px;
+ height:180px;
+ background:
+ repeating-linear-gradient(
+   45deg,
+   #000,
+   #000 6px,
+   #fff 6px,
+   #fff 12px
+ );
+ border:6px solid #000;
+}

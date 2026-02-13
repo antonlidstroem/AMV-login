@@ -24,6 +24,8 @@ import TwoFactor from './LeftViews/TwoFactor.vue'
 import ResetPasswordNew from './LeftViews/ResetPasswordNew.vue'
 import { useI18n } from '../i18n/useI18n'
 import AMVLogo from '../assets/logo_horizontal.svg'
+import MobileBankIdPending from './LeftViews/MobileBankIdPending.vue'
+import MobileBankIdApproved from './LeftViews/MobileBankIdApproved.vue'
 
 
 export default {
@@ -33,6 +35,8 @@ export default {
     LoginForm, 
     ForgotPassword, 
     MobileBankId, 
+    MobileBankIdPending,
+    MobileBankIdApproved,
     BankIdDevice, 
     TwoFactor,
     ResetPasswordNew  
@@ -50,6 +54,8 @@ export default {
         login: LoginForm,
         forgot: ForgotPassword,
         mobilebankid: MobileBankId,
+        mobilebankidpending: MobileBankIdPending,
+        mobilebankidapproved: MobileBankIdApproved,
         bankiddevice: BankIdDevice,
         twofactor:TwoFactor,
         newpassword:ResetPasswordNew
