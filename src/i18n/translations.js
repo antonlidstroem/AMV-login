@@ -15,7 +15,7 @@ export const translations = {
     mobileBankID: 'Mobilt BankID',
     bankIDThisDevice: 'BankID på den här enheten',
     resetPassword: 'Återställ lösenord',
-    resetPasswordDescription: 'Ange din e-postadress så skickar vi instruktioner för att återställa ditt lösenord.',
+    resetPasswordDescription: 'Ange den e-postadress som är kopplad till ditt konto för att återställa lösenordet.',
     email: 'E-post',
     enterEmail: 'Ange din e-postadress',
     sendReset: 'Skicka återställning',
@@ -52,7 +52,14 @@ export const translations = {
     contactOtherInfo: "I övriga frågor, välkommen att kontakta oss:",
     contactLoginInfo: "Om det gäller inloggningsuppgifter eller lösenordsåterställning, kontakta i första hand:",
     waitingForAuth: "Skriv in din säkerhetskod i BankID-appen.",
-    MobileBankIDApproved: "Säkerhetskod godkänd. Loggar in."
+    // MobileBankIDApproved: "Säkerhetskod godkänd. Loggar in.",
+    SecurityCodeApproved: "Säkerhetskod godkänd. Loggar in.",
+    enterValidEmail: "Ange en giltig e-postadress",
+    ResetPasswordEmailSent: "Ett mail med en länk för återställning har skickats till din e-postadress om den finns registrerad hos oss. Länken är giltig i 10 minuter.",
+    ResetPasswordEmailNotDelivered: "Jag har inte fått något mail.",
+    ResetPasswordEmailNotDeliveredHelp: "Det kan ta några minuter innan mailet har kommit fram. Avvakta och kontrollera att det inte har hamnat i skräpposten.",
+    goToStart: "Gå till start",
+    resendEmail: "Skicka ny återställning"
 
   },
   en: {

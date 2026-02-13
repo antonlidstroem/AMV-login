@@ -2,24 +2,23 @@
   <div class="mobile-bankid text-center">
 
     <h2>{{ t('loginWithMobileBankID') }}</h2>
-    <p class="mb-3">{{ t('waitingForAuth') }}</p>
+    <p class="mb-3">{{ t('scanQRCode') }}</p>
 
-
-<!-- Pending clock -->
-  <i class="bi bi-clock-history display-1 text-dark mb-3"></i>
+    <!-- QR -->
+    <div class="qr-wrapper mb-3">
+      <div class="fake-qr"></div>
+    </div>
 
 <!-- Step indicator with Bootstrap icons, using text-success for active step and text-secondary for inactive steps. -->
-<div class="d-flex justify-content-center align-items-center gap-2">
-  <i class="bi bi-1-circle-fill" style="color:#6c757d;"></i> 
-  <i class="bi bi-arrow-right" style="color:#000;"></i> 
-  <i class="bi bi-2-circle-fill" style="color:#85BE23;"></i> 
-  <i class="bi bi-arrow-right" style="color:#000;"></i> 
-  <i class="bi bi-3-circle-fill" style="color:#6c757d;"></i> 
-</div>
+    <div class="d-flex justify-content-center align-items-center gap-2">
+      <i class="bi bi-1-circle-fill" style="color:#85BE23;"></i> 
+      <i class="bi bi-arrow-right" style="color:#000;"></i> 
+      <i class="bi bi-2-circle-fill" style="color:#6c757d;"></i> 
+      <i class="bi bi-arrow-right" style="color:#000;"></i> 
+      <i class="bi bi-3-circle-fill" style="color:#6c757d;"></i> 
+    </div>
 
-
-
-    <!-- Länkar -->
+  <!-- Länkar -->
     <div class="d-flex justify-content-between mb-3 small">
 
       <a href="#" @click.prevent="$emit('change-view','login')">
@@ -36,7 +35,7 @@
 
     </div>
 
-    <!-- Divider med streck -->
+        <!-- Divider med streck -->
     <div class="d-flex align-items-center my-3">
       <hr class="flex-grow-1">
       <span class="px-2 small">{{ t('or') }}</span>
@@ -45,7 +44,7 @@
 
     <button
       @click="$emit('change-view','bankiddevice')"
-      class="btn-common w-100 bankid-btn"
+      class="btn-custom"
     >
       <img :src="bankIdLogo" class="bankid-icon"/>
       {{ t('bankIDThisDevice') }}
@@ -53,8 +52,8 @@
 
 <!-- 🔹 Tillfällig knapp för test -->
     <button
-      @click="$emit('change-view','mobilebankidapproved')"
-      class="btn-common w-100 bankid-btn mb-3"
+      @click="$emit('change-view','mobilebankidpending')"
+      class="btn-custom"
     >
       Simulera lyckad inloggning
     </button>
@@ -63,8 +62,8 @@
 </template>
 
 <script>
-import { useI18n } from '../../i18n/useI18n'
-import bankIdLogo from '../../assets/BankID_logo_white.png'
+import { useI18n } from '../../../i18n/useI18n'
+import bankIdLogo from '../../../assets/BankID_logo_white.png'
 
 export default {
   emits:['change-view'],

@@ -2,10 +2,10 @@
   <div class="mobile-bankid text-center">
 
     <h2>{{ t('loginWithMobileBankID') }}</h2>
-    <p class="mb-3">{{ t('MobileBankIDApproved') }}</p>
+    <p class="mb-3">{{ t('SecurityCodeApproved') }}</p>
 
 
-<!-- Pending clock -->
+
   <i class="bi bi-house-check display-1 text-dark mb-3"></i>
 
 <!-- Step indicator with Bootstrap icons, using text-success for active step and text-secondary for inactive steps. -->
@@ -30,7 +30,7 @@
 <!-- 🔹 Tillfällig knapp för test -->
         <button
         @click="$router.push('/dashboard')"
-        class="btn-common w-100 bankid-btn mb-3"
+        class="btn-custom"
         >
         Simulera lyckad inloggning
         </button>
@@ -40,8 +40,8 @@
 </template>
 
 <script>
-import { useI18n } from '../../i18n/useI18n'
-import bankIdLogo from '../../assets/BankID_logo_white.png'
+import { useI18n } from '../../../i18n/useI18n'
+import bankIdLogo from '../../../assets/BankID_logo_white.png'
 
 export default {
   emits:['change-view'],

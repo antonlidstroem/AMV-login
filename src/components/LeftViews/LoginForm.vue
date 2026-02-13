@@ -32,7 +32,7 @@
 
     </div>
 
-<button type="submit" class="btn btn-primary w-100">Logga in</button>
+<button type="submit" class="btn-custom">Logga in</button>
 
 <div class="text-sm text-right">
         <span>{{ t('forgotPasswordQuestion') }}</span>
@@ -51,13 +51,13 @@
 
         
             <button @click="$emit('change-view','mobilebankid')" 
-              class="btn-common w-100 bankid-btn">
+              class="btn-custom">
               <img :src="bankIdLogo" alt="BankID" class="bankid-icon" />
               {{ t('mobileBankID') }}
             </button>
 
             <button @click="$emit('change-view','bankiddevice')" 
-              class="btn-common w-100 bankid-btn">
+              class="btn-custom">
             <img :src="bankIdLogo" alt="BankID" class="bankid-icon" />
             {{ t('bankIDThisDevice') }}
             </button>

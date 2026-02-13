@@ -11,7 +11,7 @@
  background:var(--error);
  color:white;
  padding:10px;
- border-radius:6px;
+ border-radius:2px;
  margin-bottom:10px;
 }
 
@@ -45,23 +45,26 @@
 }
 
 /* Gemensam knapp */
-.btn-common{
- background:#0d6efd;
- color:white;
- border:none;
- border-radius:6px;
- padding:10px 14px;
- font-weight:600;
- display:flex;
- align-items:center;
- justify-content:center;
- gap:8px;
- transition:0.2s;
+.btn-custom {
+  background: linear-gradient(90deg, #486515, #628A1E);
+  color: white;
+  border: none;
+  font-weight: 600;
+  padding: 10px 16px;
+  border-radius: 6px;
+  transition: all 0.2s ease-in-out;
 }
 
-.btn-common:hover{
- background:#0b5ed7;
+.btn-custom:hover {
+  filter: brightness(1.1);
+  color: white;
 }
+
+.btn-custom:active {
+  transform: scale(0.98);
+}
+
+
 
 /* Input med ikon */
 .input-icon{

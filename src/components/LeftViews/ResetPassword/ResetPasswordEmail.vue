@@ -2,29 +2,21 @@
 <div>
 
   <h2>{{ t('resetPassword') }}</h2>
-  <p>{{ t('resetPasswordDescription') }}</p>
 
-  <div v-if="error" class="error-banner">
-    Ange en giltig e-postadress
-  </div>
+  <i class="bi bi-check-circle display-1 text-dark mb-3"></i>
 
-  <input
-    v-model="email"
-    class="form-control mb-3"
-    :class="{ 'error-border': error }"
-  />
-
-  <button class="btn btn-primary w-100" @click="send">
-    Skicka
+  <p>{{ t('ResetPasswordEmailSent') }}</p>
+  <button class="btn-custom" @click="send">
+    {{t('goToStart')}}
   </button>
 
-  <Popup
-    v-if="success"
-    title="✔"
-    text="Ett nytt mail har skickats till den adress du angav."
-    button="Okej, stäng fönster"
-    @close="success=false"
-  />
+
+  <h2>{{ t('ResetPasswordEmailNotDelivered') }}</h2>
+  <p>{{ t('ResetPasswordEmailNotDeliveredHelp') }}</p>
+  <button class="btn-custom" @click="send">
+    {{t('resendEmail')}}
+  </button>
+
 
   <div class="back-link mt-3">
     <a href="#" @click.prevent="$emit('change-view','login')">
@@ -37,8 +29,8 @@
 
 
 <script>
-import { useI18n } from '../../i18n/useI18n'
-import Popup from '../common/Popup.vue'
+import { useI18n } from '../../../i18n/useI18n'
+import Popup from '../../common/Popup.vue'
 
 export default {
   name:'ForgotPassword',
@@ -59,6 +51,8 @@ export default {
       }else{
         this.error=false
         this.success=true
+
+        this.$emit('change-view','resetpasswordemail')
       }
     }
   },
