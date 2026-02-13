@@ -3,12 +3,13 @@
     
     <img :src="AMVLogo" class="h-14 mx-auto mb-10" />
 
+<label class ="text-sm font-large">
+          {{ t('login') }}
+        </label>
+
     <form @submit.prevent="handleLogin" class="flex flex-col gap-4" >
       <div>
-        <!-- <label class ="text-sm font-medium">
-          {{ t('username') }}
-        </label> -->
-
+  <!-- Användarnamnfält -->
         <div class="form-group relative">
         <!-- Label ovanför fältet -->
         <label class="block mb-1 text-sm font-medium text-gray-700">{{ t('username') }}</label>
@@ -59,9 +60,10 @@
       </div>
     </form>
 
-    <div class="divider">
-      <span>{{ t('or') }}</span>
+    <div class="divider text-left">
+      <span>{{ t('orBankId') }}</span>
     </div>
+
 
     <div class="bankid-options">
 
@@ -75,9 +77,19 @@
           <img :src="bankIdLogo" alt="BankID" class="bankid-icon" />
           {{ t('bankIDThisDevice') }}
         </button>
-</div>
-
+      </div>
     </div>
+
+    <div class="links">
+      <a
+        href="https://www.bankid.com/privat/om-bankid"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {{ t('aboutBankID') }}
+      </a>
+    </div>
+
   </div>
 </template>
 
