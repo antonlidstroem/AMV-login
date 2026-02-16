@@ -1,0 +1,1705 @@
+
+==== C:\Users\anton\Visual Studio Code\AMV-login\index.html ====
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Arbetsmiljöverktyget - Logga in</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
+
+
+==== C:\Users\anton\Visual Studio Code\AMV-login\package.json ====
+
+{
+  "name": "amv-login",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@heroicons/vue": "^2.2.0",
+    "bootstrap": "^5.3.8",
+    "lucide-vue-next": "^0.563.0",
+    "vue": "^3.5.25",
+    "vue-i18n": "^11.2.8",
+    "vue-router": "^5.0.2"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.1.18",
+    "@vitejs/plugin-vue": "^6.0.2",
+    "tailwindcss": "^4.1.18",
+    "vite": "^7.3.1"
+  }
+}
+
+
+==== C:\Users\anton\Visual Studio Code\AMV-login\vite.config.js ====
+
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+import tailwindcss from '@tailwindcss/vite'
+
+// https://vite.dev/config/
+export default defineConfig({
+  plugins: [
+    vue(), 
+    tailwindcss()],
+})
+
+
+==== C:\Users\anton\Visual Studio Code\AMV-login\.vscode\extensions.json ====
+
+{
+  "recommendations": ["Vue.volar"]
+}
+
+
+==== C:\Users\anton\Visual Studio Code\AMV-login\src\App.vue ====
+
+<template>
+  <div class="page-wrapper">
+    <div class="main-container">
+      <LPage
+        :currentView="currentView"
+        @change-view="currentView = $event"
+      />
+      <RPage />
+    </div>
+  </div>
+</template>
+
+
+
+<script>
+import LPage from './components/LPage.vue';
+import RPage from './components/RPage.vue';
+
+export default {
+  components: { LPage, RPage },
+  data() {
+    return {
+      currentView: 'login'
+    };
+  }
+};
+</script>
+
+
+==== C:\Users\anton\Visual Studio Code\AMV-login\src\main.js ====
+
+import { createApp } from 'vue'
+import App from './App.vue'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import './assets/styles.css'
+
+createApp(App).mount('#app')
+
+
+==== C:\Users\anton\Visual Studio Code\AMV-login\src\assets\styles.css ====
+
+*{
+ font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+:root{
+ --error:#862B2B;
+ --success:#80AC2F;
+}
+
+.page-wrapper{
+  height:100vh;
+  width:100vw;
+  display:flex;
+  justify-content:center;  
+  align-items:center;      
+  background:#f5f5f5;      
+}
+
+.main-container{
+  width:1100px;      /* fast bredd */
+  height:750px;      /* fast höjd */
+  display:flex;
+  background:white;
+  border-radius:30px;
+  overflow:hidden;
+  box-shadow:0 6px 40px rgba(0,0,0,0.5);
+}
+
+
+/* EXAKT 50 / 50 */
+.main-container > *{
+  flex:0 0 50%;
+}
+
+
+
+.error-banner{
+ background:var(--error);
+ color:white;
+ padding:10px;
+ border-radius:2px;
+ margin-bottom:10px;
+}
+
+.success-border{
+ border:2px solid var(--success)!important;
+}
+
+.error-border{
+ border:2px solid var(--error)!important;
+}
+
+.popup-overlay{
+ position:fixed;
+ top:0;
+ left:0;
+ right:0;
+ bottom:0;
+ background:rgba(0,0,0,0.4);
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ z-index:999;
+}
+
+.popup-box{
+ background:white;
+ padding:20px;
+ border-radius:10px;
+ width:350px;
+ text-align:center;
+}
+
+/* Gemensam knapp */
+.btn-custom {
+  background: linear-gradient(90deg, #486515, #628A1E);
+  color: white;
+  border: none;
+  font-weight: 600;
+  padding: 10px 16px;
+  border-radius: 6px;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-custom:hover {
+  filter: brightness(1.1);
+  color: white;
+}
+
+.btn-custom:active {
+  transform: scale(0.98);
+}
+
+
+
+/* Input med ikon */
+.input-icon{
+ position:relative;
+}
+
+.input-icon i{
+ position:absolute;
+ left:10px;
+ top:50%;
+ transform:translateY(-50%);
+ color:black;
+ font-size:18px;
+}
+
+.input-icon input{
+ padding-left:35px;
+}
+
+/* Mindre BankID knappar */
+.bankid-btn{
+ padding:8px 12px;
+}
+
+.bankid-icon{
+ height:20px;
+ width:auto;
+}
+
+/* BankID layout */
+.bankid-options{
+ display:flex;
+ flex-direction:column;
+ gap:8px;
+}
+
+.logo-top{
+ max-width:220px;
+ display:block;
+ margin:0 auto 20px auto;
+}
+
+/* Fake QR */
+.qr-wrapper{
+ display:flex;
+ justify-content:center;
+}
+
+.fake-qr{
+ width:180px;
+ height:180px;
+ background:
+ repeating-linear-gradient(
+   45deg,
+   #000,
+   #000 6px,
+   #fff 6px,
+   #fff 12px
+ );
+ border:6px solid #000;
+}
+
+/* Tvåstegsverifiering layout */
+.code-input{
+  width:45px;
+  height:65px;        
+  font-size:32px;
+  font-weight:600;
+  border-radius:12px;
+}
+
+
+
+
+
+
+==== C:\Users\anton\Visual Studio Code\AMV-login\src\components\dashboard.vue ====
+
+
+
+==== C:\Users\anton\Visual Studio Code\AMV-login\src\components\LPage.vue ====
+
+<template>
+
+
+
+  <div class="col-md-6 p-4 bg-light">
+
+    <img :src="AMVLogo" class="logo-top"/>
+
+<!-- Dynamically render the component based on currentView prop -->
+    <component
+      :is="currentComponent"
+      @change-view="$emit('change-view',$event)"
+    />
+
+  </div>
+</template>
+
+<script>
+import LoginForm from './LeftViews/LoginForm.vue'
+import ForgotPassword from './LeftViews/ResetPassword/ForgotPassword.vue'
+import ResetPasswordEmail from './LeftViews/ResetPassword/ResetPasswordEmail.vue'
+import ResetPasswordNew from './LeftViews/ResetPassword/ResetPasswordNew.vue'
+
+import MobileBankId from './LeftViews/BankIDMobile/MobileBankId.vue'
+import BankIdDevice from './LeftViews/BankIDDevice/BankIDDevice.vue'
+import BankIdDeviceApproved from './LeftViews/BankIDDevice/BankIDDeviceApproved.vue'
+import TwoFactor from './LeftViews/TwoFactor.vue'
+
+import { useI18n } from '../i18n/useI18n'
+import AMVLogo from '../assets/logo_horizontal.svg'
+import MobileBankIdPending from './LeftViews/BankIDMobile/MobileBankIdPending.vue'
+import MobileBankIdApproved from './LeftViews/BankIDMobile/MobileBankIdApproved.vue'
+
+
+export default {
+  props:['currentView'],
+
+  components:{ 
+    LoginForm, 
+    ForgotPassword, 
+    MobileBankId, 
+    MobileBankIdPending,
+    MobileBankIdApproved,
+    BankIdDevice, 
+    BankIdDeviceApproved,
+    TwoFactor,
+    ResetPasswordNew,
+    ResetPasswordEmail  
+  },
+
+  setup(){
+    const { t } = useI18n()
+    return{ t, AMVLogo }
+  },
+
+  computed:{
+    currentComponent(){
+
+      const views = {
+        login: LoginForm,
+        forgot: ForgotPassword,
+        mobilebankid: MobileBankId,
+        mobilebankidpending: MobileBankIdPending,
+        mobilebankidapproved: MobileBankIdApproved,
+        bankiddevice: BankIdDevice,
+        bankiddeviceapproved: BankIdDeviceApproved,
+        twofactor:TwoFactor,
+        newpassword:ResetPasswordNew,
+        resetpasswordemail:ResetPasswordEmail
+      }
+
+      return views[this.currentView] || LoginForm
+    }
+  }
+}
+
+</script>
+
+==== C:\Users\anton\Visual Studio Code\AMV-login\src\components\RPage.vue ====
+
+<template>
+  <div class="col-md-6 text-white d-flex flex-column justify-content-start" 
+    :style="{ backgroundImage: `url(${bgImage})`, backgroundSize: 'cover'}">
+    
+    <button @click="showContact = true" class="btn-header">{{ t('contact') }}</button>
+    <button @click="showHelp = true" class="btn-header">{{ t('help') }}</button>
+
+    <div class="language-selector">
+      <button @click="showLanguageMenu = !showLanguageMenu" class="btn-header">
+        {{ languageNames[state.currentLang] }}
+      </button>
+
+      <div class="language-dropdown" :class="{ show: showLanguageMenu }">
+        <button 
+          v-for="(name, code) in languageNames" 
+          :key="code" 
+          @click="selectLanguage(code)"
+          :class="{ active: state.currentLang === code }"
+        >
+          {{ name }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Inbäddade rutor -->
+    <ContactModal v-if="showContact" @close="showContact = false" />
+    <HelpModal v-if="showHelp" @close="showHelp = false" />
+  </div>
+</template>
+
+<script>
+import { ref } from 'vue'
+import { useI18n } from '../i18n/useI18n'
+import ContactModal from './RightViews/ContactModal.vue'
+import HelpModal from './RightViews/HelpModal.vue'
+import bgImage from '../assets/RPageCard.jpg'
+
+export default {
+  components: { ContactModal, HelpModal },
+  setup() {
+    const { state, changeLang, languageNames, t } = useI18n()
+    const showContact = ref(false)
+    const showHelp = ref(false)
+    const showLanguageMenu = ref(false)
+
+    function selectLanguage(langCode) {
+      changeLang(langCode)
+      showLanguageMenu.value = false
+    }
+
+    return {
+      state,
+      languageNames,
+      t,
+      showContact,
+      showHelp,
+      showLanguageMenu,
+      selectLanguage,
+      bgImage 
+    }
+  }
+}
+</script>
+
+==== C:\Users\anton\Visual Studio Code\AMV-login\src\i18n\translations.js ====
+
+export const translations = {
+  sv: {
+    welcome: 'Välkommen',
+    contact: 'Kontakt',
+    help: 'Hjälp',
+    username: 'Användarnamn',
+    password: 'Lösenord',
+    enterUsername: 'Ange användarnamn',
+    enterPassword: 'Ange lösenord',
+    login: 'Logga in',
+    forgotPasswordQuestion: 'Glömt lösenord?',
+    clickHere: 'Klicka här',
+    orBankId: 'Logga in med BankID',
+    or: 'Eller',
+    mobileBankID: 'Mobilt BankID',
+    bankIDThisDevice: 'BankID på den här enheten',
+    resetPassword: 'Återställ lösenord',
+    resetPasswordDescription: 'Ange den e-postadress som är kopplad till ditt konto för att återställa lösenordet.',
+    email: 'E-post',
+    enterEmail: 'Ange din e-postadress',
+    sendReset: 'Skicka återställning',
+    back: 'Tillbaka',
+    emailSent: 'E-post skickad!',
+    resetEmailSentMessage: 'Vi har skickat instruktioner för att återställa lösenordet till {email}.',
+    goToStart: 'Gå till start',
+    sendNewReset: 'Skicka ny återställning',
+    newEmailSent: 'Nytt e-postmeddelande skickat!',
+    newEmailSentMessage: 'Ett nytt e-postmeddelande har skickats till {email}.',
+    okayClose: 'Okej, stäng fönster',
+    loginWithMobileBankID: 'Logga in med Mobilt BankID',
+    scanQRCode: 'Starta BankID-appen i din mobil eller surfplatta och tryck på Skanna QR-kod.',
+    aboutMobileBankID: 'Om Mobilt BankID',
+    loginWithBankID: 'Logga in med BankID',
+    enterSecurityCode: 'Skriv in din säkerhetskod i BankID-appen på din dator.',
+    waitingForBankID: 'Väntar på BankID...',
+    cancel: 'Avbryt',
+    aboutBankID: 'Om BankID',
+    aboutBankIDText: 'BankID är en elektronisk ID-handling som är jämförbar med pass, körkort och andra fysiska legitimationshandlingar.',
+    close: 'Stäng',
+    contactUs: 'Kontakta oss',
+    name: 'Namn',
+    writeMessage: 'Skriv ditt meddelande här',
+    sendMessage: 'Skicka meddelande',
+    closeWindow: 'Stäng fönster',
+    forgotPassword: 'Jag har glömt mitt lösenord',
+    noEmailAccess: 'Jag har inte tillgång till min e-post',
+    systemError: 'Jag har stött på fel i systemet',
+    goBack: 'Gå tillbaka',
+    forgotPasswordHelp: 'Om du har glömt ditt lösenord kan du återställa det genom att klicka på "Glömt lösenord?" på inloggningssidan.',
+    noEmailAccessHelp: 'Om du inte längre har tillgång till den e-postadress som är kopplad till ditt konto, vänligen kontakta vår support.',
+    systemErrorHelp: 'Om du har stött på ett tekniskt fel, vänligen kontakta vår support och beskriv problemet så detaljerat som möjligt.',
+    contactOtherInfo: "I övriga frågor, välkommen att kontakta oss:",
+    contactLoginInfo: "Om det gäller inloggningsuppgifter eller lösenordsåterställning, kontakta i första hand:",
+    waitingForAuth: "Skriv in din säkerhetskod i BankID-appen.",
+    // MobileBankIDApproved: "Säkerhetskod godkänd. Loggar in.",
+    SecurityCodeApproved: "Säkerhetskod godkänd. Loggar in.",
+    enterValidEmail: "Ange en giltig e-postadress",
+    ResetPasswordEmailSent: "Ett mail med en länk för återställning har skickats till din e-postadress om den finns registrerad hos oss. Länken är giltig i 10 minuter.",
+    ResetPasswordEmailNotDelivered: "Jag har inte fått något mail.",
+    ResetPasswordEmailNotDeliveredHelp: "Det kan ta några minuter innan mailet har kommit fram. Avvakta och kontrollera att det inte har hamnat i skräpposten.",
+    goToStart: "Gå till start",
+    resendEmail: "Skicka ny återställning"
+
+  },
+  en: {
+    welcome: 'Welcome',
+    contact: 'Contact',
+    help: 'Help',
+    username: 'Username',
+    password: 'Password',
+    enterUsername: 'Enter username',
+    enterPassword: 'Enter password',
+    login: 'Log in',
+    forgotPasswordQuestion: 'Forgot password?',
+    clickHere: 'Click here',
+    orBankId: 'Or',
+    mobileBankID: 'Mobile BankID',
+    bankIDThisDevice: 'BankID on this device',
+    resetPassword: 'Reset password',
+    resetPasswordDescription: 'Enter your email address and we will send you instructions to reset your password.',
+    email: 'Email',
+    enterEmail: 'Enter your email',
+    sendReset: 'Send reset',
+    back: 'Back',
+    emailSent: 'Email sent!',
+    resetEmailSentMessage: 'We have sent password reset instructions to {email}.',
+    goToStart: 'Go to start',
+    sendNewReset: 'Send new reset',
+    newEmailSent: 'New email sent!',
+    newEmailSentMessage: 'A new email has been sent to {email}.',
+    okayClose: 'Okay, close window',
+    loginWithMobileBankID: 'Log in with Mobile BankID',
+    scanQRCode: 'Scan the QR code with the BankID app on your phone.',
+    aboutMobileBankID: 'About Mobile BankID',
+    loginWithBankID: 'Log in with BankID',
+    enterSecurityCode: 'Enter your security code in the BankID app on your computer.',
+    waitingForBankID: 'Waiting for BankID...',
+    cancel: 'Cancel',
+    aboutBankID: 'About BankID',
+    aboutBankIDText: 'BankID is an electronic ID comparable to passports, driver\'s licenses, and other physical IDs.',
+    close: 'Close',
+    contactUs: 'Contact us',
+    name: 'Name',
+    writeMessage: 'Write your message here',
+    sendMessage: 'Send message',
+    closeWindow: 'Close window',
+    forgotPassword: 'I have forgotten my password',
+    noEmailAccess: 'I don\'t have access to my email',
+    systemError: 'I have encountered a system error',
+    goBack: 'Go back',
+    forgotPasswordHelp: 'If you have forgotten your password, you can reset it by clicking "Forgot password?" on the login page.',
+    noEmailAccessHelp: 'If you no longer have access to the email address associated with your account, please contact our support.',
+    systemErrorHelp: 'If you have encountered a technical error, please contact our support and describe the problem in as much detail as possible.',
+
+    contactOtherInfo: "ADD TRANSLATION HERE",
+    contactLoginInfo:  "ADD TRANSLATION HERE"
+  },
+  no: {
+    welcome: 'Velkommen',
+    contact: 'Kontakt',
+    help: 'Hjelp',
+    username: 'Brukernavn',
+    password: 'Passord',
+    enterUsername: 'Skriv inn brukernavn',
+    enterPassword: 'Skriv inn passord',
+    login: 'Logg inn',
+    forgotPasswordQuestion: 'Glemt passord?',
+    clickHere: 'Klikk her',
+    orBankId: 'Eller',
+    mobileBankID: 'Mobil BankID',
+    bankIDThisDevice: 'BankID på denne enheten',
+    resetPassword: 'Tilbakestill passord',
+    resetPasswordDescription: 'Skriv inn e-postadressen din, så sender vi deg instruksjoner.',
+    email: 'E-post',
+    enterEmail: 'Skriv inn e-postadressen din',
+    sendReset: 'Send tilbakestilling',
+    back: 'Tilbake',
+    emailSent: 'E-post sendt!',
+    resetEmailSentMessage: 'Vi har sendt instruksjoner for å tilbakestille passordet til {email}.',
+    goToStart: 'Gå til start',
+    sendNewReset: 'Send ny tilbakestilling',
+    newEmailSent: 'Ny e-post sendt!',
+    newEmailSentMessage: 'En ny e-post har blitt sendt til {email}.',
+    okayClose: 'OK, lukk vindu',
+    loginWithMobileBankID: 'Logg inn med Mobil BankID',
+    scanQRCode: 'Skann QR-koden med BankID-appen på telefonen din.',
+    aboutMobileBankID: 'Om Mobil BankID',
+    loginWithBankID: 'Logg inn med BankID',
+    enterSecurityCode: 'Skriv inn sikkerhetskoden din i BankID-appen på datamaskinen.',
+    waitingForBankID: 'Venter på BankID...',
+    cancel: 'Avbryt',
+    aboutBankID: 'Om BankID',
+    aboutBankIDText: 'BankID er en elektronisk ID som kan sammenlignes med pass, førerkort og andre fysiske ID-er.',
+    close: 'Lukk',
+    contactUs: 'Kontakt oss',
+    name: 'Navn',
+    writeMessage: 'Skriv meldingen din her',
+    sendMessage: 'Send melding',
+    closeWindow: 'Lukk vindu',
+    forgotPassword: 'Jeg har glemt passordet mitt',
+    noEmailAccess: 'Jeg har ikke tilgang til e-posten min',
+    systemError: 'Jeg har støtt på en systemfeil',
+    goBack: 'Gå tilbake',
+    forgotPasswordHelp: 'Hvis du har glemt passordet, kan du tilbakestille det ved å klikke "Glemt passord?" på påloggingssiden.',
+    noEmailAccessHelp: 'Hvis du ikke lenger har tilgang til e-postadressen knyttet til kontoen din, vennligst kontakt vår support.',
+    systemErrorHelp: 'Hvis du har støtt på en teknisk feil, vennligst kontakt vår support og beskriv problemet så detaljert som mulig.',
+
+        contactOtherInfo: "ADD TRANSLATION HERE",
+    contactLoginInfo:  "ADD TRANSLATION HERE"
+  },
+  fi: {
+    welcome: 'Tervetuloa',
+    contact: 'Yhteystiedot',
+    help: 'Apua',
+    username: 'Käyttäjätunnus',
+    password: 'Salasana',
+    enterUsername: 'Syötä käyttäjätunnus',
+    enterPassword: 'Syötä salasana',
+    login: 'Kirjaudu sisään',
+    forgotPasswordQuestion: 'Unohditko salasanasi?',
+    clickHere: 'Klikkaa tästä',
+    orBankId: 'Tai',
+    mobileBankID: 'Mobiili BankID',
+    bankIDThisDevice: 'BankID tällä laitteella',
+    resetPassword: 'Nollaa salasana',
+    resetPasswordDescription: 'Syötä sähköpostiosoitteesi, niin lähetämme ohjeet salasanan palauttamiseen.',
+    email: 'Sähköposti',
+    enterEmail: 'Syötä sähköpostisi',
+    sendReset: 'Lähetä palautus',
+    back: 'Takaisin',
+    emailSent: 'Sähköposti lähetetty!',
+    resetEmailSentMessage: 'Olemme lähettäneet ohjeet salasanan palauttamiseen osoitteeseen {email}.',
+    goToStart: 'Siirry alkuun',
+    sendNewReset: 'Lähetä uusi palautus',
+    newEmailSent: 'Uusi sähköposti lähetetty!',
+    newEmailSentMessage: 'Uusi sähköposti on lähetetty osoitteeseen {email}.',
+    okayClose: 'OK, sulje ikkuna',
+    loginWithMobileBankID: 'Kirjaudu sisään mobiili BankID:llä',
+    scanQRCode: 'Skannaa QR-koodi BankID-sovelluksella puhelimellasi.',
+    aboutMobileBankID: 'Tietoja mobiili BankID:stä',
+    loginWithBankID: 'Kirjaudu sisään BankID:llä',
+    enterSecurityCode: 'Syötä turvakoodisi BankID-sovellukseen tietokoneellasi.',
+    waitingForBankID: 'Odotetaan BankID:tä...',
+    cancel: 'Peruuta',
+    aboutBankID: 'Tietoja BankID:stä',
+    aboutBankIDText: 'BankID on sähköinen henkilöllisyystodistus, joka vastaa passia, ajokorttia ja muita fyysisiä tunnisteita.',
+    close: 'Sulje',
+    contactUs: 'Ota yhteyttä',
+    name: 'Nimi',
+    writeMessage: 'Kirjoita viestisi tähän',
+    sendMessage: 'Lähetä viesti',
+    closeWindow: 'Sulje ikkuna',
+    forgotPassword: 'Olen unohtanut salasanani',
+    noEmailAccess: 'Minulla ei ole pääsyä sähköpostiini',
+    systemError: 'Olen kohdannut järjestelmävirheen',
+    goBack: 'Palaa takaisin',
+    forgotPasswordHelp: 'Jos olet unohtanut salasanasi, voit nollata sen klikkaamalla "Unohditko salasanasi?" kirjautumissivulla.',
+    noEmailAccessHelp: 'Jos sinulla ei enää ole pääsyä tilisi sähköpostiosoitteeseen, ota yhteyttä tukeemme.',
+    systemErrorHelp: 'Jos kohtaat teknisen virheen, ota yhteyttä tukeemme ja kuvaile ongelma mahdollisimman tarkasti.',
+
+        contactOtherInfo: "ADD TRANSLATION HERE",
+    contactLoginInfo:  "ADD TRANSLATION HERE"
+  }
+}
+export const languageNames = {
+  sv: 'Svenska',
+  en: 'English',
+  no: 'Norsk',
+  fi: 'Suomi'
+}
+
+
+==== C:\Users\anton\Visual Studio Code\AMV-login\src\i18n\useI18n.js ====
+
+import { reactive } from 'vue'
+import { translations, languageNames } from './translations'
+
+const state = reactive({
+  currentLang:'sv'
+})
+
+export function useI18n(){
+
+  function t(key){
+    return translations[state.currentLang][key] || key
+  }
+
+  function changeLang(lang){
+    state.currentLang = lang
+  }
+
+  return{
+    state,
+    t,
+    changeLang,
+    languageNames
+  }
+}
+
+
+==== C:\Users\anton\Visual Studio Code\AMV-login\src\mock\authService.js ====
+
+import { users } from './users'
+
+export function loginMock(username,password){
+ return new Promise((resolve,reject)=>{
+  setTimeout(()=>{
+   const user=users.find(u=>u.username===username && u.password===password)
+   if(user) resolve(user)
+   else reject("Fel användarnamn och lösenord")
+  },1000)
+ })
+}
+
+
+==== C:\Users\anton\Visual Studio Code\AMV-login\src\mock\users.js ====
+
+export const users=[
+ {username:'anton',password:'1234'},
+ {username:'admin',password:'admin'}
+]
+
+
+==== C:\Users\anton\Visual Studio Code\AMV-login\src\modals\modalStore.js ====
+
+import { reactive } from 'vue'
+
+export const modalStore = reactive({
+  active:null,
+
+  open(name){
+    this.active=name
+  },
+
+  close(){
+    this.active=null
+  }
+})
+
+
+==== C:\Users\anton\Visual Studio Code\AMV-login\src\router\index.js ====
+
+import { createRouter, createWebHistory } from 'vue-router'
+
+const routes=[
+  { path:'/', component:()=>import('../App.vue') },
+  { path:'/dashboard',
+    component:()=>import('../views/LoginView.vue'),
+    meta:{ requiresAuth:true }
+  }
+]
+
+export const router = createRouter({
+  history:createWebHistory(),
+  routes
+})
+
+router.beforeEach((to)=>{
+  const isLoggedIn = localStorage.getItem('mockLogin')
+
+  if(to.meta.requiresAuth && !isLoggedIn){
+    return '/'
+  }
+})
+
+
+==== C:\Users\anton\Visual Studio Code\AMV-login\src\views\LoginView.vue ====
+
+<template>
+<App />
+</template>
+
+<script>
+import App from '../App.vue'
+export default{ components:{App} }
+</script>
+
+
+==== C:\Users\anton\Visual Studio Code\AMV-login\src\components\common\Banner.vue ====
+
+
+
+==== C:\Users\anton\Visual Studio Code\AMV-login\src\components\common\Popup.vue ====
+
+<template>
+<div class="popup-overlay">
+ <div class="popup-box">
+  <h5>{{title}}</h5>
+  <p>{{text}}</p>
+  <button v-if="button" class="btn btn-primary" @click="$emit('close')">{{button}}</button>
+ </div>
+</div>
+</template>
+
+<script>
+export default{
+ props:['title','text','button']
+}
+</script>
+
+
+==== C:\Users\anton\Visual Studio Code\AMV-login\src\components\LeftViews\LoginForm.vue ====
+
+<template>
+<div>
+
+
+<div v-if="error" class="error-banner">Fel användarnamn och lösenord</div>
+
+<h2>{{ t('login') }}</h2>
+
+    <form @submit.prevent="login">
+
+    <div class="input-icon">
+      <p>{{ t('username') }}</p>
+      <i class="bi bi-person-fill"></i>
+      <input 
+        v-model="username" 
+        class="form-control mb-2" 
+        :class="{'error-border':error}" 
+      />
+    </div>
+
+
+
+    <div class="input-icon">
+      <p>{{ t('password') }}</p>
+      <i class="bi bi-lock-fill"></i>
+        <input
+          type="password"
+          v-model="password"
+          class="form-control mb-3"
+          :class="{'error-border':error}"
+        />
+
+    </div>
+
+<button type="submit" class="btn-custom">Logga in</button>
+
+<div class="text-sm text-right">
+        <span>{{ t('forgotPasswordQuestion') }}</span>
+        <a href="#" @click.prevent="$emit('change-view','forgot')"
+        class="text-blue-600 ml-1 hover:underline"
+        >
+        {{" " + t('clickHere') }}
+      </a>
+      </div>
+
+<div class="divider">
+      <span>{{ t('orBankId') }}</span>
+    </div>
+
+<div class="bankid-options">
+
+        
+            <button @click="$emit('change-view','mobilebankid')" 
+              class="btn-custom">
+              <img :src="bankIdLogo" alt="BankID" class="bankid-icon" />
+              {{ t('mobileBankID') }}
+            </button>
+
+            <button @click="$emit('change-view','bankiddevice')" 
+              class="btn-custom">
+            <img :src="bankIdLogo" alt="BankID" class="bankid-icon" />
+            {{ t('bankIDThisDevice') }}
+            </button>
+
+
+            
+    </div>
+
+     <a
+        href="https://www.bankid.com/privat/om-bankid"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {{ t('aboutMobileBankID') }}
+      </a>
+
+
+
+</form>
+
+<Popup v-if="loading" title="Loggar in" text="Vänta..." button=""/>
+</div>
+</template>
+
+<script>
+import { loginMock } from '../../mock/authService'
+import Popup from '../common/Popup.vue'
+import { useI18n } from '../../i18n/useI18n'
+import bankIdLogo from '../../assets/BankID_logo_white.png'
+
+
+export default{
+ components:{Popup},
+ data(){
+  return{
+   username:'',
+   password:'',
+   error:false,
+   loading:false
+  }
+ },
+ methods:{
+  async login(){
+   this.error=false
+   this.loading=true
+   try{
+    await loginMock(this.username,this.password)
+    localStorage.setItem('mockLogin','true')
+
+    this.$emit('change-view','twofactor')
+   }catch{
+    this.error=true
+   }
+   this.loading=false
+  }
+ },
+ setup(){
+ const { t } = useI18n()
+ return { t, bankIdLogo}
+}
+
+}
+</script>
+
+
+==== C:\Users\anton\Visual Studio Code\AMV-login\src\components\LeftViews\TwoFactor.vue ====
+
+<template>
+<div>
+<h4>Verifiera med kod</h4>
+<p>Ange den fyrsiffriga kod som skickats...</p>
+
+<div v-if="error" class="error-banner">Du har angett fel kod. Försök igen.</div>
+
+<div class="d-flex gap-3 mb-3 justify-content-center">
+  <input
+    v-for="(d,i) in digits"
+    :key="i"
+    v-model="digits[i]"
+    maxlength="1"
+    class="form-control text-center code-input"
+    :class="{
+      'error-border': error,
+      'success-border': digits[i] && !error
+    }"
+  />
+</div>
+
+
+<button class="btn-custom" @click="verify">Logga in</button>
+
+<button class="btn btn-link" @click="$emit('change-view','login')">Tillbaka</button>
+
+<Popup v-if="successPopup"
+ title="✔"
+ text="En ny kod har skickats"
+ button="Okej, stäng fönster"
+ @close="successPopup=false"/>
+</div>
+</template>
+
+<script>
+import Popup from '../common/Popup.vue'
+import { useI18n } from '../../i18n/useI18n'
+
+
+export default{
+ components:{Popup},
+ data(){
+  return{
+   digits:['','','',''],
+   error:false,
+   successPopup:false
+  }
+ },
+ computed:{
+  inputClass(){
+   if(this.error) return 'error-border'
+   if(this.digits.some(d=>d)) return 'success-border'
+   return ''
+  }
+ },
+ methods:{
+  verify(){
+   if(this.digits.join('')==='1234'){
+    alert('login success mock')
+   }else{
+    this.error=true
+   }
+  }
+ },
+ setup(){
+ const { t } = useI18n()
+ return { t }
+}
+
+}
+</script>
+
+
+==== C:\Users\anton\Visual Studio Code\AMV-login\src\components\RightViews\ContactModal.vue ====
+
+<template>
+  <div class="contact-panel">
+    <!-- Stäng-cirkel -->
+    <button class="close-circle" @click="close">×</button>
+
+    <!-- Kontaktinfo -->
+    <h2>{{ t('contact') }}</h2>
+    <p>
+      {{ t('contactLoginInfo') }}
+    </p>
+
+    <div class="contact-person">
+      <p><strong>Emanuel Makhoul</strong></p>
+      <p>emanuel@arbetsmiljoverktyget.se</p>
+      <p>+4670 112</p>
+    </div>
+
+    <p>{{ t('contactOtherInfo') }}</p>
+
+    <!-- Kontaktformulär -->
+    <form @submit.prevent="sendContact">
+      <div class="form-group">
+        <label>{{ t('name') }}</label>
+        <input v-model="name" type="text" required />
+      </div>
+
+      <div class="form-group">
+        <label>{{ t('email') }}</label>
+        <input v-model="email" type="email" required />
+      </div>
+
+      <div class="form-group">
+        <label>{{ t('message') }}</label>
+        <textarea v-model="message" rows="4" required></textarea>
+      </div>
+
+      <div class="form-buttons">
+        <button type="submit" class="btn-submit">{{ t('sendMessage') }}</button>
+        <button type="button" class="btn-close" @click="close">{{ t('closeWindow') }}</button>
+      </div>
+    </form>
+  </div>
+</template>
+
+<script>
+import { ref } from 'vue'
+import { useI18n } from '../../i18n/useI18n'
+
+export default {
+  emits: ['close'],
+  setup(_, { emit }) {
+    const { t } = useI18n()
+    const name = ref('')
+    const email = ref('')
+    const message = ref('')
+
+    function sendContact() {
+      alert(`${t('sendMessage')}:\n${name.value}, ${email.value}\n${message.value}`)
+      name.value = ''
+      email.value = ''
+      message.value = ''
+      emit('close')
+    }
+
+    function close() {
+      emit('close')
+    }
+
+    return {
+      t,
+      name,
+      email,
+      message,
+      sendContact,
+      close
+    }
+  }
+}
+</script>
+
+
+
+==== C:\Users\anton\Visual Studio Code\AMV-login\src\components\RightViews\HelpModal.vue ====
+
+<template>
+  <div class="help-panel">
+    <!-- Stäng-cirkel -->
+    <button class="close-circle" @click="close">×</button>
+
+    <!-- Lista med hjälpknappar -->
+    <div v-if="!selectedTopic" class="help-buttons">
+      <button v-for="(topic, index) in topics" 
+              :key="index"
+              @click="selectTopic(topic)">
+        {{ topic.label }}
+      </button>
+    </div>
+
+    <!-- Visar innehåll när ett ämne är valt -->
+    <div v-else class="help-content">
+      <h2>{{ selectedTopic.label }}</h2>
+      <p>{{ selectedTopic.content }}</p>
+
+      <button class="btn-close" @click="backToTopics">{{ t('back') }}</button>
+    </div>
+  </div>
+</template>
+
+<script>
+import { ref } from 'vue'
+import { useI18n } from '../../i18n/useI18n'
+
+export default {
+  emits: ['close'],
+  setup(_, { emit }) {
+    const { t } = useI18n()
+    const selectedTopic = ref(null)
+
+    const topics = [
+      { label: 'Jag har glömt mitt lösenord', content: 'Platshållartext för lösenord.' },
+      { label: 'Jag har inte tillgång till min e-post', content: 'Platshållartext för e-post.' },
+      { label: 'Jag har stött på ett fel i systemet', content: 'Platshållartext för fel.' },
+      { label: 'Hjälpsektion', content: 'Platshållartext.' },
+      { label: 'Hjälpsektion', content: 'Platshållartext.' },
+      { label: 'Hjälpsektion', content: 'Platshållartext.' },
+      { label: 'Hjälpsektion', content: 'Platshållartext.' },
+      { label: 'Hjälpsektion', content: 'Platshållartext.' },
+      { label: 'Hjälpsektion', content: 'Platshållartext.' }
+    ]
+
+    function close() {
+      emit('close')
+    }
+
+    function selectTopic(topic) {
+      selectedTopic.value = topic
+    }
+
+    function backToTopics() {
+      selectedTopic.value = null
+    }
+
+    return {
+      t,
+      selectedTopic,
+      topics,
+      close,
+      selectTopic,
+      backToTopics
+    }
+  }
+}
+</script>
+
+
+==== C:\Users\anton\Visual Studio Code\AMV-login\src\components\LeftViews\BankIDDevice\BankIDDevice.vue ====
+
+<template>
+  <div>
+
+    <h2>{{ t('loginWithBankID') }}</h2>
+    <p>{{ t('enterSecurityCode') }}</p>
+
+    <div class="waiting-box">
+      <div class="spinner"></div>
+      <p>{{ t('waitingForBankId') }}</p>
+    </div>
+
+    <!-- Pending clock -->
+  <i class="bi bi-clock-history display-1 text-dark mb-3"></i>
+    <div>
+    <a href="#" @click.prevent="$emit('change-view','login')">
+            {{ t('cancel') }}
+          </a>
+    </div>
+<!-- Step indicator with Bootstrap icons, using text-success for active step and text-secondary for inactive steps. -->
+<div class="d-flex justify-content-center align-items-center gap-2">
+  <i class="bi bi-1-circle-fill" style="color:#85BE23;"></i> 
+  <i class="bi bi-arrow-right" style="color:#000;"></i> 
+  <i class="bi bi-2-circle-fill" style="color:#6c757d;"></i> 
+</div>
+
+
+    <div class="links">
+      
+
+      <a href="#" @click.prevent="$emit('change-view','login')">
+        {{ t('back') }}
+      </a>
+
+      <a
+        href="https://www.bankid.com/privat/om-bankid"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {{ t('aboutMobileBankID') }}
+      </a>
+    </div>
+
+    <div class="divider"><span>{{ t('orBankId') }}</span></div>
+
+    <button @click="$emit('change-view','mobilebankid')" class="btn-custom" >
+      <img :src="bankIdLogo" class="bankid-icon" />
+      {{ t('mobileBankID') }}
+      
+    </button>
+
+<!-- 🔹 Tillfällig knapp för test -->
+    <button
+      @click="$emit('change-view','bankiddeviceapproved')"
+      class="btn-custom"
+    >
+      Simulera lyckad inloggning
+    </button>
+
+  </div>
+</template>
+
+<script>
+import { useI18n } from '../../../i18n/useI18n'
+import bankIdLogo from '../../../assets/BankID_logo_white.png'
+
+
+
+
+export default {
+  emits:['change-view'],
+
+  setup() {
+    const { t } = useI18n()
+    return { t, bankIdLogo}
+  }
+}
+</script>
+
+
+==== C:\Users\anton\Visual Studio Code\AMV-login\src\components\LeftViews\BankIDDevice\BankIDDeviceApproved.vue ====
+
+<template>
+  <div>
+
+    <h2>{{ t('loginWithBankID') }}</h2>
+    <p>{{ t('SecurityCodeApproved') }}</p>
+
+    <div class="waiting-box">
+      <div class="spinner"></div>
+      <p>{{ t('waitingForBankId') }}</p>
+    </div>
+
+    <i class="bi bi-house-check display-1 text-dark mb-3"></i>
+  
+    <div>
+    <a href="#" @click.prevent="$emit('change-view','login')">
+            {{ t('cancel') }}
+          </a>
+    </div>
+<!-- Step indicator with Bootstrap icons, using text-success for active step and text-secondary for inactive steps. -->
+<div class="d-flex justify-content-center align-items-center gap-2">
+  <i class="bi bi-1-circle-fill" style="color:#6c757d;"></i> 
+  <i class="bi bi-arrow-right" style="color:#000;"></i> 
+  <i class="bi bi-2-circle-fill" style="color:#85BE23;"></i> 
+</div>
+
+
+    <div class="links">
+      <a href="#" @click.prevent="$emit('change-view','login')">
+        {{ t('back') }}
+      </a>
+    </div>
+
+<!-- 🔹 Tillfällig knapp för test -->
+    <button
+      @click="$emit('change-view','mobilebankidapproved')"
+      class="btn-custom"
+    >
+      Simulera lyckad inloggning
+    </button>
+
+  </div>
+</template>
+
+<script>
+import { useI18n } from '../../../i18n/useI18n'
+import bankIdLogo from '../../../assets/BankID_logo_white.png'
+
+
+
+
+export default {
+  emits:['change-view'],
+
+  setup() {
+    const { t } = useI18n()
+    return { t, bankIdLogo}
+  }
+}
+</script>
+
+
+==== C:\Users\anton\Visual Studio Code\AMV-login\src\components\LeftViews\BankIDMobile\MobileBankId.vue ====
+
+<template>
+  <div class="mobile-bankid text-center">
+
+    <h2>{{ t('loginWithMobileBankID') }}</h2>
+    <p class="mb-3">{{ t('scanQRCode') }}</p>
+
+    <!-- QR -->
+    <div class="qr-wrapper mb-3">
+      <div class="fake-qr"></div>
+    </div>
+
+<!-- Step indicator with Bootstrap icons, using text-success for active step and text-secondary for inactive steps. -->
+    <div class="d-flex justify-content-center align-items-center gap-2">
+      <i class="bi bi-1-circle-fill" style="color:#85BE23;"></i> 
+      <i class="bi bi-arrow-right" style="color:#000;"></i> 
+      <i class="bi bi-2-circle-fill" style="color:#6c757d;"></i> 
+      <i class="bi bi-arrow-right" style="color:#000;"></i> 
+      <i class="bi bi-3-circle-fill" style="color:#6c757d;"></i> 
+    </div>
+
+  <!-- Länkar -->
+    <div class="d-flex justify-content-between mb-3 small">
+
+      <a href="#" @click.prevent="$emit('change-view','login')">
+        ← {{ t('back') }}
+      </a>
+
+      <a
+        href="https://www.bankid.com/privat/om-bankid"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {{ t('aboutMobileBankID') }}
+      </a>
+
+    </div>
+
+        <!-- Divider med streck -->
+    <div class="d-flex align-items-center my-3">
+      <hr class="flex-grow-1">
+      <span class="px-2 small">{{ t('or') }}</span>
+      <hr class="flex-grow-1">
+    </div>
+
+    <button
+      @click="$emit('change-view','bankiddevice')"
+      class="btn-custom"
+    >
+      <img :src="bankIdLogo" class="bankid-icon"/>
+      {{ t('bankIDThisDevice') }}
+    </button>
+
+<!-- 🔹 Tillfällig knapp för test -->
+    <button
+      @click="$emit('change-view','mobilebankidpending')"
+      class="btn-custom"
+    >
+      Simulera lyckad inloggning
+    </button>
+
+  </div>
+</template>
+
+<script>
+import { useI18n } from '../../../i18n/useI18n'
+import bankIdLogo from '../../../assets/BankID_logo_white.png'
+
+export default {
+  emits:['change-view'],
+  setup() {
+    const { t } = useI18n()
+    return { t, bankIdLogo }
+  }
+}
+</script>
+
+
+==== C:\Users\anton\Visual Studio Code\AMV-login\src\components\LeftViews\BankIDMobile\MobileBankIdApproved.vue ====
+
+<template>
+  <div class="mobile-bankid text-center">
+
+    <h2>{{ t('loginWithMobileBankID') }}</h2>
+    <p class="mb-3">{{ t('SecurityCodeApproved') }}</p>
+
+
+
+  <i class="bi bi-house-check display-1 text-dark mb-3"></i>
+
+<!-- Step indicator with Bootstrap icons, using text-success for active step and text-secondary for inactive steps. -->
+<div class="d-flex justify-content-center align-items-center gap-2">
+  <i class="bi bi-1-circle-fill" style="color:#6c757d;"></i> 
+  <i class="bi bi-arrow-right" style="color:#000;"></i> 
+  <i class="bi bi-2-circle-fill" style="color:#6c757d;"></i> 
+  <i class="bi bi-arrow-right" style="color:#000;"></i> 
+  <i class="bi bi-3-circle-fill" style="color:#85BE23;"></i> 
+</div>
+
+
+
+    <!-- Länkar -->
+    <div class="d-flex justify-content-between mb-3 small">
+
+      <a href="#" @click.prevent="$emit('change-view','login')">
+        ← {{ t('back') }}
+      </a>
+    </div>
+
+<!-- 🔹 Tillfällig knapp för test -->
+        <button
+        @click="$router.push('/dashboard')"
+        class="btn-custom"
+        >
+        Simulera lyckad inloggning
+        </button>
+
+
+  </div>
+</template>
+
+<script>
+import { useI18n } from '../../../i18n/useI18n'
+import bankIdLogo from '../../../assets/BankID_logo_white.png'
+
+export default {
+  emits:['change-view'],
+  setup() {
+    const { t } = useI18n()
+    return { t, bankIdLogo }
+  }
+}
+</script>
+
+
+==== C:\Users\anton\Visual Studio Code\AMV-login\src\components\LeftViews\BankIDMobile\MobileBankIdPending.vue ====
+
+<template>
+  <div class="mobile-bankid text-center">
+
+    <h2>{{ t('loginWithMobileBankID') }}</h2>
+    <p class="mb-3">{{ t('waitingForAuth') }}</p>
+
+
+<!-- Pending clock -->
+  <i class="bi bi-clock-history display-1 text-dark mb-3"></i>
+
+<!-- Step indicator with Bootstrap icons, using text-success for active step and text-secondary for inactive steps. -->
+<div class="d-flex justify-content-center align-items-center gap-2">
+  <i class="bi bi-1-circle-fill" style="color:#6c757d;"></i> 
+  <i class="bi bi-arrow-right" style="color:#000;"></i> 
+  <i class="bi bi-2-circle-fill" style="color:#85BE23;"></i> 
+  <i class="bi bi-arrow-right" style="color:#000;"></i> 
+  <i class="bi bi-3-circle-fill" style="color:#6c757d;"></i> 
+</div>
+
+
+
+    <!-- Länkar -->
+    <div class="d-flex justify-content-between mb-3 small">
+
+      <a href="#" @click.prevent="$emit('change-view','login')">
+        ← {{ t('back') }}
+      </a>
+
+      <a
+        href="https://www.bankid.com/privat/om-bankid"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {{ t('aboutMobileBankID') }}
+      </a>
+
+    </div>
+
+    <!-- Divider med streck -->
+    <div class="d-flex align-items-center my-3">
+      <hr class="flex-grow-1">
+      <span class="px-2 small">{{ t('or') }}</span>
+      <hr class="flex-grow-1">
+    </div>
+
+    <button
+      @click="$emit('change-view','bankiddevice')"
+      class="btn-custom"
+    >
+      <img :src="bankIdLogo" class="bankid-icon"/>
+      {{ t('bankIDThisDevice') }}
+    </button>
+
+<!-- 🔹 Tillfällig knapp för test -->
+    <button
+      @click="$emit('change-view','mobilebankidapproved')"
+      class="btn-custom"
+    >
+      Simulera lyckad inloggning
+    </button>
+
+  </div>
+</template>
+
+<script>
+import { useI18n } from '../../../i18n/useI18n'
+import bankIdLogo from '../../../assets/BankID_logo_white.png'
+
+export default {
+  emits:['change-view'],
+  setup() {
+    const { t } = useI18n()
+    return { t, bankIdLogo }
+  }
+}
+</script>
+
+
+==== C:\Users\anton\Visual Studio Code\AMV-login\src\components\LeftViews\ResetPassword\ForgotPassword.vue ====
+
+<template>
+  <div>
+    <h2>{{ t('resetPassword') }}</h2>
+    <p>{{ t('resetPasswordDescription') }}</p>
+    <p>{{ t('email') }}:</p>
+
+    <div v-if="error" class="error-banner">
+      {{ t('enterValidEmail') }}
+    </div>
+
+
+    <label>ForgotPassword.vue</label>
+    <input
+      v-model="email"
+      class="form-control mb-3"
+      :class="{ 'error-border': error }"
+    />
+
+    <button class="btn-custom" @click="send">
+      Skicka
+    </button>
+
+    <div class="back-link mt-3">
+      <a href="#" @click.prevent="$emit('change-view','login')">
+        ← {{ t('back') }}
+      </a>
+    </div>
+  </div>
+</template>
+
+<script>
+import { useI18n } from '../../../i18n/useI18n'
+
+export default {
+  name:'ForgotPassword',
+
+  data(){
+    return {
+      email:'',
+      error:false
+    }
+  },
+
+  methods:{
+    send(){
+      if(!this.email.includes('@')){
+        this.error = true
+      } else {
+        this.error = false
+        // Byt vy direkt till ResetPasswordEmail.vue
+        this.$emit('change-view','resetpasswordemail')
+      }
+    }
+  },
+
+  setup(){
+    const { t } = useI18n()
+    return { t }
+  }
+}
+</script>
+
+
+==== C:\Users\anton\Visual Studio Code\AMV-login\src\components\LeftViews\ResetPassword\ResetPasswordEmail.vue ====
+
+<template>
+<div>
+
+  <h2>{{ t('resetPassword') }}</h2>
+
+  <i class="bi bi-check-circle display-1 text-dark mb-3"></i>
+
+  <p>{{ t('ResetPasswordEmailSent') }}</p>
+  <button class="btn-custom" @click="send">
+    {{t('goToStart')}}
+  </button>
+
+
+  <h2>{{ t('ResetPasswordEmailNotDelivered') }}</h2>
+  <p>{{ t('ResetPasswordEmailNotDeliveredHelp') }}</p>
+  <button class="btn-custom" @click="send">
+    {{t('resendEmail')}}
+  </button>
+
+
+  <div class="back-link mt-3">
+    <a href="#" @click.prevent="$emit('change-view','login')">
+      ← {{ t('back') }}
+    </a>
+  </div>
+
+</div>
+</template>
+
+
+<script>
+import { useI18n } from '../../../i18n/useI18n'
+import Popup from '../../common/Popup.vue'
+
+export default {
+  name:'ForgotPassword',
+  components:{ Popup },
+
+  data(){
+    return{
+      email:'',
+      error:false,
+      success:false
+    }
+  },
+
+  methods:{
+    send(){
+      if(!this.email.includes('@')){
+        this.error=true
+      }else{
+        this.error=false
+        this.success=true
+
+        this.$emit('change-view','resetpasswordemail')
+      }
+    }
+  },
+
+  setup(){
+    const { t } = useI18n()
+    return { t }
+  }
+}
+</script>
+
+
+
+==== C:\Users\anton\Visual Studio Code\AMV-login\src\components\LeftViews\ResetPassword\ResetPasswordNew.vue ====
+
+<template>
+<div>
+<h4>Ange nytt lösenord</h4>
+
+<div v-if="errorMsg" class="error-banner">{{errorMsg}}</div>
+
+<input type="password" v-model="p1" class="form-control mb-2" :class="inputClass"/>
+<input type="password" v-model="p2" class="form-control mb-2" :class="inputClass"/>
+
+<button class="btn btn-success w-100" @click="change">Byt lösenord</button>
+
+<Popup v-if="success"
+ title="✔"
+ text="Du har nu bytt lösenord."
+ button="Till inloggning"
+ @close="$emit('change-view','login')"/>
+</div>
+</template>
+
+<script>
+import Popup from '../../common/Popup.vue'
+import { useI18n } from '../../../i18n/useI18n'
+
+
+export default{
+ components:{Popup},
+ data(){return{p1:'',p2:'',errorMsg:'',success:false}},
+ computed:{
+  inputClass(){
+   return this.errorMsg?'error-border':''
+  }
+ },
+ methods:{
+  change(){
+   if(this.p1!==this.p2){
+    this.errorMsg='De angivna lösenorden stämmer inte överens'
+    return
+   }
+   if(this.p1.length<5){
+    this.errorMsg='Ditt lösenord uppfyller inte kraven'
+    return
+   }
+   this.success=true
+  }
+ },
+ setup(){
+ const { t } = useI18n()
+ return { t }
+}
+
+}
+</script>
+

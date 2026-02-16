@@ -23,26 +23,21 @@
   <i class="bi bi-2-circle-fill" style="color:#6c757d;"></i> 
 </div>
 
-
+<!-- Links -->
     <div class="links">
-      
-
-      <a href="#" @click.prevent="$emit('change-view','login')">
-        {{ t('back') }}
-      </a>
-
-      <a
-        href="https://www.bankid.com/privat/om-bankid"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        {{ t('aboutMobileBankID') }}
-      </a>
+      <BackLink
+        :label="t('back')"
+        @click="$emit('change-view','login')"
+      />
+      <BankIdLink
+        :label="t('aboutMobileBankID')"
+      />
     </div>
 
-    <div class="divider"><span>{{ t('orBankId') }}</span></div>
 
-    <button @click="$emit('change-view','mobilebankid')" class="btn-custom" >
+    <div class="divider mb-3"><span>{{ t('orBankId') }}</span></div>
+
+    <button @click="$emit('change-view','mobilebankid')" class="btn-custom btn-custom btn-custom d-flex align-items-center justify-content-start gap-2 mb-3" >
       <img :src="bankIdLogo" class="bankid-icon" />
       {{ t('mobileBankID') }}
       
@@ -51,7 +46,7 @@
 <!-- 🔹 Tillfällig knapp för test -->
     <button
       @click="$emit('change-view','bankiddeviceapproved')"
-      class="btn-custom"
+      class="btn-temp"
     >
       Simulera lyckad inloggning
     </button>
@@ -62,11 +57,13 @@
 <script>
 import { useI18n } from '../../../i18n/useI18n'
 import bankIdLogo from '../../../assets/BankID_logo_white.png'
-
+import BackLink from '../../common/BackLink.vue'
+import BankIdLink from '../../common/BankIdLink.vue'
 
 
 
 export default {
+  components:{BackLink, BankIdLink},
   emits:['change-view'],
 
   setup() {

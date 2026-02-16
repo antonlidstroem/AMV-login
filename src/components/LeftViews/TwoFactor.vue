@@ -5,15 +5,22 @@
 
 <div v-if="error" class="error-banner">Du har angett fel kod. Försök igen.</div>
 
-<div class="d-flex gap-2 mb-3">
-<input v-for="(d,i) in digits" :key="i"
- v-model="digits[i]"
- maxlength="1"
- class="form-control text-center"
- :class="inputClass"/>
+<div class="d-flex gap-3 mb-3 justify-content-center">
+  <input
+    v-for="(d,i) in digits"
+    :key="i"
+    v-model="digits[i]"
+    maxlength="1"
+    class="form-control text-center code-input"
+    :class="{
+      'error-border': error,
+      'success-border': digits[i] && !error
+    }"
+  />
 </div>
 
-<button class="btn btn-success w-100 mb-2" @click="verify">Logga in</button>
+
+<button class="btn-custom" @click="verify">Logga in</button>
 
 <button class="btn btn-link" @click="$emit('change-view','login')">Tillbaka</button>
 

@@ -2,77 +2,85 @@
 <div>
 
 
-<div v-if="error" class="error-banner">Fel användarnamn och lösenord</div>
-
-<h2>{{ t('login') }}</h2>
-
-    <form @submit.prevent="login">
-
-    <div class="input-icon">
-      <p>{{ t('username') }}</p>
-      <i class="bi bi-person-fill"></i>
-      <input 
-        v-model="username" 
-        class="form-control mb-2" 
-        :class="{'error-border':error}" 
-      />
-    </div>
+<div v-if="error" class="error-banner">{{ t('wrongUserNamePassword') }}</div>
 
 
 
-    <div class="input-icon">
-      <p>{{ t('password') }}</p>
-      <i class="bi bi-lock-fill"></i>
+ <form @submit.prevent="login" class="d-flex flex-column gap-2 p-3 text-dark">
+    <h2 class="mb-3">{{ t('login') }}</h2> 
+      <!-- Username -->
+<label class="form-label mb-1">{{ t('username') }}</label>
+      <div class="position-relative mb-2">
+        <i class="bi bi-person-fill position-absolute text-dark" 
+           style="left: 10px; top: 50%; transform: translateY(-50%); font-size: 1.2rem;"></i>
+        <input 
+          v-model="username" 
+          class="form-control ps-5" 
+          :class="{'error-border':error}" 
+        />
+      </div>
+
+     <!-- Password -->
+      <label class="form-label mb-1">{{ t('password') }}</label>
+      <div class="position-relative mb-2">
+        <i class="bi bi-lock-fill position-absolute text-dark" 
+           style="left: 10px; top: 50%; transform: translateY(-50%); font-size: 1.2rem;"></i>
         <input
           type="password"
           v-model="password"
-          class="form-control mb-3"
+          class="form-control ps-5"
           :class="{'error-border':error}"
         />
-
-    </div>
-
-<button type="submit" class="btn-custom">Logga in</button>
-
-<div class="text-sm text-right">
-        <span>{{ t('forgotPasswordQuestion') }}</span>
-        <a href="#" @click.prevent="$emit('change-view','forgot')"
-        class="text-blue-600 ml-1 hover:underline"
-        >
-        {{" " + t('clickHere') }}
-      </a>
       </div>
 
-<div class="divider">
-      <span>{{ t('orBankId') }}</span>
+<button type="submit" class="btn-custom w-100 mb-2">Logga in</button>
+
+
+<!-- Forgot password link -->
+     <div class="d-flex justify-content-end mb-4">
+        <span>{{ t('forgotPasswordQuestion') }}</span>
+        <a href="#" @click.prevent="$emit('change-view','forgot')" 
+           class="ms-1 fw-bold text-decoration-none text-primary">
+          {{ t('clickHere') }}
+        </a>
+      </div>
+
+
+
+<div class="divider mb-2">
+  <br/>    
+  <h4>{{ t('orBankId') }}</h4>
     </div>
 
-<div class="bankid-options">
-
+<div class="d-flex flex-column gap-2 mb-2">
         
             <button @click="$emit('change-view','mobilebankid')" 
-              class="btn-custom">
+              class="btn-custom d-flex align-items-center justify-content-start gap-2">
               <img :src="bankIdLogo" alt="BankID" class="bankid-icon" />
               {{ t('mobileBankID') }}
             </button>
 
             <button @click="$emit('change-view','bankiddevice')" 
-              class="btn-custom">
+              class="btn-custom d-flex align-items-center justify-content-start gap-2">
             <img :src="bankIdLogo" alt="BankID" class="bankid-icon" />
             {{ t('bankIDThisDevice') }}
             </button>
-
-
-            
+          
     </div>
 
-     <a
-        href="https://www.bankid.com/privat/om-bankid"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        {{ t('aboutMobileBankID') }}
-      </a>
+    <!-- About BankId -->
+<div class="d-flex justify-content-end mt-2">
+  <a
+    href="https://www.bankid.com/privat/om-bankid"
+    class="fw-bold text-decoration-none text-primary d-flex align-items-center"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <span class="me-1" style="color: inherit;">⍰</span>
+    {{ t('aboutMobileBankID') }}
+  </a>
+</div>
+
 
 
 

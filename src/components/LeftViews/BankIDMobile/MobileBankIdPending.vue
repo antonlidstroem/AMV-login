@@ -19,21 +19,15 @@
 
 
 
-    <!-- Länkar -->
-    <div class="d-flex justify-content-between mb-3 small">
-
-      <a href="#" @click.prevent="$emit('change-view','login')">
-        ← {{ t('back') }}
-      </a>
-
-      <a
-        href="https://www.bankid.com/privat/om-bankid"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        {{ t('aboutMobileBankID') }}
-      </a>
-
+<!-- Links -->
+    <div class="links">
+      <BackLink
+        :label="t('back')"
+        @click="$emit('change-view','login')"
+      />
+      <BankIdLink
+        :label="t('aboutMobileBankID')"
+      />
     </div>
 
     <!-- Divider med streck -->
@@ -45,7 +39,7 @@
 
     <button
       @click="$emit('change-view','bankiddevice')"
-      class="btn-custom"
+      class="btn-custom btn-custom btn-custom d-flex align-items-center justify-content-start gap-2 mb-3"
     >
       <img :src="bankIdLogo" class="bankid-icon"/>
       {{ t('bankIDThisDevice') }}
@@ -54,7 +48,7 @@
 <!-- 🔹 Tillfällig knapp för test -->
     <button
       @click="$emit('change-view','mobilebankidapproved')"
-      class="btn-custom"
+      class="btn-temp"
     >
       Simulera lyckad inloggning
     </button>
@@ -65,8 +59,11 @@
 <script>
 import { useI18n } from '../../../i18n/useI18n'
 import bankIdLogo from '../../../assets/BankID_logo_white.png'
+import BackLink from '../../common/BackLink.vue'
+import BankIdLink from '../../common/BankIdLink.vue'
 
 export default {
+  components:{BackLink, BankIdLink},
   emits:['change-view'],
   setup() {
     const { t } = useI18n()

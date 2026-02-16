@@ -17,20 +17,19 @@
   <i class="bi bi-3-circle-fill" style="color:#85BE23;"></i> 
 </div>
 
+<!-- Links -->
+    <div class="links">
+      <BackLink
+        :label="t('back')"
+        @click="$emit('change-view','login')"
+      />
 
-
-    <!-- Länkar -->
-    <div class="d-flex justify-content-between mb-3 small">
-
-      <a href="#" @click.prevent="$emit('change-view','login')">
-        ← {{ t('back') }}
-      </a>
     </div>
 
 <!-- 🔹 Tillfällig knapp för test -->
         <button
         @click="$router.push('/dashboard')"
-        class="btn-custom"
+        class="btn-temp"
         >
         Simulera lyckad inloggning
         </button>
@@ -42,8 +41,10 @@
 <script>
 import { useI18n } from '../../../i18n/useI18n'
 import bankIdLogo from '../../../assets/BankID_logo_white.png'
+import BackLink from '../../common/BackLink.vue'
 
 export default {
+  components:{BackLink},
   emits:['change-view'],
   setup() {
     const { t } = useI18n()

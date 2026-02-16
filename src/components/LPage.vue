@@ -2,7 +2,7 @@
 
 
 
-  <div class="col-md-6 p-4 bg-light">
+  <div class="left-page p-4 bg-light">
 
     <img :src="AMVLogo" class="logo-top"/>
 

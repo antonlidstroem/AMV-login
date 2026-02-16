@@ -29,7 +29,7 @@ export const translations = {
     okayClose: 'Okej, stäng fönster',
     loginWithMobileBankID: 'Logga in med Mobilt BankID',
     scanQRCode: 'Starta BankID-appen i din mobil eller surfplatta och tryck på Skanna QR-kod.',
-    aboutMobileBankID: 'Om Mobilt BankID',
+    aboutMobileBankID: 'Om BankID',
     loginWithBankID: 'Logga in med BankID',
     enterSecurityCode: 'Skriv in din säkerhetskod i BankID-appen på din dator.',
     waitingForBankID: 'Väntar på BankID...',
@@ -59,7 +59,8 @@ export const translations = {
     ResetPasswordEmailNotDelivered: "Jag har inte fått något mail.",
     ResetPasswordEmailNotDeliveredHelp: "Det kan ta några minuter innan mailet har kommit fram. Avvakta och kontrollera att det inte har hamnat i skräpposten.",
     goToStart: "Gå till start",
-    resendEmail: "Skicka ny återställning"
+    resendEmail: "Skicka ny återställning",
+    wrongUserNamePassword: "Fel användarnamn eller lösenord"
 
   },
   en: {

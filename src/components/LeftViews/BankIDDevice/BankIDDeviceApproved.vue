@@ -23,12 +23,18 @@
   <i class="bi bi-2-circle-fill" style="color:#85BE23;"></i> 
 </div>
 
-
-    <div class="links">
-      <a href="#" @click.prevent="$emit('change-view','login')">
-        {{ t('back') }}
-      </a>
+<!-- Links -->
+   <div class="links">
+      <BackLink
+        :label="t('back')"
+        @click="$emit('change-view','login')"
+      />
+      <BankIdLink
+        :label="t('aboutMobileBankID')"
+      />
     </div>
+
+    
 
 <!-- 🔹 Tillfällig knapp för test -->
     <button
@@ -44,11 +50,13 @@
 <script>
 import { useI18n } from '../../../i18n/useI18n'
 import bankIdLogo from '../../../assets/BankID_logo_white.png'
+import BackLink from '../../common/BackLink.vue'
 
 
 
 
 export default {
+  components:{BackLink},
   emits:['change-view'],
 
   setup() {
