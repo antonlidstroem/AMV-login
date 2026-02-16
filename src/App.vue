@@ -1,13 +1,15 @@
 <template>
-  <div class="container-fluid vh-100 d-flex">
-    <LPage
-      :currentView="currentView"
-      @change-view="currentView = $event"
-    />
-
-    <RPage />
+  <div class="page-wrapper">
+    <div class="main-container">
+      <LPage
+        :currentView="currentView"
+        @change-view="currentView = $event"
+      />
+      <RPage />
+    </div>
   </div>
 </template>
+
 
 
 <script>
