@@ -6,16 +6,21 @@
 
     <div class="waiting-box">
       <div class="spinner"></div>
-      <p>{{ t('waitingForBankId') }}</p>
     </div>
 
-    <!-- Pending clock -->
-  <i class="bi bi-clock-history display-1 text-dark mb-3"></i>
-    <div>
-    <a href="#" @click.prevent="$emit('change-view','login')">
-            {{ t('cancel') }}
-          </a>
-    </div>
+
+<!-- Pending clock -->
+<div class="d-flex flex-column justify-content-center align-items-center text-center mt-4">
+  <!-- Klockikon (stor med font-size) -->
+  <i class="bi bi-clock-history text-dark mb-3" style="font-size: 6rem;"></i>
+
+
+  <!-- Avbryt-länk -->
+  <a href="#" @click.prevent="$emit('change-view','login')" class="text-decoration-none fw-medium mb-4">
+    {{ t('cancel') }}
+  </a>
+</div>
+
 <!-- Step indicator with Bootstrap icons, using text-success for active step and text-secondary for inactive steps. -->
 <div class="d-flex justify-content-center align-items-center gap-2">
   <i class="bi bi-1-circle-fill" style="color:#85BE23;"></i> 
@@ -24,18 +29,20 @@
 </div>
 
 <!-- Links -->
-    <div class="links">
-      <BackLink
-        :label="t('back')"
-        @click="$emit('change-view','login')"
-      />
-      <BankIdLink
-        :label="t('aboutMobileBankID')"
-      />
-    </div>
+<div class="d-flex justify-content-between align-items-center mt-3 mb-5">
+  <BackLink
+    :label="t('back')"
+    @click="$emit('change-view','login')"
+  />
+
+  <BankIdLink
+    :label="t('aboutMobileBankID')"
+  />
+</div>
 
 
-    <div class="divider mb-3"><span>{{ t('orBankId') }}</span></div>
+
+    <div class="divider mb-3"><h4>{{ t('orBankId') }}</h4></div>
 
     <button @click="$emit('change-view','mobilebankid')" class="btn-custom btn-custom btn-custom d-flex align-items-center justify-content-start gap-2 mb-3" >
       <img :src="bankIdLogo" class="bankid-icon" />

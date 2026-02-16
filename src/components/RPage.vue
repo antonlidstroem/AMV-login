@@ -2,8 +2,8 @@
   <div class="right-page text-white d-flex flex-column justify-content-start" 
     :style="{ backgroundImage: `url(${bgImage})`, backgroundSize: 'cover'}">
     
-    <button @click="showContact = true" class="btn-header">{{ t('contact') }}</button>
-    <button @click="showHelp = true" class="btn-header">{{ t('help') }}</button>
+    <button @click="showContact = true" class="btn-secondary">{{ t('contact') }}</button>
+    <button @click="showHelp = true" class="btn-secondary">{{ t('help') }}</button>
 
     <div class="language-selector">
       <button @click="showLanguageMenu = !showLanguageMenu" class="btn-header">

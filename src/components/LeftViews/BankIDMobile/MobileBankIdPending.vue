@@ -20,15 +20,17 @@
 
 
 <!-- Links -->
-    <div class="links">
-      <BackLink
-        :label="t('back')"
-        @click="$emit('change-view','login')"
-      />
-      <BankIdLink
-        :label="t('aboutMobileBankID')"
-      />
-    </div>
+<div class="d-flex justify-content-between align-items-center mt-3">
+  <BackLink
+    :label="t('back')"
+    @click="$emit('change-view','login')"
+  />
+
+  <BankIdLink
+    :label="t('aboutMobileBankID')"
+  />
+</div>
+
 
     <!-- Divider med streck -->
     <div class="d-flex align-items-center my-3">

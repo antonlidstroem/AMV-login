@@ -18,7 +18,7 @@
 </div>
 
 <!-- Links -->
-    <div class="links">
+    <div class="d-flex justify-content-between align-items-center mt-3">
       <BackLink
         :label="t('back')"
         @click="$emit('change-view','login')"

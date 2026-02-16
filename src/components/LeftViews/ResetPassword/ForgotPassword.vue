@@ -1,15 +1,13 @@
 <template>
-  <div>
-    <h2>{{ t('resetPassword') }}</h2>
-    <p>{{ t('resetPasswordDescription') }}</p>
-    <p>{{ t('email') }}:</p>
+  <div class="mb-3">
+    <h2 class="mb-3">{{ t('resetPassword') }}</h2>
+    <p class="mb-5">{{ t('resetPasswordDescription') }}</p>
+    <p class="mb-2">{{ t('email') }}:</p>
 
     <div v-if="error" class="error-banner">
       {{ t('enterValidEmail') }}
     </div>
 
-
-    <label>ForgotPassword.vue</label>
     <input
       v-model="email"
       class="form-control mb-3"
@@ -22,7 +20,7 @@
 
     <div class="back-link mt-3">
       <a href="#" @click.prevent="$emit('change-view','login')">
-        ← {{ t('back') }}
+        {{ t('back') }}
       </a>
     </div>
   </div>
