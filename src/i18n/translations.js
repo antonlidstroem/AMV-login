@@ -61,7 +61,8 @@ export const translations = {
     goToStart: "Gå till start",
     resendEmail: "Skicka ny återställning",
     wrongUserNamePassword: "Fel användarnamn eller lösenord",
-    yourMessage: "Skriv ditt meddelande här..."
+    yourMessage: "Skriv ditt meddelande här...",
+    helpTitle: "Vad behöver du hjälp med?"
 
   },
   en: {

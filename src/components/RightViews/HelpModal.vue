@@ -1,24 +1,56 @@
 <template>
-  <div class="help-panel">
-    <!-- Stäng-cirkel -->
-    <button class="close-circle" @click="close">×</button>
+  <div class="contact-panel position-relative rounded-4 text-white p-4 border border-white"
+       style="background-color: rgba(33, 33, 33, 0.70);
+              width: 90%;
+              max-width: 900px;
+              height: 85%;
+              max-height: 90vh;
+              margin: auto;
+              display: flex;
+              flex-direction: column;">
 
-    <!-- Lista med hjälpknappar -->
-    <div v-if="!selectedTopic" class="help-buttons">
-      <button v-for="(topic, index) in topics" 
-              :key="index"
-              @click="selectTopic(topic)">
+    <!-- Stäng-knapp -->
+    <button 
+      class="btn btn-transparent btn-sm rounded-circle position-absolute top-0 end-0 m-3 d-flex align-items-center justify-content-center p-0"
+      @click="close"
+    >
+      <i class="bi bi-x-circle text-white fs-4"></i>
+    </button>
+
+    <!-- Rubrik centrerad -->
+    <h2 class="text-white mb-4 text-center">{{ t('helpTitle') }}</h2>
+
+    <!-- Lista med hjälpämnen -->
+    <div v-if="!selectedTopic" class="help-buttons flex-grow-1 overflow-auto">
+      <button 
+        v-for="(topic, index) in topics" 
+        :key="index"
+        class="btn-secondary-custom w-100"
+        @click="selectTopic(topic)"
+      >
         {{ topic.label }}
       </button>
     </div>
 
-    <!-- Visar innehåll när ett ämne är valt -->
-    <div v-else class="help-content">
-      <h2>{{ selectedTopic.label }}</h2>
-      <p>{{ selectedTopic.content }}</p>
+    <!-- Detaljvy när ett ämne är valt -->
+    <div v-else class="flex-column flex-grow-1 overflow-auto">
+      <div class="rounded-3 p-3 mb-4 flex-shrink-0 border border-white"
+           style="background-color: rgba(20,20,20,0.55);">
+        <h3 class="text-white">{{ selectedTopic.label }}</h3>
+        <p class="text-white">{{ selectedTopic.content }}</p>
+      </div>
 
-      <button class="btn-close" @click="backToTopics">{{ t('back') }}</button>
+      <button class="btn-secondary-custom" @click="backToTopics">
+        {{ t('back') }}
+      </button>
     </div>
+
+    <!-- Stäng fönsterknapp längst ner -->
+    <button type="button" class="btn-secondary-custom" @click="close">
+        <i class="bi bi-x-circle-fill text-white fs-5"></i>
+        {{ t('closeWindow') }}
+      </button>
+
   </div>
 </template>
 
@@ -36,12 +68,8 @@ export default {
       { label: 'Jag har glömt mitt lösenord', content: 'Platshållartext för lösenord.' },
       { label: 'Jag har inte tillgång till min e-post', content: 'Platshållartext för e-post.' },
       { label: 'Jag har stött på ett fel i systemet', content: 'Platshållartext för fel.' },
-      { label: 'Hjälpsektion', content: 'Platshållartext.' },
-      { label: 'Hjälpsektion', content: 'Platshållartext.' },
-      { label: 'Hjälpsektion', content: 'Platshållartext.' },
-      { label: 'Hjälpsektion', content: 'Platshållartext.' },
-      { label: 'Hjälpsektion', content: 'Platshållartext.' },
-      { label: 'Hjälpsektion', content: 'Platshållartext.' }
+      { label: 'Hjälpsektion 1', content: 'Platshållartext.' },
+      { label: 'Hjälpsektion 2', content: 'Platshållartext.' }
     ]
 
     function close() {
