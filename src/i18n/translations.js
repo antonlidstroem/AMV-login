@@ -60,7 +60,8 @@ export const translations = {
     ResetPasswordEmailNotDeliveredHelp: "Det kan ta några minuter innan mailet har kommit fram. Avvakta och kontrollera att det inte har hamnat i skräpposten.",
     goToStart: "Gå till start",
     resendEmail: "Skicka ny återställning",
-    wrongUserNamePassword: "Fel användarnamn eller lösenord"
+    wrongUserNamePassword: "Fel användarnamn eller lösenord",
+    yourMessage: "Skriv ditt meddelande här..."
 
   },
   en: {

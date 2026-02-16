@@ -1,28 +1,32 @@
 <template>
-  <div class="right-page text-white d-flex flex-column justify-content-start" 
-    :style="{ backgroundImage: `url(${bgImage})`, backgroundSize: 'cover'}">
+  <div class="right-page text-white d-flex flex-column justify-content-start align-items-center" 
+       :style="{ backgroundImage: `url(${bgImage})`, backgroundSize: 'cover'}">
     
-    <button @click="showContact = true" class="btn-secondary">{{ t('contact') }}</button>
-    <button @click="showHelp = true" class="btn-secondary">{{ t('help') }}</button>
+    <!-- Knapprad -->
+    <div class="d-flex gap-2 p-3 justify-content-center">
+      <button @click="toggleContact" class="btn-secondary-custom">{{ t('contact') }}</button>
+      <button @click="toggleHelp" class="btn-secondary-custom">{{ t('help') }}</button>
 
-    <div class="language-selector">
-      <button @click="showLanguageMenu = !showLanguageMenu" class="btn-header">
-        {{ languageNames[state.currentLang] }}
-      </button>
-
-      <div class="language-dropdown" :class="{ show: showLanguageMenu }">
-        <button 
-          v-for="(name, code) in languageNames" 
-          :key="code" 
-          @click="selectLanguage(code)"
-          :class="{ active: state.currentLang === code }"
-        >
-          {{ name }}
+      <div class="language-selector position-relative">
+        <button @click="toggleLanguage" class="btn-secondary-custom">
+          {{ languageNames[state.currentLang] }}
         </button>
+
+        <!-- language dropdown -->
+        <div class="language-dropdown" :class="{ show: showLanguageMenu }">
+          <button 
+            v-for="(name, code) in languageNames" 
+            :key="code" 
+            @click="selectLanguage(code)"
+            :class="{ active: state.currentLang === code }"
+          >
+            {{ name }}
+          </button>
+        </div>
       </div>
     </div>
 
-    <!-- Inbäddade rutor -->
+    <!-- Modals -->
     <ContactModal v-if="showContact" @close="showContact = false" />
     <HelpModal v-if="showHelp" @close="showHelp = false" />
   </div>
@@ -39,9 +43,30 @@ export default {
   components: { ContactModal, HelpModal },
   setup() {
     const { state, changeLang, languageNames, t } = useI18n()
+    
+    // Alla toggle states
     const showContact = ref(false)
     const showHelp = ref(false)
     const showLanguageMenu = ref(false)
+
+    // Toggle-funktioner
+    function toggleContact() {
+      showContact.value = !showContact.value
+      if (showContact.value) showHelp.value = false // stänger help
+      showLanguageMenu.value = false // stänger language dropdown
+    }
+
+    function toggleHelp() {
+      showHelp.value = !showHelp.value
+      if (showHelp.value) showContact.value = false // stänger contact
+      showLanguageMenu.value = false // stänger language dropdown
+    }
+
+    function toggleLanguage() {
+      showLanguageMenu.value = !showLanguageMenu.value
+      showContact.value = false // stänger contact
+      showHelp.value = false // stänger help
+    }
 
     function selectLanguage(langCode) {
       changeLang(langCode)
@@ -55,8 +80,11 @@ export default {
       showContact,
       showHelp,
       showLanguageMenu,
+      toggleContact,
+      toggleHelp,
+      toggleLanguage,
       selectLanguage,
-      bgImage 
+      bgImage
     }
   }
 }
