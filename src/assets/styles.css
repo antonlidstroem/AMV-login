@@ -144,7 +144,45 @@
     transform: translateY(-20px);
   }
 
+  .mobile-controls {
+    width: 100%;
+    padding: 0.5rem 1rem;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+
+  .action-dropdown .language-dropdown {
+    top: 100%;
+    left: 0;
+    width: 150px;
+    border-radius: 0 0 6px 6px;
+    border: 1px solid #fff;
+    background: rgba(255,255,255,0.3);
+  }
+
+   .action-dropdown .language-dropdown button {
+    width: 100%;
+    padding: 8px 16px;
+    background: transparent;
+    border: none;
+    color: white;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .action-dropdown .language-dropdown button:hover {
+    background: rgba(255,255,255,0.5);
+  }
+
 }
+
+
+  .language-selector {
+    position: relative;
+    z-index: 20;
+  }
+
 
 .overlay-panel {
   position: absolute;

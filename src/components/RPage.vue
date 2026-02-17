@@ -4,18 +4,40 @@
 
     <!-- Knapprad överst -->
 <div class="d-flex gap-2 p-3 justify-content-center w-100">
+  <div class="d-none d-md-flex">
   <button @click="toggleContact" class="btn-secondary-custom">
     <i class="bi bi-at text-white fs-5"></i>{{ t('contact') }}
   </button>
   <button @click="toggleHelp" class="btn-secondary-custom">
     <i class="bi bi-question-circle text-white fs-5"></i>{{ t('help') }}
   </button>
+</div>
+  <!-- Mobil dropdown för Kontakt/Hjälp -->
+  <div class="action-dropdown position-relative d-md-none">
+    <button @click="toggleActionMenu" class="btn-secondary-custom">
+      ☰
+    </button>
+    <div class="language-dropdown" :class="{ show: showActionMenu }">
+      <button @click="toggleContact">Kontakt</button>
+      <button @click="toggleHelp">Hjälp</button>
+    </div>
+  </div>
 
+  <!-- Desktop knapprad -->
+  <!-- <div class="d-none d-md-flex gap-2">
+    <button @click="toggleContact" class="btn-secondary-custom">
+      <i class="bi bi-at text-white fs-5"></i>{{ t('contact') }}
+    </button>
+    <button @click="toggleHelp" class="btn-secondary-custom">
+      <i class="bi bi-question-circle text-white fs-5"></i>{{ t('help') }}
+    </button>
+  </div> -->
+
+   <!-- Språkknapp -->
   <div class="language-selector position-relative">
     <button @click="toggleLanguage" class="btn-secondary-custom">
       {{ languageNames[state.currentLang] }}
     </button>
-
     <div class="language-dropdown" :class="{ show: showLanguageMenu }">
       <button v-for="(name, code) in languageNames" 
               :key="code" 
@@ -78,10 +100,22 @@ export default {
       showLanguageMenu.value = false
     }
 
-    // ✅ computed property som kollar om någon overlay/modals är öppen
+    const toggleActionMenu = () => {
+      showActionMenu.value = !showActionMenu.value
+      // stäng övriga overlay
+      showContact.value = false
+      showHelp.value = false
+      showLanguageMenu.value = false
+}
+
+
+
+    // computed property som kollar om någon overlay/modals är öppen
     const isOverlayVisible = computed(() => {
       return showContact.value || showHelp.value || showLanguageMenu.value
     })
+
+    const showActionMenu = ref(false)
 
     return {
       state,
@@ -90,9 +124,11 @@ export default {
       showContact,
       showHelp,
       showLanguageMenu,
+      showActionMenu,
       toggleContact,
       toggleHelp,
       toggleLanguage,
+      toggleActionMenu,
       selectLanguage,
       bgImage,
       isOverlayVisible
