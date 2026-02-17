@@ -174,30 +174,28 @@ body{
 
 /* RPage-knappar */
 .btn-secondary-custom {
-  background: rgba(255, 255, 255, 0.15); /* lätt transparent */
+  background: rgba(33, 33, 30, 0.30); 
   border: 1px solid #fff;
   color: white;
   font-weight: 600;
-  padding: 4px 12px;       /* kompakt höjd */
-  font-size: 0.9rem;       /* lite mindre text */
+  padding: 1px 12px;       
+  font-size: 0.9rem;    
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
 
-  width: fit-content;      /* exakt så bred som innehållet */
+  width: fit-content;    
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;                /* avstånd mellan ikon och text */
+  gap: 6px;                
 
-  margin: 0 auto;          /* centrerar knappen horisontellt */
+  margin: 0 auto;          
 }
 
 .btn-secondary-custom:hover {
-  background: rgba(255, 255, 255, 0.25); /* lite mörkare vid hover */
+  background: rgba(33, 33, 33, 0.85);
 }
-
-
 
 
 /* Dropdown-container */
@@ -265,19 +263,7 @@ body{
   filter: brightness(1.1);
 }
 
-.btn-secondary-custom {
-  background: rgba(255, 255, 255, 0.15);
-  border: 1px solid #fff;
-  color: white;
-  font-weight: 600;
-  padding: 8px 16px;
-  border-radius: 6px;
-  transition: all 0.2s ease-in-out;
-}
 
-.btn-secondary-custom:hover {
-  background: rgba(255, 255, 255, 0.25);
-}
 .help-modal {
   width: 90%;
   max-width: 900px;
@@ -339,21 +325,8 @@ body{
   filter: brightness(1.1);
 }
 
-.btn-secondary-custom {
-  background: rgba(255, 255, 255, 0.15);
-  border: 1px solid #fff;
-  color: white;
-  font-weight: 600;
-  padding: 8px 16px;
-  border-radius: 6px;
-  transition: all 0.2s ease-in-out;
-  width: fit-content;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
+.flag-icon {
+  width: 20px;
+  height: 15px;
 }
 
-.btn-secondary-custom:hover {
-  background: rgba(255, 255, 255, 0.25);
-}

@@ -4,8 +4,8 @@
     
     <!-- Knapprad -->
     <div class="d-flex gap-2 p-3 justify-content-center">
-      <button @click="toggleContact" class="btn-secondary-custom">{{ t('contact') }}</button>
-      <button @click="toggleHelp" class="btn-secondary-custom">{{ t('help') }}</button>
+      <button @click="toggleContact" class="btn-secondary-custom"><i class="bi bi-at text-white fs-5"></i>{{ t('contact') }}</button>
+      <button @click="toggleHelp" class="btn-secondary-custom"><i class="bi bi-question-circle text-white fs-5"></i>{{ t('help') }}</button>
 
       <div class="language-selector position-relative">
         <button @click="toggleLanguage" class="btn-secondary-custom">
@@ -24,7 +24,9 @@
           </button>
         </div>
       </div>
-    </div>
+  </div>
+
+
 
     <!-- Modals -->
     <ContactModal v-if="showContact" @close="showContact = false" />
@@ -38,6 +40,9 @@ import { useI18n } from '../i18n/useI18n'
 import ContactModal from './RightViews/ContactModal.vue'
 import HelpModal from './RightViews/HelpModal.vue'
 import bgImage from '../assets/RPageCard.jpg'
+
+
+
 
 export default {
   components: { ContactModal, HelpModal },
@@ -84,7 +89,7 @@ export default {
       toggleHelp,
       toggleLanguage,
       selectLanguage,
-      bgImage
+      bgImage,
     }
   }
 }
