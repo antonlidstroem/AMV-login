@@ -8,18 +8,20 @@
         @change-view="currentView = $event"
       />
 
-      <!-- Mobile LPage -->
-      <LPage
-        class="mobile-left-page"
-        :currentView="currentView"
-        @change-view="currentView = $event"
-      />
-
       <!-- Right Page -->
       <RPage
         :currentView="currentView"
         @change-view="currentView = $event"
-      />
+      >
+        <!-- Mobil-LPage ligger inuti RPage -->
+        <template #mobile-left>
+          <LPage
+            class="mobile-left-page"
+            :currentView="currentView"
+            @change-view="currentView = $event"
+          />
+        </template>
+      </RPage>
     </div>
   </div>
 </template>

@@ -46,9 +46,15 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  width: 100%;
   height: 846px; /* desktop standard */
+  /* width: 100%; <-- ta bort detta */
   box-sizing: border-box;
+}
+
+.left-page,
+.right-page {
+  flex: 1;       /* lika stor */
+  min-width: 0;  /* förhindra overflow */
 }
 
 /* ================= Desktop (>=769px) ================= */
@@ -72,6 +78,7 @@
 
   .mobile-left-page {
     display: none;
+    
   }
 
   .right-page {
@@ -80,14 +87,7 @@
   }
 }
 
-/* ================= Mobil (<769px) ================= */
 @media (max-width: 768px) {
-  .page-wrapper {
-    justify-content: flex-start;
-    align-items: stretch;
-    overflow: visible;
-  }
-
   .main-container {
     flex-direction: column;
     width: 100vw;
@@ -103,24 +103,63 @@
   }
 
   .mobile-left-page {
-    display: block;      /* visa mobil-LPage */
-    width: 100%;         /* fyller bredden */
-    flex: 0 0 auto;      /* hindra krympning */
-    margin-bottom: 20px; /* lite mellanrum till knappar */
+    display: block;
+    border-radius: 25px;
+    height: 98%;
+    width: 98%;
   }
 
   .right-page {
-    height: 100%;         /* fyller hela fönstret */
-    align-items: stretch; /* LPage fyller bredden */
-    overflow-y: auto;     /* scroll vid mycket innehåll */
+    display: flex;
     flex-direction: column;
     justify-content: flex-start;
+    align-items: center; /* center horisontellt */
+    width: 100%;
+    height: 100%;          
+    background-size: cover;
+    background-position: center;
+    padding: 60px 1px 1px 1px;     
+    box-sizing: border-box;
+    overflow-y: auto;
+    padding-top: 1rem;
   }
 
-  body {
-    min-width: 0;
+  /* LPage inuti RPage */
+.right-page ::v-deep(.mobile-left-page) {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto; /* centrerad */
+    border-radius: 20px;
+    background: rgba(255,255,255,0.9);
+    padding: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    margin-top: 20px;
+    transition: all 0.3s ease;
   }
+
+  /* göm LPage när behövs */
+  .mobile-left-hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-20px);
+  }
+
 }
+
+.overlay-panel {
+  position: absolute;
+  top: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+  z-index: 100;
+}
+
+
+
 
 /* ================= Övriga stilar ================= */
 .error-banner {
