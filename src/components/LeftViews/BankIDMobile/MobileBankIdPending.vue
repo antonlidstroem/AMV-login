@@ -1,5 +1,5 @@
 <template>
-  <div class="mobile-bankid text-center">
+<div class="bg-white p-4 rounded-4 mb-3">
 
     <h2>{{ t('loginWithMobileBankID') }}</h2>
     <p class="mb-3">{{ t('waitingForAuth') }}</p>

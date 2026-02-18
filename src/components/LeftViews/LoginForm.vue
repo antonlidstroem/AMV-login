@@ -1,6 +1,7 @@
 <template>
-<div>
+<div class="bg-white p-4 rounded-4 mb-3">
 
+<img :src="AMVLogo" class="logo-top" />
 
 <div v-if="error" class="error-banner">{{ t('wrongUserNamePassword') }}</div>
 
@@ -45,8 +46,6 @@
         </a>
       </div>
 
-
-
 <div class="divider mb-2">
   <br/>    
   <h4>{{ t('orBankId') }}</h4>
@@ -86,7 +85,7 @@
 
 </form>
 
-<Popup v-if="loading" title="Loggar in" text="Vänta..." button=""/>
+<Popup v-if="loading" :title="t('loginIn')" :text="t('wait')" button=""/>
 </div>
 </template>
 
@@ -95,6 +94,7 @@ import { loginMock } from '../../mock/authService'
 import Popup from '../common/Popup.vue'
 import { useI18n } from '../../i18n/useI18n'
 import bankIdLogo from '../../assets/BankID_logo_white.png'
+import AMVLogo from '../../assets/logo_horizontal.svg'
 
 
 export default{
@@ -124,7 +124,7 @@ export default{
  },
  setup(){
  const { t } = useI18n()
- return { t, bankIdLogo}
+ return { t, bankIdLogo, AMVLogo }
 }
 
 }

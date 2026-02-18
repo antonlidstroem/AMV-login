@@ -1,5 +1,5 @@
 <template>
-  <div>
+<div class="bg-white p-4 rounded-4 mb-3">
 
     <h2>{{ t('loginWithBankID') }}</h2>
     <p>{{ t('SecurityCodeApproved') }}</p>

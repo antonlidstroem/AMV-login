@@ -1,5 +1,5 @@
 <template>
-  <div class="mb-3">
+<div class="bg-white p-4 rounded-4 mb-3">
     <h2 class="mb-3">{{ t('resetPassword') }}</h2>
     <p class="mb-5">{{ t('resetPasswordDescription') }}</p>
     <p class="mb-2">{{ t('email') }}:</p>
@@ -15,7 +15,7 @@
     />
 
     <button class="btn-custom" @click="send">
-      Skicka
+      {{ t('send') }}
     </button>
 
     <div class="back-link mt-3">
@@ -45,8 +45,7 @@ export default {
         this.error = true
       } else {
         this.error = false
-        // Byt vy direkt till ResetPasswordEmail.vue
-        this.$emit('change-view','resetpasswordemail')
+        this.$emit('change-view','resetpasswordemail', 'noemailreceived')
       }
     }
   },

@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class="bg-white p-4 rounded-4 mb-3">
 <h4>Ange nytt lösenord</h4>
 
 <div v-if="errorMsg" class="error-banner">{{errorMsg}}</div>

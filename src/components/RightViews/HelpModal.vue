@@ -1,6 +1,6 @@
 <template>
   <div class="contact-panel position-relative rounded-4 text-white p-4 border border-white"
-       style="background-color: rgba(255, 255, 255, 0.20);
+     style="background-color: rgba(100, 100, 100, 0.80);
               width: 90%;
               max-width: 900px;
               height: 85%;

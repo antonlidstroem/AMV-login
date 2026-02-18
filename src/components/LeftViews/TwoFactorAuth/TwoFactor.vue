@@ -1,9 +1,12 @@
 <template>
-<div>
-<h4>Verifiera med kod</h4>
-<p>Ange den fyrsiffriga kod som skickats...</p>
+<div class="bg-white p-4 rounded-4 mb-3">
 
-<div v-if="error" class="error-banner">Du har angett fel kod. Försök igen.</div>
+  <img :src="AMVLogo" class="logo-top" />
+
+<h4>{{ t('verifyWithCode') }}</h4>
+<p>{{ t('enterPinCode') }}</p>
+
+<div v-if="error" class="error-banner">t('newCodeSent')"</div>
 
 <div class="d-flex gap-3 mb-3 justify-content-center">
   <input
@@ -11,30 +14,26 @@
     :key="i"
     v-model="digits[i]"
     maxlength="1"
-    class="form-control text-center code-input"
+    class="text-center code-input"
     :class="{
       'error-border': error,
       'success-border': digits[i] && !error
     }"
+    @input="clearError"
   />
 </div>
 
 
-<button class="btn-custom" @click="verify">Logga in</button>
+<button class="btn-custom" @click="verify">{{ t('login') }}</button>
 
-<button class="btn btn-link" @click="$emit('change-view','login')">Tillbaka</button>
-
-<Popup v-if="successPopup"
- title="✔"
- text="En ny kod har skickats"
- button="Okej, stäng fönster"
- @close="successPopup=false"/>
+<button class="btn btn-link" @click="$emit('change-view','login')">{{ t('back') }}</button>
 </div>
 </template>
 
 <script>
-import Popup from '../common/Popup.vue'
-import { useI18n } from '../../i18n/useI18n'
+import Popup from '../../common/Popup.vue'
+import { useI18n } from '../../../i18n/useI18n'
+import AMVLogo from '../../../assets/logo_horizontal.svg'
 
 
 export default{
@@ -60,11 +59,16 @@ export default{
    }else{
     this.error=true
    }
+  },
+  clearError(){
+   if(this.error){
+    this.error=false
+   }
   }
  },
  setup(){
  const { t } = useI18n()
- return { t }
+ return { t, AMVLogo }
 }
 
 }

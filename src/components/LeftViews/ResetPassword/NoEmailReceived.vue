@@ -1,23 +1,18 @@
 <template>
 <div class="bg-white p-4 rounded-4 mb-3">
 
-  <h2>{{ t('resetPassword') }}</h2>
-
-  <div class="text-center">
-  <i class="bi bi-check-circle display-1 mb-3" style="color: var(--success)"></i>
-  </div>
-
-  <p>{{ t('ResetPasswordEmailSent') }}</p>
-  <button class="btn-custom" @click="send">
-    {{t('goToStart')}}
-  </button>
-
-
   <h2>{{ t('ResetPasswordEmailNotDelivered') }}</h2>
   <p>{{ t('ResetPasswordEmailNotDeliveredHelp') }}</p>
   <button class="btn-custom" @click="send">
     {{t('resendEmail')}}
   </button>
+
+
+  <div class="back-link mt-3">
+    <a href="#" @click.prevent="$emit('change-view','login')">
+      ← {{ t('back') }}
+    </a>
+  </div>
 
 </div>
 </template>

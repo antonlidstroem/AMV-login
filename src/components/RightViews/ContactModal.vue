@@ -1,6 +1,6 @@
 <template>
 <div class="contact-panel position-relative rounded-4 text-white p-4 border border-white"
-     style="background-color: rgba(255, 255, 255, 0.25);
+     style="background-color: rgba(100, 100, 100, 0.80);
             width: 90%;
             max-width: 900px;
             height: 85%;        /* istället för fixed 80% */
@@ -27,7 +27,7 @@
 
     <!-- Kontaktinfo -->
 <div class="contact-person rounded-3 p-3 mb-4 flex-shrink-0 border border-white"
-     style="background-color: rgba(20,20,20,0.55);">
+     style="background-color: rgba(128, 172, 47, 0.15);">
   <p class="mb-2" style="color: #ffffff !important;">
     <i class="bi bi-person-fill me-2" style="color: #ffffff !important;"></i>
     <strong style="color: #ffffff !important;">Emanuel Makhoul</strong>
