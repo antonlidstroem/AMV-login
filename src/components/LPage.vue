@@ -1,7 +1,11 @@
 <template>
-  <div class="left-page p-4">
+  <!-- <div class="bg-lpage p-1"> -->
+<div class="bg-lpage d-flex flex-column align-items-center justify-content-center h-100">
 
-  <div v-if="currentView === 'twofactor'" class="twofactor-wrapper">
+
+
+   <div class="w-100">
+<div v-if="currentView === 'twofactor'" class="d-flex flex-column gap-3 w-100">
     <div class="component-box">
       <TwoFactor @change-view="$emit('change-view',$event)" />
     </div>
@@ -10,7 +14,7 @@
     </div>
   </div>
 
-  <div v-if="currentView === 'noemailreceived'" class="twofactor-wrapper">
+ <div v-else-if="currentView === 'noemailreceived'" class="d-flex flex-column gap-3 w-100">
     <div class="component-box">
       <ResetPasswordEmail @change-view="$emit('change-view',$event)" />
     </div>
@@ -26,6 +30,8 @@
     @change-view="$emit('change-view',$event)"
   />
 </div>
+
+</div>  
 
 </template>
 

@@ -1,5 +1,5 @@
 <template>
-<div class="bg-white p-4 rounded-4 mb-3">
+<div class=" bg-views p-4 rounded-4 mb-3">
 
   <h2>{{ t('resetPassword') }}</h2>
 

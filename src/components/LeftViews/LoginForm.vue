@@ -1,5 +1,6 @@
 <template>
-<div class="bg-white p-4 rounded-4 mb-3">
+<div class=" bg-views p-4 rounded-4 mb-3">
+
 
 <img :src="AMVLogo" class="logo-top" />
 
@@ -16,8 +17,8 @@
            style="left: 10px; top: 50%; transform: translateY(-50%); font-size: 1.2rem;"></i>
         <input 
           v-model="username" 
-          class="form-control ps-5" 
-          :class="{'error-border':error}" 
+          class="form-size form-control ps-5" 
+          :class="{'error-border':error}"
         />
       </div>
 
@@ -29,7 +30,7 @@
         <input
           type="password"
           v-model="password"
-          class="form-control ps-5"
+          class="form-size form-control ps-5"
           :class="{'error-border':error}"
         />
       </div>
@@ -79,9 +80,6 @@
     {{ t('aboutMobileBankID') }}
   </a>
 </div>
-
-
-
 
 </form>
 

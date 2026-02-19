@@ -3,7 +3,7 @@
  <div class="popup-box">
   <h5>{{title}}</h5>
   <p>{{text}}</p>
-  <button v-if="button" class="btn btn-primary" @click="$emit('close')">{{button}}</button>
+  <button v-if="button" @click="$emit('close')">{{button}}</button>
  </div>
 </div>
 </template>

@@ -1,5 +1,5 @@
 <template>
-<div class="bg-white p-4 rounded-4 mb-3">
+<div class=" bg-views p-4 rounded-4 mb-3">
     <h2 class="mb-3">{{ t('resetPassword') }}</h2>
     <p class="mb-5">{{ t('resetPasswordDescription') }}</p>
     <p class="mb-2">{{ t('email') }}:</p>
@@ -10,7 +10,7 @@
 
     <input
       v-model="email"
-      class="form-control mb-3"
+      class="form-control mb-3 form-size"
       :class="{ 'error-border': error }"
     />
 

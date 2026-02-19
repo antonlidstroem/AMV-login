@@ -1,5 +1,5 @@
 <template>
-<div class="bg-white p-4 rounded-4 mb-3">
+<div class="bg-views p-4 rounded-4 mb-3">
     <h4>{{ t('noCodeReceived') }}</h4>
     <p>{{ t('waitingForCode') }} {{ t('contactUs') }}</p>
 
