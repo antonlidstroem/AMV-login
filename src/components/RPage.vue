@@ -27,11 +27,14 @@
 
    <!-- Språkknapp -->
   <div class="language-selector position-relative">
-    <button @click="toggleLanguage" class="btn-secondary-custom d-flex align-items-center gap-2" 
-        style="min-width: 150px;">
-      <span :class="`${flagClasses[state.currentLang]} flag-icon`"></span>
-      {{ languageNames[state.currentLang] }}
-        <span class="dropdown-arrow text-white">▼</span>
+    <!-- v-for i template -->
+    <button v-for="(name, code) in languageNames" 
+            :key="code"
+            @click="selectLanguage(code as Lang)"
+            :class="{ active: state.currentLang === code }"
+            class="btn-custom border border-white d-flex align-items-center gap-2">
+      <span :class="[flagClasses[code as Lang], 'flag-icon']"></span>
+      {{ name }}
     </button>
      <!-- dropdown -->
     <div class="language-dropdown" :class="{ show: showLanguageMenu }">
@@ -61,10 +64,11 @@
     <HelpModal v-if="showHelp" @close="showHelp = false" />
   </div>
 </template>
-
-<script>
+<script lang="ts">
 import { ref, computed } from 'vue'
+import type { Ref } from 'vue'
 import { useI18n } from '../i18n/useI18n'
+import type { Lang } from '../i18n/useI18n'
 import ContactModal from './RightViews/ContactModal.vue'
 import HelpModal from './RightViews/HelpModal.vue'
 import bgImage from '../assets/RPageCard.jpg'
@@ -74,21 +78,18 @@ export default {
   setup() {
     const { state, changeLang, languageNames, t } = useI18n()
 
-    const flagClasses = {
-  sv: 'fi fi-se',
-  en: 'fi fi-gb',
-  fi: 'fi fi-fi',
-  no: 'fi fi-no'
-}
-
-
-    const showContact = ref(false)
-    const showHelp = ref(false)
-    const showLanguageMenu = ref(false)
-
-    const handleContactClose = () => {
-      showContact.value = false
+    type LangCode = keyof typeof languageNames
+    const flagClasses: Record<LangCode, string> = {
+      sv: 'fi fi-se',
+      en: 'fi fi-gb',
+      fi: 'fi fi-fi',
+      no: 'fi fi-no'
     }
+
+    const showContact: Ref<boolean> = ref(false)
+    const showHelp: Ref<boolean> = ref(false)
+    const showLanguageMenu: Ref<boolean> = ref(false)
+    const showActionMenu: Ref<boolean> = ref(false)
 
     const toggleContact = () => {
       showContact.value = !showContact.value
@@ -102,37 +103,36 @@ export default {
       showLanguageMenu.value = false
     }
 
-const toggleLanguage = () => {
-  showLanguageMenu.value = !showLanguageMenu.value
-}
+    const toggleLanguage = () => {
+      showLanguageMenu.value = !showLanguageMenu.value
+    }
 
+    const toggleActionMenu = () => {
+      showActionMenu.value = !showActionMenu.value
+    }
 
-    const selectLanguage = (langCode) => {
+    const selectLanguage = (langCode: LangCode) => {
       changeLang(langCode)
       showLanguageMenu.value = false
     }
 
-const toggleActionMenu = () => {
-  showActionMenu.value = !showActionMenu.value
-}
-
-
     const handleMobileContact = () => {
-  showActionMenu.value = false
-  toggleContact()
-}
+      showActionMenu.value = false
+      toggleContact()
+    }
 
-const handleMobileHelp = () => {
-  showActionMenu.value = false
-  toggleHelp()
-}
+    const handleMobileHelp = () => {
+      showActionMenu.value = false
+      toggleHelp()
+    }
 
-    // computed property som kollar om någon overlay/modals är öppen
-    const isOverlayVisible = computed(() => {
+    const handleContactClose = () => {
+      showContact.value = false
+    }
+
+    const isOverlayVisible = computed<boolean>(() => {
       return showContact.value || showHelp.value || showLanguageMenu.value
     })
-
-    const showActionMenu = ref(false)
 
     return {
       state,

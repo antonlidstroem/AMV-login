@@ -2,8 +2,9 @@
 import { reactive } from 'vue'
 import { translations, languageNames } from './translations'
 
+
 // Typa språken automatiskt från objektet
-type Lang = keyof typeof translations  // 'sv' | 'en' | 'no' | 'fi'
+export type Lang = keyof typeof translations  // 'sv' | 'en' | 'no' | 'fi'
 
 // Typa alla möjliga nycklar (alla nycklar måste finnas i alla språk)
 type TranslationKey = keyof typeof translations['sv']  // t.ex. 'aboutBankID' | 'messageSent' | ...

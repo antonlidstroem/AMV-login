@@ -1,5 +1,6 @@
 // src/i18n/translations.ts
 import type { BaseTranslations } from './types'
+import type { Lang } from './useI18n'
 
 // Svenska
 const sv: BaseTranslations = {
@@ -308,9 +309,9 @@ const fi: BaseTranslations = {
 // Export all translations
 export const translations: Record<string, BaseTranslations> = { sv, en, no, fi }
 
-export const languageNames = {
+export const languageNames: Record<Lang, string> = {
   sv: 'Svenska',
   en: 'English',
   no: 'Norsk',
   fi: 'Suomi'
-} as const
+}
