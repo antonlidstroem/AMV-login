@@ -9,12 +9,11 @@
 
 
  <form @submit.prevent="login" class="d-flex flex-column gap-2 p-3 text-dark">
-    <h2 class="mb-3">{{ t('login') }}</h2> 
+    <h1 class="mb-3">{{ t('login') }}</h1> 
       <!-- Username -->
 <label class="form-label mb-1">{{ t('username') }}</label>
       <div class="position-relative mb-2">
-        <i class="bi bi-person-fill position-absolute text-dark" 
-           style="left: 10px; top: 50%; transform: translateY(-50%); font-size: 1.2rem;"></i>
+         <i class="bi bi-person-fill input-icon"></i>
         <input 
           v-model="username" 
           class="form-size form-control ps-5" 
@@ -22,11 +21,13 @@
         />
       </div>
 
+
+
+      
      <!-- Password -->
       <label class="form-label mb-1">{{ t('password') }}</label>
       <div class="position-relative mb-2">
-        <i class="bi bi-lock-fill position-absolute text-dark" 
-           style="left: 10px; top: 50%; transform: translateY(-50%); font-size: 1.2rem;"></i>
+          <i class="bi bi-lock-fill input-icon"></i>
         <input
           type="password"
           v-model="password"
@@ -49,7 +50,7 @@
 
 <div class="divider mb-2">
   <br/>    
-  <h4>{{ t('orBankId') }}</h4>
+  <h2>{{ t('orBankId') }}</h2>
     </div>
 
 <div class="d-flex flex-column gap-2 mb-2">
@@ -83,13 +84,17 @@
 
 </form>
 
-<Popup v-if="loading" :title="t('loginIn')" :text="t('wait')" button=""/>
+    <Popup 
+      v-if="loading" 
+      :title="t('loginIn')"  
+      :loading="true"
+    />
 </div>
 </template>
 
 <script>
 import { loginMock } from '../../mock/authService'
-import Popup from '../common/Popup.vue'
+import Popup from '../common/LoginPopup.vue'
 import { useI18n } from '../../i18n/useI18n'
 import bankIdLogo from '../../assets/BankID_logo_white.png'
 import AMVLogo from '../../assets/logo_horizontal.svg'
@@ -109,16 +114,17 @@ export default{
   async login(){
    this.error=false
    this.loading=true
-   try{
-    await loginMock(this.username,this.password)
-    localStorage.setItem('mockLogin','true')
 
-    this.$emit('change-view','twofactor')
-   }catch{
-    this.error=true
-   }
-   this.loading=false
-  }
+   try {
+          await loginMock(this.username, this.password)
+          localStorage.setItem('mockLogin', 'true')
+          this.$emit('change-view', 'twofactor')
+        } catch {
+          this.error = true
+        } finally {
+          this.loading = false
+        }
+
  },
  setup(){
  const { t } = useI18n()

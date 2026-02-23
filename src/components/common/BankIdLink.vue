@@ -1,25 +1,14 @@
 <template>
   <a
-    :href="url"
+    href="https://www.bankid.com/privat/om-bankid"
     target="_blank"
     rel="noopener noreferrer"
     class="bankid-link"
   >
-    {{ label }}
+    {{ props.label ?? 'Om Mobilt BankID' }}
   </a>
 </template>
 
-<script>
-export default {
-  props: {
-    label: {
-      type: String,
-      default: 'Om Mobilt BankID'
-    },
-    url: {
-      type: String,
-      default: 'https://www.bankid.com/privat/om-bankid'
-    }
-  }
-}
+<script lang="ts" setup>
+const props = defineProps<{ label?: string }>()
 </script>

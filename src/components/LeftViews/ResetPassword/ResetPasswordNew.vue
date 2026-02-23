@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import Popup from '../../common/Popup.vue'
+import Popup from '../../common/LoginPopup.vue'
 import { useI18n } from '../../../i18n/useI18n'
 
 

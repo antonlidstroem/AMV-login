@@ -5,6 +5,7 @@
 
     <!-- Knapprad överst -->
 <div class="top-controls d-flex gap-2 p-3 w-100">
+  
   <div class="d-none d-md-flex">
   <button @click="toggleContact" class="btn-secondary-custom">
     <i class="bi bi-at text-white fs-5"></i>{{ t('contact') }}
@@ -55,7 +56,8 @@
 
 
     <!-- Modals -->
-    <ContactModal v-if="showContact" @close="showContact = false" />
+    <!-- <ContactModal v-if="showContact" @close="showContact = false" /> -->
+     <ContactModal v-if="showContact" @close="handleContactClose" />
     <HelpModal v-if="showHelp" @close="showHelp = false" />
   </div>
 </template>
@@ -83,6 +85,10 @@ export default {
     const showContact = ref(false)
     const showHelp = ref(false)
     const showLanguageMenu = ref(false)
+
+    const handleContactClose = () => {
+      showContact.value = false
+    }
 
     const toggleContact = () => {
       showContact.value = !showContact.value
@@ -145,7 +151,8 @@ const handleMobileHelp = () => {
       isOverlayVisible,
       handleMobileContact,
       handleMobileHelp,
-      flagClasses
+      flagClasses,
+      handleContactClose
     }
   }
 }

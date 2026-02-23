@@ -5,13 +5,16 @@
 
       
       <!-- Desktop LPage -->
-      <LPage
-        class="d-none d-md-flex flex-fill"
-        :currentView="currentView"
-        @change-view="currentView = $event"
-      />
+        <div class="col-12 col-md-6 d-flex p-0">
+          <LPage
+            class="d-none d-md-flex flex-fill"
+            :currentView="currentView"
+            @change-view="currentView = $event"
+          />
+      </div>
 
       <!-- Right Page -->
+       <div class="col-12 col-md-6 d-flex p-0">
       <RPage
         class="flex-fill d-flex flex-column"
         :currentView="currentView"
@@ -26,6 +29,7 @@
           />
         </template>
       </RPage>
+      </div>
     </div>
   </div>
 </template>
