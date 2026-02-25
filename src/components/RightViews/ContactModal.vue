@@ -13,14 +13,12 @@
     <!-- Stäng-knapp -->
     <button 
       class="btn btn-transparent btn-sm rounded-circle position-absolute top-0 end-0 m-3 d-flex align-items-center justify-content-center p-0"
-      @click="close"
-    >
+      @click="close">
       <i class="bi bi-x-circle text-white fs-4"></i>
     </button>
 
     <h2 class="text-white mb-4">{{ t('contact') }}</h2>
-
-    <label class="form-label mb-0 text-white mb-3">{{ t('contactLoginInfo') }}</label>
+    <span class="text-white mb-3">{{ t('contactLoginInfo') }}</span>
 
     <!-- Kontaktinfo -->
     <div class="contact-person rounded-3 p-3 mb-4 flex-shrink-0 border border-white"
@@ -39,14 +37,14 @@
       </p>
     </div>
 
-    <label class="form-label mb-0 text-white mb-3">{{ t('contactOtherInfo') }}</label>
+     <span class="text-white mb-3">{{ t('contactOtherInfo') }}</span>
 
     <!-- Formulär -->
     <form @submit.prevent="sendContact" class="d-flex flex-column gap-2">
 
       <!-- Name -->
       <label class="form-label mb-0 text-white">{{ t('name') }}</label>
-      <div class="position-relative">
+      <div class="position-relative mb-3">
         <i class="bi bi-person-vcard position-absolute text-white" 
            style="left: 12px; top: 50%; transform: translateY(-50%); font-size: 1.2rem; opacity: 0.6;"></i>
         <input v-model="name" type="text" class="form-control ps-5 bg-transparent text-white border-white rounded-3" required />
@@ -54,27 +52,29 @@
 
       <!-- Email -->
       <label class="form-label mb-0 text-white">{{ t('email') }}</label>
-      <div class="position-relative">
+      <div class="position-relative mb-3">
         <i class="bi bi-envelope position-absolute text-white" 
            style="left: 12px; top: 50%; transform: translateY(-50%); font-size: 1.2rem; opacity: 0.6;"></i>
         <input v-model="email" type="email" class="form-control ps-5 bg-transparent text-white border-white rounded-3" required />
       </div>
 
       <!-- Message -->
-      <div class="position-relative">
+      <div class="position-relative mb-3">
         <i class="bi bi-pencil-square position-absolute text-white" 
            style="left: 12px; top: 12px; font-size: 1.2rem; opacity: 0.6;"></i>
         <textarea v-model="message" rows="4" :placeholder="t('yourMessage')" class="form-control ps-5 pt-2 bg-transparent text-white border-white rounded-3" required></textarea>
       </div>
 
       <!-- Skicka-knapp -->
-      <button type="submit" class="btn-custom border border-white">{{ t('sendMessage') }}</button>
+      <button type="submit" class="btn-custom border border-white mb-3">{{ t('sendMessage') }}</button>
 
       <!-- Stäng-knapp -->
-      <button type="button" class="btn-secondary-custom" @click="close">
-        <i class="bi bi-x-circle-fill text-white fs-5"></i>
-        {{ t('closeWindow') }}
-      </button>
+      <div class="btn-wrapper">
+        <button type="button" class="btn-secondary-custom mb-3" @click="close">
+          <i class="bi bi-x-circle-fill text-white fs-5"></i>
+          {{ t('closeWindow') }}
+        </button>
+      </div>
     </form>
 
     <!-- Popup som visas när meddelandet skickats -->

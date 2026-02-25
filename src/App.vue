@@ -1,7 +1,7 @@
 <template>
-  <div class="page-wrapper d-flex justify-content-md-center align-items-md-center min-vh-100">
+  <div class="page-wrapper min-vh-100 d-md-flex justify-content-md-center align-items-md-center">
     
-    <div class="d-flex flex-column flex-md-row shadow rounded-3 overflow-hidden p-0"
+    <div class="main-container d-flex flex-column flex-md-row shadow rounded-5 w-100 overflow-hidden p-0"
          style="max-width:1120px; width:100%;">
       <!-- Desktop LPage -->
       <div class="col-12 col-md-6 d-flex p-0">
@@ -21,11 +21,14 @@
         >
           <!-- Mobil-LPage ligger inuti RPage -->
           <template #mobile-left>
-            <LPage
-              class="d-block d-md-none w-100 rounded-4"
-              :currentView="currentView"
-              @change-view="currentView = $event"
-            />
+            <div class="d-block d-md-none w-100 d-flex justify-content-center align-items-start py-3 px-2">
+              <LPage
+                class="w-100 h-100"
+                style="max-width: 460px; max-height: 90vh; border-radius: 20px; overflow: hidden;"
+                :currentView="currentView"
+                @change-view="currentView = $event"
+              />
+            </div>
           </template>
         </RPage>
       </div>
