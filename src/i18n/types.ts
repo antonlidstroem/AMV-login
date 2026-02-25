@@ -6,9 +6,11 @@ export interface BaseTranslations {
   back: string;
   bankIDThisDevice: string;
   cancel: string;
+  changePassword: string;
   clickHere: string;
   close: string;
   closeWindow: string;
+  confirmPassword: string;
   contact: string;
   contactLoginInfo: string;
   contactOtherInfo: string;
@@ -16,6 +18,7 @@ export interface BaseTranslations {
   email: string;
   emailSent: string;
   enterEmail: string;
+  EnterNewPassword: string;
   enterPassword: string;
   enterPinCode: string;
   enterSecurityCode: string;
@@ -38,13 +41,15 @@ export interface BaseTranslations {
   newCodeSent: string;
   newEmailSent: string;
   newEmailSentMessage: string;
+  newPassword: string;
   noCodeReceived: string;
   noEmailAccess: string;
   noEmailAccessHelp: string;
-  okayClose: string;
+  okClose: string;
   or: string;
   orBankId: string;
   password: string;
+  passwordRequirements: string;
   resendEmail: string;
   resetEmailSentMessage: string;
   ResetPasswordEmailNotDelivered: string;
@@ -59,6 +64,7 @@ export interface BaseTranslations {
   sendNewCode: string;
   sendNewReset: string;
   sendReset: string;
+  showPasswordDemands: string;
   systemError: string;
   systemErrorHelp: string;
   username: string;

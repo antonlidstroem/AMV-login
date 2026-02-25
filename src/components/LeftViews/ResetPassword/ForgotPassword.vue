@@ -19,40 +19,47 @@
     </button>
 
     <div class="back-link mt-3">
-      <a href="#" @click.prevent="$emit('change-view','login')">
+      <a href="#" @click.prevent="goToLogin">
         {{ t('back') }}
       </a>
     </div>
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { ref } from 'vue'
 import { useI18n } from '../../../i18n/useI18n'
 
-export default {
-  name:'ForgotPassword',
+// i18n
+const { t } = useI18n()
 
-  data(){
-    return {
-      email:'',
-      error:false
-    }
-  },
+// state
+const email = ref<string>('')
+const error = ref<boolean>(false)
 
-  methods:{
-    send(){
-      if(!this.email.includes('@')){
-        this.error = true
-      } else {
-        this.error = false
-        this.$emit('change-view','resetpasswordemail', 'noemailreceived')
-      }
-    }
-  },
+// 🔐 Typa alla views korrekt
+type ViewType = 'login' | 'resetpasswordemail'
+type ResetStatus = 'noemailreceived'
 
-  setup(){
-    const { t } = useI18n()
-    return { t }
+const emit = defineEmits<{
+  (e: 'change-view', view: ViewType, status?: ResetStatus): void
+}>()
+
+// email-validering (bättre än includes('@'))
+const isValidEmail = (value: string): boolean =>
+  /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+
+const send = (): void => {
+  if (!isValidEmail(email.value)) {
+    error.value = true
+    return
   }
+
+  error.value = false
+  emit('change-view', 'resetpasswordemail', 'noemailreceived')
+}
+
+const goToLogin = (): void => {
+  emit('change-view', 'login')
 }
 </script>

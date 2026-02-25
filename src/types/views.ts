@@ -1,0 +1,13 @@
+export type ViewType =
+  | 'login'
+  | 'forgot'
+  | 'mobilebankid'
+  | 'mobilebankidpending'
+  | 'mobilebankidapproved'
+  | 'bankiddevice'
+  | 'bankiddeviceapproved'
+  | 'twofactor'
+  | 'newpassword'
+  | 'resetpasswordemail'
+  | 'nocodereceived'
+  | 'noemailreceived'

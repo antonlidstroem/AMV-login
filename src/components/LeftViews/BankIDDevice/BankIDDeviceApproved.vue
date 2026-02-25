@@ -44,7 +44,7 @@
       <path d="M9.4754 8.73513C9.8114 8.73513 10.1381 8.70713 10.4554 8.65113C10.7727 8.59513 11.0574 8.5018 11.3094 8.37113C11.5707 8.24047 11.7901 8.07247 11.9674 7.86713C12.1541 7.6618 12.2754 7.4098 12.3314 7.11113H13.6334V16.9111H11.8834V9.99513H9.4754V8.73513Z" fill="#E0E0E0"/>
       </svg>
 
-<a href="#" @click.prevent="$emit('change-view','login')">
+<a href="#" @click.prevent="changeToLogin">
             {{ t('cancel') }}
           </a>
     </div>
@@ -52,7 +52,7 @@
 
 <!-- Tillfällig knapp för test -->
     <button
-      @click="$emit('change-view','mobilebankidapproved')"
+     @click="simulateSuccess"
       class="btn-temp"
     >
       Simulera lyckad inloggning
@@ -61,17 +61,19 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import { useI18n } from '../../../i18n/useI18n'
-import bankIdLogo from '../../../assets/BankID_logo_white.png'
 import AMVLogo from '../../../assets/logo_horizontal.svg'
 
-export default {
-  emits:['change-view'],
+const { t } = useI18n()
 
-  setup() {
-    const { t } = useI18n()
-    return { t, bankIdLogo, AMVLogo }
+const emit = defineEmits<{
+  (e: 'change-view', view: string): void}>()
+
+  const changeToLogin = () => {
+    emit('change-view', 'login')
   }
-}
-</script>
+  const simulateSuccess = () => {
+    emit('change-view', 'mobilebankidapproved')
+  }
+  </script>

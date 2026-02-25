@@ -42,7 +42,7 @@
 <div class="d-flex justify-content-between align-items-center mt-3">
   <BackLink
     :label="t('back')"
-    @click="$emit('change-view','login')"
+    @click="goToBankIdDevice"
   />
 
   <BankIdLink
@@ -67,7 +67,7 @@
 
 <!-- 🔹 Tillfällig knapp för test -->
     <button
-      @click="$emit('change-view','mobilebankidpending')"
+      @click="simulatePending"
       class="btn-temp"
     >
       Simulera lyckad inloggning
@@ -76,19 +76,32 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import { useI18n } from '../../../i18n/useI18n'
 import bankIdLogo from '../../../assets/BankID_logo_white.png'
 import BackLink from '../../common/BackLink.vue'
 import BankIdLink from '../../common/BankIdLink.vue'
 import AMVLogo from '../../../assets/logo_horizontal.svg'
 
-export default {
-  components:{BackLink, BankIdLink},
-  emits:['change-view'],
-  setup() {
-    const { t } = useI18n()
-    return { t, bankIdLogo, AMVLogo }
+const { t } = useI18n()
+
+type ViewType = 
+| 'login'
+| 'bankiddevice'
+| 'mobilebankidpending'
+
+const emit = defineEmits<{
+  (e: 'change-view', view: ViewType): void}>()
+
+  const goToLogin = () => {
+    emit ('change-view', 'login')
   }
-}
+
+  const goToBankIdDevice = () => {
+    emit ('change-view', 'bankiddevice')
+  }
+
+  const simulatePending = () => {
+    emit('change-view', 'mobilebankidpending')
+  }
 </script>

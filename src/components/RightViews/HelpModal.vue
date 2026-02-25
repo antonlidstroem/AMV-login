@@ -1,13 +1,14 @@
 <template>
-  <div class="contact-panel position-relative rounded-4 text-white p-4 border border-white"
-     style="background-color: rgba(100, 100, 100, 0.80);
-              width: 90%;
-              max-width: 900px;
-              height: 85%;
-              max-height: 90vh;
-              margin: auto;
-              display: flex;
-              flex-direction: column;">
+  <div
+    class="contact-panel position-relative rounded-4 text-white p-4 border border-white"
+    style="background-color: rgba(100, 100, 100, 0.80);
+           width: 90%;
+           max-width: 900px;
+           height: 85%;
+           max-height: 90vh;
+           margin: auto;
+           display: flex;
+           flex-direction: column;">
 
     <!-- Stäng-knapp -->
     <button 
@@ -49,22 +50,29 @@
     <button type="button" class="btn-secondary-custom" @click="close">
         <i class="bi bi-x-circle-fill text-white fs-5"></i>
         {{ t('closeWindow') }}
-      </button>
+    </button>
 
   </div>
 </template>
 
-<script>
-import { ref } from 'vue'
+<script lang="ts">
+import { defineComponent, ref } from 'vue'
 import { useI18n } from '../../i18n/useI18n'
 
-export default {
+// Typ för ett hjälptopic
+interface HelpTopic {
+  label: string
+  content: string
+}
+
+export default defineComponent({
+  name: 'HelpPanel',
   emits: ['close'],
   setup(_, { emit }) {
     const { t } = useI18n()
-    const selectedTopic = ref(null)
 
-    const topics = [
+    // Lista med topics
+    const topics: HelpTopic[] = [
       { label: 'Jag har glömt mitt lösenord', content: 'Platshållartext för lösenord.' },
       { label: 'Jag har inte tillgång till min e-post', content: 'Platshållartext för e-post.' },
       { label: 'Jag har stött på ett fel i systemet', content: 'Platshållartext för fel.' },
@@ -72,26 +80,30 @@ export default {
       { label: 'Hjälpsektion 2', content: 'Platshållartext.' }
     ]
 
-    function close() {
+    // Den topic som är vald
+    const selectedTopic = ref<HelpTopic | null>(null)
+
+    // Funktioner
+    const close = (): void => {
       emit('close')
     }
 
-    function selectTopic(topic) {
+    const selectTopic = (topic: HelpTopic): void => {
       selectedTopic.value = topic
     }
 
-    function backToTopics() {
+    const backToTopics = (): void => {
       selectedTopic.value = null
     }
 
     return {
       t,
-      selectedTopic,
       topics,
+      selectedTopic,
       close,
       selectTopic,
       backToTopics
     }
   }
-}
+})
 </script>

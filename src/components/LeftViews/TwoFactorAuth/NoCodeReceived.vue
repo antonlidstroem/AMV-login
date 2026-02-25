@@ -15,18 +15,20 @@
   </div>
 </template>
 
-<script>
-import { ref } from 'vue'
+<script lang="ts">
+import { defineComponent, ref } from 'vue'
 import Popup from '../../common/LoginPopup.vue'
 import { useI18n } from '../../../i18n/useI18n'
 
-export default {
-  components: { Popup },
-  setup() {
+export default defineComponent({
+  name: 'ResendCode',
+  components: {Popup},
+  setup(){
     const { t } = useI18n()
-    const successPopup = ref(false)
 
-    const verify = () => {
+    const successPopup = ref<boolean>(false)
+
+    const verify = (): void => {
       successPopup.value = true
     }
 
@@ -36,5 +38,7 @@ export default {
       verify
     }
   }
-}
-</script>
+ })
+ </script>
+
+

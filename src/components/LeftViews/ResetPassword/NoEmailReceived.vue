@@ -1,56 +1,60 @@
 <template>
-<div class=" bg-views p-4 rounded-4 mb-3">
+  <div class="bg-views p-4 rounded-4 mb-3">
+    <h2>{{ t('ResetPasswordEmailNotDelivered') }}</h2>
+    <p>{{ t('ResetPasswordEmailNotDeliveredHelp') }}</p>
 
-  <h2>{{ t('ResetPasswordEmailNotDelivered') }}</h2>
-  <p>{{ t('ResetPasswordEmailNotDeliveredHelp') }}</p>
-  <button class="btn-custom" @click="send">
-    {{t('resendEmail')}}
-  </button>
+    <input v-model="email" type="email" placeholder="Email" class="mb-2 p-2 rounded" />
 
+    <button class="btn-custom" @click="send">
+      {{ t('resendEmail') }}
+    </button>
 
-  <div class="back-link mt-3">
-    <a href="#" @click.prevent="$emit('change-view','login')">
-      ← {{ t('back') }}
-    </a>
+ 
+    <div v-if="success" class="text-success mt-2">
+      {{ t('emailSent') }}
+    </div>
+
+    <div class="back-link mt-3">
+      <a href="#" @click.prevent="goBack">
+        ← {{ t('back') }}
+      </a>
+    </div>
   </div>
-
-</div>
 </template>
 
-
-<script>
+<script lang="ts">
+import { defineComponent, ref } from 'vue'
 import { useI18n } from '../../../i18n/useI18n'
 import Popup from '../../common/LoginPopup.vue'
 
-export default {
-  name:'ForgotPassword',
-  components:{ Popup },
+export default defineComponent({
+  name: 'ForgotPassword',
+  components: { Popup },
 
-  data(){
-    return{
-      email:'',
-      error:false,
-      success:false
-    }
-  },
+  emits: ['change-view'],
 
-  methods:{
-    send(){
-      if(!this.email.includes('@')){
-        this.error=true
-      }else{
-        this.error=false
-        this.success=true
+  setup(_, { emit }) {
+    const { t } = useI18n()
+    const email = ref<string>('')
+    const error = ref<boolean>(false)
+    const success = ref<boolean>(false)
 
-        this.$emit('change-view','resetpasswordemail')
+    const send = () => {
+      if (!email.value.includes('@')) {
+        error.value = true
+        success.value = false
+      } else {
+        error.value = false
+        success.value = true
+        emit('change-view', 'resetpasswordemail')
       }
     }
-  },
 
-  setup(){
-    const { t } = useI18n()
-    return { t }
+    const goBack = () => {
+      emit('change-view', 'login')
+    }
+
+    return { t, email, error, success, send, goBack }
   }
-}
+})
 </script>
-

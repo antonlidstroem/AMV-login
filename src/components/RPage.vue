@@ -4,18 +4,20 @@
 
 
     <!-- Knapprad överst -->
-<div class="top-controls d-flex gap-2 p-3 w-100">
+<div class="top-controls d-flex justify-content-center align-items-center  gap-2 p-3 w-100">
+
   
   <div class="d-none d-md-flex">
-  <button @click="toggleContact" class="btn-secondary-custom">
+  <button @click="toggleContact" class="btn-secondary-custom flex-grow-1 me-2">
     <i class="bi bi-at text-white fs-5"></i>{{ t('contact') }}
   </button>
-  <button @click="toggleHelp" class="btn-secondary-custom">
+  <button @click="toggleHelp" class="btn-secondary-custom flex-grow-1 mx-2">
     <i class="bi bi-question-circle text-white"></i>{{ t('help') }}
   </button>
 </div>
+
   <!-- Mobil dropdown för Kontakt/Hjälp -->
-  <div class="action-dropdown position-relative d-md-none" style="gap: 0.5rem; ">
+  <div class="action-dropdown position-relative d-md-none flex-grow-1 ms-2" style="gap: 0.5rem; ">
     <button @click="toggleActionMenu" class="btn-secondary-custom">
       ☰
     </button>
@@ -26,42 +28,54 @@
   </div>
 
    <!-- Språkknapp -->
-  <div class="language-selector position-relative">
-    <!-- v-for i template -->
-    <button v-for="(name, code) in languageNames" 
+<div class="language-selector position-relative">
+        <!-- Visar endast aktuellt språk -->
+        <button
+          @click="toggleLanguage"
+          class="btn-secondary-custom d-flex align-items-center justify-content-start gap-2"
+    style="width: 140px;"
+        >
+          <span :class="[flagClasses[state.currentLang], 'd-inline-block']"
+            style="width: 24px; height: 16px;">
+          </span>
+          {{ languageNames[state.currentLang] }}
+        </button>
+
+        <!-- Dropdown med alla språk -->
+        <div class="language-dropdown" :class="{ show: showLanguageMenu }" style="width: 140px;">
+          <button
+            v-for="(name, code) in languageNames"
             :key="code"
             @click="selectLanguage(code as Lang)"
             :class="{ active: state.currentLang === code }"
-            class="btn-custom border border-white d-flex align-items-center gap-2">
-      <span :class="[flagClasses[code as Lang], 'flag-icon']"></span>
-      {{ name }}
-    </button>
-     <!-- dropdown -->
-    <div class="language-dropdown" :class="{ show: showLanguageMenu }">
-      <button v-for="(name, code) in languageNames" 
-              :key="code" 
-              @click="selectLanguage(code)"
-              :class="{ active: state.currentLang === code }"
-              class="d-flex align-items-center gap-2">
-              <span :class="[flagClasses[code], 'flag-icon']"></span>
-        {{ name }}
-      </button>
+            class="btn-secondary-custom d-flex align-items-center justify-content-start gap-2 w-100"
+          >
+            <span :class="[flagClasses[code as Lang], 'd-inline block']" style="width: 24px; height: 16px;" 
+            ></span>
+            {{ name }}
+          </button>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
 
 
 
-<!-- Mobil: LPage inuti RPage -->
-<div v-show="!isOverlayVisible" class="mobile-left-page">
-  <slot name="mobile-left"></slot>
-</div>
+    <!-- Mobil: LPage inuti RPage -->
+    <div v-show="!isOverlayVisible" class="mobile-left-page">
+      <slot name="mobile-left"></slot>
+    </div>
 
 
     <!-- Modals -->
     <!-- <ContactModal v-if="showContact" @close="showContact = false" /> -->
      <ContactModal v-if="showContact" @close="handleContactClose" />
     <HelpModal v-if="showHelp" @close="showHelp = false" />
+    <PasswordDemands 
+      v-if="showPasswordDemands" 
+      @close="handleClosePasswordDemands" 
+    />
+
+
   </div>
 </template>
 <script lang="ts">
@@ -72,9 +86,11 @@ import type { Lang } from '../i18n/useI18n'
 import ContactModal from './RightViews/ContactModal.vue'
 import HelpModal from './RightViews/HelpModal.vue'
 import bgImage from '../assets/RPageCard.jpg'
+import PasswordDemands from './RightViews/PasswordDemands.vue'
+import type { ViewType } from '../types/views'
 
 export default {
-  components: { ContactModal, HelpModal },
+  components: { ContactModal, HelpModal, PasswordDemands },
   setup() {
     const { state, changeLang, languageNames, t } = useI18n()
 
@@ -130,6 +146,16 @@ export default {
       showContact.value = false
     }
 
+    const showPasswordDemands: Ref<boolean> = ref(false)
+
+    const handleShowPasswordDemands = () => {
+      showPasswordDemands.value = true
+    }
+
+    const handleClosePasswordDemands = () => {
+      showPasswordDemands.value = false
+    }
+
     const isOverlayVisible = computed<boolean>(() => {
       return showContact.value || showHelp.value || showLanguageMenu.value
     })
@@ -152,7 +178,10 @@ export default {
       handleMobileContact,
       handleMobileHelp,
       flagClasses,
-      handleContactClose
+      handleContactClose,
+      handleShowPasswordDemands,
+      handleClosePasswordDemands,
+      showPasswordDemands
     }
   }
 }

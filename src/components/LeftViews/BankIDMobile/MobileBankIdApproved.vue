@@ -47,35 +47,45 @@
     <div class="d-flex justify-content-between align-items-center mt-3">
       <BackLink
         :label="t('back')"
-        @click="$emit('change-view','login')"
+        @click="goToLogin"
       />
 
     </div>
 
 <!-- 🔹 Tillfällig knapp för test -->
-        <button
-        @click="$router.push('/dashboard')"
-        class="btn-temp"
+       <button
+          @click="simulateSuccess"
+          class="btn-temp"
         >
-        Simulera lyckad inloggning
+          Simulera lyckad inloggning
         </button>
 
 
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { useRouter } from 'vue-router'
 import { useI18n } from '../../../i18n/useI18n'
-import bankIdLogo from '../../../assets/BankID_logo_white.png'
 import BackLink from '../../common/BackLink.vue'
 import AMVLogo from '../../../assets/logo_horizontal.svg'
 
-export default {
-  components:{BackLink, AMVLogo},
-  emits:['change-view'],
-  setup() {
-    const { t } = useI18n()
-    return { t, bankIdLogo, AMVLogo }
-  }
+
+const { t } = useI18n()
+
+const router = useRouter()
+
+type ViewType = 'login'
+
+const emit = defineEmits<{
+  (e: 'change-view', view: ViewType): void
+}>()
+
+const goToLogin = () => {
+  emit('change-view', 'login')
+}
+
+const simulateSuccess = () => {
+  router.push('/dashboard')
 }
 </script>

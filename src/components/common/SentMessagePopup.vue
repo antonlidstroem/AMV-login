@@ -18,7 +18,7 @@
         <span class="popup-text">{{ t('messageSent') }}</span>
 
         <button class="btn-custom border border-white mt-3" @click="closePopup">
-          {{ t('okayClose') }}
+          {{ t('okClose') }}
         </button>
       </div>
     </div>

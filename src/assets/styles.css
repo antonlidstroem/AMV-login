@@ -340,12 +340,7 @@ input.form-control { width: 100%; }
 
 .help-buttons { display:flex; flex-direction:column; gap:10px; }
 
-.flag-icon {
-  display: inline-block;
-  vertical-align:baseline;
-  font-size: 1.1rem; 
-  line-height: 1;
-}
+
 
 .top-controls .btn-secondary-custom {
   height: 40px; /* matcha språkknappens höjd, justera vid behov */
@@ -525,6 +520,7 @@ label {
 }
 
 .btn-custom {
+  min-width: 120 px;
   background: var(--green-gradient);
   color: white;
   border: none;

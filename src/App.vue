@@ -1,5 +1,6 @@
 <template>
   <div class="page-wrapper d-flex justify-content-md-center align-items-md-center min-vh-100">
+    
     <div class="d-flex flex-column flex-md-row shadow rounded-3 overflow-hidden p-0"
          style="max-width:1120px; width:100%;">
       <!-- Desktop LPage -->
@@ -36,12 +37,16 @@
 import { defineComponent, ref } from 'vue'
 import LPage from './components/LPage.vue'
 import RPage from './components/RPage.vue'
+import type { ViewType } from './types/views'
+
+const currentView = ref<ViewType>('login')
 
 export default defineComponent({
   name: 'App',
   components: { LPage, RPage },
   setup() {
-    const currentView = ref('login')
+
+
 
     return {
       currentView
