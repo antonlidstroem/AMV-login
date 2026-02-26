@@ -164,7 +164,7 @@ input.form-control { width: 100%; }
   gap:10px;
 }
 
-.help-buttons { display:flex; flex-direction:column; gap:10px; }
+
 
 
 .code-input {
@@ -617,3 +617,4 @@ label {
   width: 24px;
   height: 16px;
 }
+

@@ -3,11 +3,13 @@ import { reactive } from 'vue'
 import { translations, languageNames } from './translations'
 
 
+
+
 // Typa språken automatiskt från objektet
 export type Lang = keyof typeof translations  // 'sv' | 'en' | 'no' | 'fi'
 
 // Typa alla möjliga nycklar (alla nycklar måste finnas i alla språk)
-type TranslationKey = keyof typeof translations['sv']  // t.ex. 'aboutBankID' | 'messageSent' | ...
+export type TranslationKey = keyof typeof translations['sv'] 
 
 const state = reactive<{ currentLang: Lang }>({
   currentLang: 'sv'

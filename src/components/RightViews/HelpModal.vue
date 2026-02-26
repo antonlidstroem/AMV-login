@@ -19,14 +19,18 @@
     </button>
 
     <!-- Rubrik centrerad -->
-    <h2 class="text-white mb-4 text-center">{{ t('helpTitle') }}</h2>
+    <h2 class="text-white mb-4 text-center">
+      {{ panelTitle }}
+    </h2>
 
     <!-- Lista med hjälpämnen -->
-    <div v-if="!selectedTopic" class="help-buttons flex-grow-1 overflow-auto">
+    <div 
+      v-if="!selectedTopic" 
+      class="d-flex flex-column gap-2 flex-grow-1 overflow-auto">
       <button 
         v-for="(topic, index) in topics" 
-        :key="index"
-        class="btn-secondary-custom w-100"
+        :key="topic.id"
+        class="btn btn-secondary-custom w-100"
         @click="selectTopic(topic)"
       >
         {{ topic.label }}
@@ -35,11 +39,7 @@
 
     <!-- Detaljvy när ett ämne är valt -->
     <div v-else class="flex-column flex-grow-1 overflow-auto">
-      <div class="rounded-3 p-3 mb-4 flex-shrink-0 border border-white"
-           style="background-color: rgba(20,20,20,0.55);">
-        <h3 class="text-white">{{ selectedTopic.label }}</h3>
-        <p class="text-white">{{ selectedTopic.content }}</p>
-      </div>
+      <p class="text-white">{{ selectedTopic.content }}</p>
 
       <button class="btn-secondary-custom" @click="backToTopics">
         {{ t('back') }}
@@ -47,20 +47,25 @@
     </div>
 
     <!-- Stäng fönsterknapp längst ner -->
-    <button type="button" class="btn-secondary-custom" @click="close">
-        <i class="bi bi-x-circle-fill text-white fs-5"></i>
-        {{ t('closeWindow') }}
-    </button>
+    <div class="btn-wrapper mt-3">
+      <button type="button" class="btn-secondary-custom" @click="close">
+          <i class="bi bi-x-circle-fill text-white fs-5"></i>
+          {{ t('closeWindow') }}
+      </button>
+    </div>
 
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, computed } from 'vue'
 import { useI18n } from '../../i18n/useI18n'
+import { useHelpI18n } from '../../i18n/help-i18n'
+import { helpTopics } from '../../i18n/helpTopics'
+import type { HelpTopicDefinition } from '../../i18n/helpTopics'
 
-// Typ för ett hjälptopic
 interface HelpTopic {
+  id: string
   label: string
   content: string
 }
@@ -70,23 +75,21 @@ export default defineComponent({
   emits: ['close'],
   setup(_, { emit }) {
     const { t } = useI18n()
+    const { tHelp } = useHelpI18n()
 
-    // Lista med topics
-    const topics: HelpTopic[] = [
-      { label: 'Jag har glömt mitt lösenord', content: 'Platshållartext för lösenord.' },
-      { label: 'Jag har inte tillgång till min e-post', content: 'Platshållartext för e-post.' },
-      { label: 'Jag har stött på ett fel i systemet', content: 'Platshållartext för fel.' },
-      { label: 'Hjälpsektion 1', content: 'Platshållartext.' },
-      { label: 'Hjälpsektion 2', content: 'Platshållartext.' }
-    ]
-
-    // Den topic som är vald
     const selectedTopic = ref<HelpTopic | null>(null)
 
-    // Funktioner
-    const close = (): void => {
-      emit('close')
-    }
+    const topics = computed<HelpTopic[]>(() =>
+      helpTopics.map((topic: HelpTopicDefinition) => ({
+        id: topic.id,
+        label: tHelp(topic.labelKey),
+        content: tHelp(topic.contentKey)
+      }))
+    )
+
+    const panelTitle = computed(() =>
+      selectedTopic.value ? selectedTopic.value.label : t('helpTitle')
+    )
 
     const selectTopic = (topic: HelpTopic): void => {
       selectedTopic.value = topic
@@ -96,10 +99,15 @@ export default defineComponent({
       selectedTopic.value = null
     }
 
+    const close = (): void => {
+      emit('close')
+    }
+
     return {
       t,
       topics,
       selectedTopic,
+      panelTitle,
       close,
       selectTopic,
       backToTopics

@@ -25,7 +25,6 @@ export interface BaseTranslations {
   enterUsername: string;
   enterValidEmail: string;
   forgotPassword: string;
-  forgotPasswordHelp: string;
   forgotPasswordQuestion: string;
   goBack: string;
   goToStart: string;
@@ -43,8 +42,6 @@ export interface BaseTranslations {
   newEmailSentMessage: string;
   newPassword: string;
   noCodeReceived: string;
-  noEmailAccess: string;
-  noEmailAccessHelp: string;
   okClose: string;
   or: string;
   orBankId: string;
@@ -65,8 +62,6 @@ export interface BaseTranslations {
   sendNewReset: string;
   sendReset: string;
   showPasswordDemands: string;
-  systemError: string;
-  systemErrorHelp: string;
   username: string;
   verifyWithCode: string;
   waitingForAuth: string;
