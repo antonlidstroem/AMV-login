@@ -1,5 +1,8 @@
 <template>
 <div class=" bg-views p-4 rounded-4 mb-3">
+
+    <img :src="AMVLogo" class="logo-top" />
+
     <h2 class="mb-3">{{ t('resetPassword') }}</h2>
     <p class="mb-5">{{ t('resetPasswordDescription') }}</p>
     <p class="mb-2">{{ t('email') }}:</p>
@@ -29,6 +32,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useI18n } from '../../../i18n/useI18n'
+import AMVLogo from '../../../assets/logo_horizontal.svg'
 
 // i18n
 const { t } = useI18n()

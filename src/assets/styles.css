@@ -358,7 +358,6 @@ label {
 
 .form-size { height: 48px; display: flex; align-items: center; }
 
-.logo-top { width:260px; max-width:100%; display:block; margin:15px auto 30px auto; }
 
 .input-icon {
   position: absolute;
@@ -618,3 +617,17 @@ label {
   height: 16px;
 }
 
+.btn-modal {
+  height: 44px;
+  min-width: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-top { 
+  width: 260px; 
+  max-width: 100%; 
+  display: block; 
+  margin: 15px auto 60px auto; 
+}

@@ -1,5 +1,8 @@
 <template>
   <div class="bg-views p-4 rounded-4 mb-3">
+
+    
+
     <h2>{{ t('ResetPasswordEmailNotDelivered') }}</h2>
     <p>{{ t('ResetPasswordEmailNotDeliveredHelp') }}</p>
 
@@ -26,6 +29,7 @@
 import { defineComponent, ref } from 'vue'
 import { useI18n } from '../../../i18n/useI18n'
 import Popup from '../../common/LoginPopup.vue'
+
 
 export default defineComponent({
   name: 'ForgotPassword',

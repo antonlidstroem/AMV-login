@@ -1,7 +1,9 @@
 <template>
   <div class="bg-views p-4 rounded-4 mb-3">
 
-    <h2>{{ t('resetPassword') }}</h2>
+    <img :src="AMVLogo" class="logo-top" />
+
+    <h2 class="mt-4 py-2">{{ t('resetPassword') }}</h2>
 
     <div class="text-center">
       <i class="bi bi-check-circle display-1 mb-3" style="color: var(--success)"></i>
@@ -31,6 +33,7 @@
 import { defineComponent, ref } from 'vue'
 import { useI18n } from '../../../i18n/useI18n'
 import Popup from '../../common/LoginPopup.vue'
+import AMVLogo from '../../../assets/logo_horizontal.svg'
 
 export default defineComponent({
   name: 'ForgotPassword',
@@ -64,7 +67,7 @@ export default defineComponent({
       emit('change-view', 'newpassword')
     }
 
-    return { t, email, error, success, resendEmail, goToStart, simulateResetLink }
+    return { t, email, error, success, resendEmail, goToStart, simulateResetLink, AMVLogo }
   }
 })
 </script>

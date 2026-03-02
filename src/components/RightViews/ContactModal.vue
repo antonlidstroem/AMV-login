@@ -17,7 +17,7 @@
       <i class="bi bi-x-circle text-white fs-4"></i>
     </button>
 
-    <h2 class="text-white mb-4">{{ t('contact') }}</h2>
+    <h2 class="text-white text-center mt-4 mb-4">{{ t('contact') }}</h2>
     <span class="text-white mb-3">{{ t('contactLoginInfo') }}</span>
 
     <!-- Kontaktinfo -->

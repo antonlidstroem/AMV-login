@@ -1,5 +1,8 @@
 <template>
   <div class="bg-views p-4 rounded-4 mb-3">
+
+     <img :src="AMVLogo" class="logo-top" />
+     
     <h4>{{ t('EnterNewPassword') }}</h4>
 
     <div v-if="errorMsg" class="error-banner">{{ errorMsg }}</div>
@@ -38,6 +41,7 @@
 import { defineComponent, ref, computed } from 'vue'
 import { useI18n } from '../../../i18n/useI18n'
 import Popup from '../../common/LoginPopup.vue'
+import AMVLogo from '../../../assets/logo_horizontal.svg'
 
 export default defineComponent({
   name: 'ResetPasswordForm',
@@ -90,7 +94,8 @@ export default defineComponent({
       success,
       inputClass,
       change,
-      showDemands
+      showDemands,
+      AMVLogo
     }
   }
 })

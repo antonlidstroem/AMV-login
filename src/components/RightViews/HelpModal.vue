@@ -19,14 +19,14 @@
     </button>
 
     <!-- Rubrik centrerad -->
-    <h2 class="text-white mb-4 text-center">
+    <h2 class="text-white text-center mt-4 mb-4 py-2">
       {{ panelTitle }}
     </h2>
 
     <!-- Lista med hjälpämnen -->
     <div 
       v-if="!selectedTopic" 
-      class="d-flex flex-column gap-2 flex-grow-1 overflow-auto">
+      class="d-flex flex-column gap-2 flex-grow-1 overflow-auto px-4">
       <button 
         v-for="(topic, index) in topics" 
         :key="topic.id"
@@ -38,21 +38,51 @@
     </div>
 
     <!-- Detaljvy när ett ämne är valt -->
-    <div v-else class="flex-column flex-grow-1 overflow-auto">
+    <div v-else class="flex-column flex-grow-1 overflow-auto px-4">
       <p class="text-white">{{ selectedTopic.content }}</p>
 
-      <button class="btn-secondary-custom" @click="backToTopics">
-        {{ t('back') }}
-      </button>
+     
     </div>
 
     <!-- Stäng fönsterknapp längst ner -->
     <div class="btn-wrapper mt-3">
-      <button type="button" class="btn-secondary-custom" @click="close">
-          <i class="bi bi-x-circle-fill text-white fs-5"></i>
-          {{ t('closeWindow') }}
-      </button>
+
     </div>
+
+    <!-- Knapprad längst ner -->
+<div class="d-flex justify-content-center align-items-center gap-3 mt-4">
+
+  <!-- Tillbaka (visas bara i detaljvy) -->
+
+  <button 
+    v-if="selectedTopic"
+    type="button"
+    class="btn btn-secondary-custom d-flex align-items-center justify-content-center px-4 btn-modal"
+   
+    @click="backToTopics">
+    <i class="bi bi-arrow-left me-2 text-white"></i>
+    {{ t('goBack') }}
+  </button>
+
+
+  <!-- Stäng fönster -->
+
+  <button 
+    type="button" 
+        class="btn btn-secondary-custom d-flex align-items-center justify-content-center px-4 btn-modal"
+
+    @click="close"
+  >
+    <i class="bi bi-x-circle-fill text-white fs-5"></i>
+    {{ t('closeWindow') }}
+  </button>
+
+</div>
+
+
+
+
+
 
   </div>
 </template>
@@ -77,8 +107,9 @@ export default defineComponent({
     const { t } = useI18n()
     const { tHelp } = useHelpI18n()
 
-    const selectedTopic = ref<HelpTopic | null>(null)
+    const selectedTopicId = ref<string | null>(null)
 
+    // 🔥 topics är reaktiva mot språk
     const topics = computed<HelpTopic[]>(() =>
       helpTopics.map((topic: HelpTopicDefinition) => ({
         id: topic.id,
@@ -87,16 +118,30 @@ export default defineComponent({
       }))
     )
 
+    // 🔥 Detta är den viktiga delen
+    const selectedTopic = computed<HelpTopic | null>(() => {
+      if (!selectedTopicId.value) return null
+
+      const topicDef = helpTopics.find(t => t.id === selectedTopicId.value)
+      if (!topicDef) return null
+
+      return {
+        id: topicDef.id,
+        label: tHelp(topicDef.labelKey),
+        content: tHelp(topicDef.contentKey)
+      }
+    })
+
     const panelTitle = computed(() =>
       selectedTopic.value ? selectedTopic.value.label : t('helpTitle')
     )
 
     const selectTopic = (topic: HelpTopic): void => {
-      selectedTopic.value = topic
+      selectedTopicId.value = topic.id
     }
 
     const backToTopics = (): void => {
-      selectedTopic.value = null
+      selectedTopicId.value = null
     }
 
     const close = (): void => {
@@ -107,6 +152,7 @@ export default defineComponent({
       t,
       topics,
       selectedTopic,
+      selectedTopicId,
       panelTitle,
       close,
       selectTopic,
