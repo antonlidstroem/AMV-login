@@ -4,7 +4,7 @@
     @click.prevent="emitClick"
     class="d-inline-flex align-items-center gap-2 text-decoration-none fw-medium text-primary"
   >
-    <span class="arrow">←</span>
+    <i class="bi bi-arrow-left"></i>
     <span>{{ label }}</span>
   </a>
 </template>

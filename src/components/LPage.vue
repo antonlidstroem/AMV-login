@@ -1,38 +1,42 @@
 <template>
   <div class="bg-lpage d-flex flex-column align-items-center justify-content-center h-100">
     <div class="w-100">
+
+      <!-- TwoFactor -->
       <div v-if="currentView === 'twofactor'" class="d-flex flex-column gap-3 w-100">
-        <div class="component-box">
-          <TwoFactor @change-view="$emit('change-view', $event)" />
-        </div>
-        <div class="component-box">
-          <NoCodeReceived />
+        <TwoFactor @change-view="handleChangeView" />
+        <NoCodeReceived />
+      </div>
+
+      <!-- ResetPasswordEmail -->
+      <div v-else-if="currentView === 'resetpasswordemail'">
+        <div class="reset-password-wrapper d-flex flex-column">
+          <ResetPasswordEmail @change-view="handleChangeView" />
+          <div class="no-email-received-wrapper mt-3 mt-md-0">
+            <NoEmailReceived :email="emailForNoEmailReceived" @change-view="handleChangeView" />
+          </div>
         </div>
       </div>
 
+      <!-- NoEmailReceived (vid direkt navigering) -->
       <div v-else-if="currentView === 'noemailreceived'" class="d-flex flex-column gap-3 w-100">
-        <div class="component-box">
-          <ResetPasswordEmail @change-view="$emit('change-view', $event)" />
-        </div>
-        <div class="component-box">
-          <NoEmailReceived />
-        </div>
+        <NoEmailReceived :email="emailForNoEmailReceived" @change-view="handleChangeView" />
       </div>
 
+      <!-- Övriga komponenter -->
       <component
         v-else
         :is="currentComponent"
-        @change-view="$emit('change-view', $event)"
+        @change-view="handleChangeView"
       />
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from 'vue'
+import { defineComponent, ref, computed } from 'vue'
 import { useI18n } from '../i18n/useI18n'
 
-// Importera alla komponenter
 import LoginForm from './LeftViews/LoginForm.vue'
 import ForgotPassword from './LeftViews/ResetPassword/ForgotPassword.vue'
 import ResetPasswordEmail from './LeftViews/ResetPassword/ResetPasswordEmail.vue'
@@ -47,32 +51,29 @@ import MobileBankIdPending from './LeftViews/BankIDMobile/MobileBankIdPending.vu
 import MobileBankIdApproved from './LeftViews/BankIDMobile/MobileBankIdApproved.vue'
 import type { ViewType } from '../types/views'
 
-
 export default defineComponent({
   name: 'LeftPageContainer',
   props: {
-    currentView: {
-      type: String as () => ViewType,
-      required: true
-    }
+    currentView: { type: String as () => ViewType, required: true },
   },
   emits: ['change-view'],
   components: { 
-    LoginForm, 
-    ForgotPassword, 
-    MobileBankId, 
-    MobileBankIdPending,
-    MobileBankIdApproved,
-    BankIdDevice, 
-    BankIdDeviceApproved,
-    TwoFactor,
-    ResetPasswordNew,
-    ResetPasswordEmail,
-    NoCodeReceived,
-    NoEmailReceived
+    LoginForm, ForgotPassword, MobileBankId, MobileBankIdPending, MobileBankIdApproved,
+    BankIdDevice, BankIdDeviceApproved, TwoFactor, ResetPasswordNew, ResetPasswordEmail,
+    NoCodeReceived, NoEmailReceived
   },
   setup(props, { emit }) {
     const { t } = useI18n()
+
+    // Lokal state för email när man går till noemailreceived
+    const emailForNoEmailReceived = ref('')
+
+    const handleChangeView = (view: ViewType, email?: string) => {
+      if (view === 'noemailreceived' && email) {
+        emailForNoEmailReceived.value = email
+      }
+      emit('change-view', view)
+    }
 
     const currentComponent = computed(() => {
       const views: Record<ViewType, any> = {
@@ -89,15 +90,10 @@ export default defineComponent({
         nocodereceived: NoCodeReceived,
         noemailreceived: NoEmailReceived
       }
-
       return views[props.currentView] || LoginForm
     })
 
-    return {
-      t,
-      currentComponent,
-      emit
-    }
+    return { t, currentComponent, emailForNoEmailReceived, handleChangeView }
   }
 })
 </script>

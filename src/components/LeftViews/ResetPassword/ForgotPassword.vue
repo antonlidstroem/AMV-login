@@ -1,10 +1,9 @@
 <template>
-<div class=" bg-views p-4 rounded-4 mb-3">
-
+  <div class="bg-views p-3 rounded-4 mb-3">
     <img :src="AMVLogo" class="logo-top" />
-
     <h2 class="mb-3">{{ t('resetPassword') }}</h2>
     <p class="mb-5">{{ t('resetPasswordDescription') }}</p>
+
     <p class="mb-2">{{ t('email') }}:</p>
 
     <div v-if="error" class="error-banner">
@@ -15,17 +14,18 @@
       v-model="email"
       class="form-control mb-3 form-size"
       :class="{ 'error-border': error }"
+      placeholder="example@mail.com"
     />
 
-    <button class="btn-custom" @click="send">
+    <button class="btn-custom mb-2" @click="sendEmail">
       {{ t('send') }}
     </button>
 
-    <div class="back-link mt-3">
-      <a href="#" @click.prevent="goToLogin">
-        {{ t('back') }}
-      </a>
-    </div>
+    <button class="btn-link mt-2" @click="noEmailReceived">
+      {{ t('ResetPasswordEmailNotDelivered') }}
+    </button>
+
+    <BackLink :label="t('back')" @click="goToLogin" />
   </div>
 </template>
 
@@ -33,37 +33,34 @@
 import { ref } from 'vue'
 import { useI18n } from '../../../i18n/useI18n'
 import AMVLogo from '../../../assets/logo_horizontal.svg'
+import BackLink from '../../common/BackLink.vue'
 
-// i18n
 const { t } = useI18n()
+const email = ref('')
+const error = ref(false)
 
-// state
-const email = ref<string>('')
-const error = ref<boolean>(false)
-
-// 🔐 Typa alla views korrekt
-type ViewType = 'login' | 'resetpasswordemail'
-type ResetStatus = 'noemailreceived'
+type ViewType = 'login' | 'resetpasswordemail' | 'noemailreceived'
 
 const emit = defineEmits<{
-  (e: 'change-view', view: ViewType, status?: ResetStatus): void
+  (e: 'change-view', view: ViewType, email?: string): void
 }>()
 
-// email-validering (bättre än includes('@'))
-const isValidEmail = (value: string): boolean =>
-  /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+const isValidEmail = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
 
-const send = (): void => {
+const sendEmail = () => {
   if (!isValidEmail(email.value)) {
     error.value = true
     return
   }
-
   error.value = false
-  emit('change-view', 'resetpasswordemail', 'noemailreceived')
+  emit('change-view', 'resetpasswordemail')
 }
 
-const goToLogin = (): void => {
+const noEmailReceived = () => {
+  emit('change-view', 'noemailreceived', email.value)
+}
+
+const goToLogin = () => {
   emit('change-view', 'login')
 }
 </script>

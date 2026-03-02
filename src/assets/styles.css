@@ -68,26 +68,6 @@
   border: 2px solid var(--error) !important;
 }
 
-.popup-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0,0,0,0.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 999;
-}
-
-.popup-box {
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  width: 350px;
-  text-align: center;
-}
 
 /* ===== Knappar ===== */
 
@@ -278,24 +258,6 @@ label {
 }
 
 
-/* =========================
-   POPUP TEXT
-========================= */
-
-.popup-text {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-weight: 400; 
-  font-size: 18px;
-  line-height: 1;
-  letter-spacing: 0;
-  color: var(--text-color);
-  color: white;
-}
-
-
-
-
-
 * {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: #5A5A5A;
@@ -325,7 +287,7 @@ label {
 }
 
 .btn-custom {
-  min-width: 120 px;
+  min-width: 120px;
   background: var(--green-gradient);
   color: white;
   border: none;
@@ -368,21 +330,6 @@ label {
   color: var(--text-color);
   pointer-events: none;
 }
-
-
-
-
-@keyframes popupScale {
-  from {
-    transform: scale(0.9);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
 
 
 
@@ -630,4 +577,29 @@ label {
   max-width: 100%; 
   display: block; 
   margin: 15px auto 60px auto; 
+}
+
+/* Extra luft under ResetPasswordEmail innan NoEmailReceived på desktop */
+@media (min-width: 768px) {
+  .bg-views .no-email-extra {
+    margin-top: 2rem; /* justera efter behov */
+  }
+}
+
+
+.reset-password-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Mobil: mellanrum mellan komponenter */
+.no-email-received-wrapper {
+  margin-top: 1rem; /* 16px mellanrum på mobil */
+}
+
+/* Desktop: ta bort mellanrum för att skapa en modul */
+@media (min-width: 768px) {
+  .no-email-received-wrapper {
+    margin-top: 0;
+  }
 }

@@ -1,27 +1,23 @@
 <template>
-  <div class="bg-views p-4 rounded-4 mb-3">
+  <div class="bg-views p-3 rounded-4 mb-3 mt-5">
 
+    <!-- Logo -->
     <img :src="AMVLogo" class="logo-top" />
 
+    <!-- Rubrik -->
     <h2 class="mt-4 py-2">{{ t('resetPassword') }}</h2>
 
-    <div class="text-center">
-      <i class="bi bi-check-circle display-1 mb-3" style="color: var(--success)"></i>
+    <!-- Ikon -->
+    <div class="text-center mb-5">
+      <i class="bi bi-check-circle display-1" style="color: var(--success)"></i>
     </div>
 
+    <!-- Text -->
     <p>{{ t('ResetPasswordEmailSent') }}</p>
-    <button class="btn-custom" @click="goToStart">
+
+    <!-- Knapp till start -->
+    <button class="btn-custom mb-3" @click="goToStart">
       {{ t('goToStart') }}
-    </button>
-
-    <h2>{{ t('ResetPasswordEmailNotDelivered') }}</h2>
-    <p>{{ t('ResetPasswordEmailNotDeliveredHelp') }}</p>
-    <button class="btn-custom mb-3" @click="resendEmail">
-      {{ t('resendEmail') }}
-    </button>
-
-    <button class="btn-temp" @click="simulateResetLink">
-      simulera tryck på återställningslänk
     </button>
 
 
@@ -30,44 +26,23 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent } from 'vue'
 import { useI18n } from '../../../i18n/useI18n'
-import Popup from '../../common/LoginPopup.vue'
 import AMVLogo from '../../../assets/logo_horizontal.svg'
+import NoEmailReceived from './NoEmailReceived.vue'
 
 export default defineComponent({
-  name: 'ForgotPassword',
-  components: { Popup },
+  name: 'ResetPasswordEmail',
+  components: { NoEmailReceived },
   emits: ['change-view'],
-
   setup(_, { emit }) {
     const { t } = useI18n()
-
-    const email = ref<string>('')
-    const error = ref<boolean>(false)
-    const success = ref<boolean>(false)
-
-    const resendEmail = () => {
-      if (!email.value.includes('@')) {
-        error.value = true
-        success.value = false
-      } else {
-        error.value = false
-        success.value = true
-        emit('change-view', 'resetpasswordemail')
-      }
-    }
 
     const goToStart = () => {
       emit('change-view', 'login')
     }
 
-    const simulateResetLink = () => {
-      // Emit för att byta till ResetPasswordNew
-      emit('change-view', 'newpassword')
-    }
-
-    return { t, email, error, success, resendEmail, goToStart, simulateResetLink, AMVLogo }
+    return { t, goToStart, AMVLogo }
   }
 })
 </script>

@@ -81,33 +81,47 @@
       </div>
     </form>
 
-    <Popup v-if="loading" :title="t('loginIn')" :loading="true" />
+    <!-- <Popup v-if="loading" :title="t('loginIn')" :loading="true" /> -->
+
+    <GenericPopup 
+      :visible="loading" 
+      :title="t('loginIn')" 
+      :loading="loading"
+    />
+
+
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, nextTick } from 'vue'
 import { loginMock } from '../../mock/authService'
-import Popup from '../common/LoginPopup.vue'
+import GenericPopup from '../common/GenericPopup.vue'
 import { useI18n } from '../../i18n/useI18n'
 import bankIdLogo from '../../assets/BankID_logo_white.png'
 import AMVLogo from '../../assets/logo_horizontal.svg'
 
 export default defineComponent({
   name: 'LoginForm',
-  components: { Popup },
+  components: { GenericPopup },
   setup(_, { emit }) {
     const username = ref('')
     const password = ref('')
     const error = ref(false)
     const loading = ref(false)
-
     const { t } = useI18n()
 
     const login = async () => {
       error.value = false
       loading.value = true
+
+      await nextTick()
+
+
+
       try {
+        await new Promise(resolve => setTimeout(resolve, 300))
+
         await loginMock(username.value, password.value)
         localStorage.setItem('mockLogin', 'true')
         emit('change-view', 'twofactor')
@@ -131,7 +145,7 @@ export default defineComponent({
       bankIdLogo,
       AMVLogo,
       login,
-      changeView
+      changeView,
     }
   }
 })
