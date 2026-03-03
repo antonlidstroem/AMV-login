@@ -258,14 +258,19 @@ label {
 }
 
 
+
 * {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  color: #5A5A5A;
   box-sizing: border-box;
 }
 
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: var(--text-color);
+}
 
-
+body, body *:not([class]) {
+  color: #4C4C4B;
+}
 
 
 .bg-views {
@@ -338,7 +343,7 @@ label {
   background: var(--error);
   color: white;
   padding: 10px;
-  border-radius: 6px;
+  border-radius: 2px;
   margin-bottom: 10px;
   animation: shake 0.3s ease;
 }
@@ -602,4 +607,27 @@ label {
   .no-email-received-wrapper {
     margin-top: 0;
   }
+}
+
+/* Alla text-element i bg-views som inte har egen klass ska ha #4C4C4B */
+/* Alla text-element i bg-views som inte har egen klass ska ha #4C4C4B */
+.bg-views, 
+.bg-views p, 
+.bg-views span, 
+.bg-views label, 
+.bg-views h1, 
+.bg-views h2, 
+.bg-views h3, 
+.bg-views h4, 
+.bg-views h5, 
+.bg-views h6 {
+  color: #4C4C4B;
+}
+
+/* Undantag: element som ska vara vita */
+.bg-views .error-banner,
+.bg-views .btn-custom,
+.bg-views .help-modal,
+.bg-views .help-panel {
+  color: white !important;
 }

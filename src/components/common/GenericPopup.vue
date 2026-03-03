@@ -9,7 +9,9 @@
         </div>
 
         <!-- Valfri ikon slot -->
+        <div class="popup-icon mb-4">
         <slot name="icon"></slot>
+        </div>
 
         <!-- Titel -->
         <h5 v-if="title" class="popup-title mb-2">{{ title }}</h5>
@@ -97,6 +99,22 @@ function onButtonClick(btn: Button) {
 .popup-fade-enter-from,
 .popup-fade-leave-to {
   opacity: 0;
+}
+
+.popup-icon,
+.popup-icon i,
+.popup-icon svg {
+  font-size: 3rem;
+  color: var(--success) !important;
+}
+
+.popup-box h1,
+.popup-box h2,
+.popup-box h3,
+.popup-box h4,
+.popup-box h5,
+.popup-box h6 {
+  color: white !important;
 }
 
 /* Spinner */

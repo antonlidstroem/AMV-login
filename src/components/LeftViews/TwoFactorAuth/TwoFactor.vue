@@ -25,25 +25,25 @@
     <button class="btn-custom" @click="verify">{{ t('login') }}</button>
     <button class="btn btn-link" @click="$emit('change-view','login')">{{ t('back') }}</button>
 
-    <Popup
+    <!-- <Popup
       v-if="successPopup"
       title="✔"
       :text="t('newCodeSent')"
       :button="t('okClose')"
       @close="successPopup = false"
-    />
+    /> -->
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, reactive, computed } from 'vue'
-import Popup from '../../common/LoginPopup.vue'
+// import Popup from '../../common/LoginPopup.vue'
 import { useI18n } from '../../../i18n/useI18n'
 import AMVLogo from '../../../assets/logo_horizontal.svg'
 
 export default defineComponent({
   name: 'VerifyCode',
-  components: { Popup },
+  // components: { Popup },
   emits: ['change-view'],
   setup(_, { emit }) {
     const { t } = useI18n()
@@ -51,7 +51,7 @@ export default defineComponent({
     // Reaktiva state
     const digits = reactive<string[]>(['', '', '', ''])
     const error = ref<boolean>(false)
-    const successPopup = ref<boolean>(false)
+    // const successPopup = ref<boolean>(false)
 
     // Computed (valfritt, här bara för exempel)
     const inputClass = computed(() => {
@@ -64,7 +64,7 @@ export default defineComponent({
     const verify = (): void => {
       if (digits.join('') === '1234') {
         alert('login success mock')
-        successPopup.value = true
+        // successPopup.value = true
       } else {
         error.value = true
       }
@@ -79,7 +79,7 @@ export default defineComponent({
       AMVLogo,
       digits,
       error,
-      successPopup,
+      // successPopup,
       inputClass,
       verify,
       clearError,

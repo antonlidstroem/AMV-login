@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-views p-3 rounded-4 mb-3 mt-5">
+  <div class="bg-views p-4 rounded-4 mb-3 mt-5">
 
     <!-- Logo -->
     <img :src="AMVLogo" class="logo-top" />
@@ -20,6 +20,10 @@
       {{ t('goToStart') }}
     </button>
 
+    <!-- Knapp till simulering -->
+    <button class="btn-temp mb-3" @click="goToResetNew">
+      Simulera
+    </button>
 
 
   </div>
@@ -42,7 +46,11 @@ export default defineComponent({
       emit('change-view', 'login')
     }
 
-    return { t, goToStart, AMVLogo }
+    const goToResetNew = () => {
+      emit('change-view', 'newpassword')
+    }
+
+    return { t, goToStart, goToResetNew, AMVLogo }
   }
 })
 </script>

@@ -1,14 +1,17 @@
 <template>
   <div class="bg-views p-3 rounded-4 mb-3">
     <img :src="AMVLogo" class="logo-top" />
+
+    <div v-if="error" class="error-banner mb-4">
+      {{ t('enterValidEmail') }}
+    </div>
+
     <h2 class="mb-3">{{ t('resetPassword') }}</h2>
     <p class="mb-5">{{ t('resetPasswordDescription') }}</p>
 
     <p class="mb-2">{{ t('email') }}:</p>
 
-    <div v-if="error" class="error-banner">
-      {{ t('enterValidEmail') }}
-    </div>
+    
 
     <input
       v-model="email"
@@ -17,13 +20,11 @@
       placeholder="example@mail.com"
     />
 
-    <button class="btn-custom mb-2" @click="sendEmail">
-      {{ t('send') }}
+    <button class="btn-custom mb-4" @click="sendEmail">
+      {{ t('sendReset') }}
     </button>
 
-    <button class="btn-link mt-2" @click="noEmailReceived">
-      {{ t('ResetPasswordEmailNotDelivered') }}
-    </button>
+  
 
     <BackLink :label="t('back')" @click="goToLogin" />
   </div>

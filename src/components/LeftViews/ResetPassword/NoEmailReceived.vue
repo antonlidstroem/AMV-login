@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-views p-3 rounded-4 mb-3 mt-3 no-email-received-wrapper">
+  <div class="bg-views p-4 rounded-4 mb-3 mt-3 no-email-received-wrapper">
     <h1 class="mb-4">{{ t('ResetPasswordEmailNotDelivered') }}</h1>
     <p class="mb-4">{{ t('ResetPasswordEmailNotDeliveredHelp') }}</p>
 
@@ -7,9 +7,6 @@
       {{ t('resendEmail') }}
     </button>
 
-    <div v-if="success" class="text-success mt-2">
-      {{ t('emailSent') }}
-    </div>
 
     <BackLink :label="t('back')" @click="goBack" />
 
@@ -18,8 +15,8 @@
       :title="t('newEmailSent')" 
       :buttons="[ { label: t('okClose'), action: closePopup } ]"
     >
-        <template #icon><!-- SVG --></template>
-        <template #text>{{ t('newEmailSent') }}</template>
+        <template #icon><i class="bi bi-check-circle"></i></template>
+      
     </GenericPopup>
   </div>
 </template>

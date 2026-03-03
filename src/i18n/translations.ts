@@ -42,7 +42,7 @@ const sv: BaseTranslations = {
   mobileBankID: 'Mobilt BankID',
   name: 'Namn',
   newCodeSent: 'En ny kod har skickats',
-  newEmailSent: 'Nytt e-postmeddelande skickat!',
+  newEmailSent: 'Nytt e-postmeddelande skickat till den epostadress du angav.',
   newEmailSentMessage: 'Ett nytt e-postmeddelande har skickats till {email}.',
   newPassword: "Nytt lösenord",
   noCodeReceived: 'Jag har inte fått någon kod',
