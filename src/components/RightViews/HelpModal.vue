@@ -11,12 +11,7 @@
            flex-direction: column;">
 
     <!-- Stäng-knapp -->
-    <button 
-      class="btn btn-transparent btn-sm rounded-circle position-absolute top-0 end-0 m-3 d-flex align-items-center justify-content-center p-0"
-      @click="close"
-    >
-      <i class="bi bi-x-circle text-white fs-4"></i>
-    </button>
+    <IconCloseButton @close="close" />
 
     <!-- Rubrik centrerad -->
     <h2 class="text-white text-center mt-4 mb-4 py-2">
@@ -86,6 +81,7 @@ import { useHelpI18n } from '../../i18n/help-i18n'
 import { helpTopics } from '../../i18n/helpTopics'
 import type { HelpTopicDefinition } from '../../i18n/helpTopics'
 import CloseButton from '../common/CloseButton.vue'
+import IconCloseButton from '../common/IconCloseButton.vue'
 
 interface HelpTopic {
   id: string
@@ -95,7 +91,7 @@ interface HelpTopic {
 
 export default defineComponent({
   name: 'HelpPanel',
-  components: { CloseButton },
+  components: { CloseButton, IconCloseButton },
   emits: ['close'],
   setup(_, { emit }) {
     const { t } = useI18n()

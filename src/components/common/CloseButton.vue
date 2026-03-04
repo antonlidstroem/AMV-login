@@ -1,6 +1,6 @@
 <template>
   <button type="button" class="btn btn-secondary-custom" @click="$emit('close')">
-    <i class="bi bi-x-circle-fill me-2"></i> {{ t('closeWindow') }}
+    <i class="bi bi-x-circle-fill me-2 fs-6"></i> {{ t('closeWindow') }}
   </button>
 </template>
 

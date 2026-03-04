@@ -15,7 +15,7 @@
       </div>
 
       <div class="action-dropdown position-relative d-md-none flex-grow-1 ms-2" style="gap: 0.5rem;">
-        <button @click="toggleActionMenu" class="btn-secondary-custom btn-transparent">...</button>
+        <button @click="toggleActionMenu" class="btn-secondary-custom btn-transparent"><i class="bi bi-list fs-1"></i></button>
         <div class="dropdown-menu-custom" :class="{ show: showActionMenu }">
           <button @click="handleMobileContact"><i class="bi bi-at"></i>{{ t('contact') }}</button>
           <button @click="handleMobileHelp"><i class="bi bi-question-circle"></i>{{ t('help') }}</button>

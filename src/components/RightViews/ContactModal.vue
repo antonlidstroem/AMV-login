@@ -3,11 +3,9 @@
     class="contact-panel position-relative rounded-4 text-white p-4 border border-white"
     style="background-color: rgba(100, 100, 100, 0.80); width: 90%; max-width: 900px; height: 85%; max-height: 90vh; margin: auto; display: flex; flex-direction: column;">
             
-    <button 
-      class="btn btn-transparent btn-sm rounded-circle position-absolute top-0 end-0 m-3 d-flex align-items-center justify-content-center p-0"
-      @click="close">
-      <i class="bi bi-x-circle text-white fs-4"></i>
-    </button>
+   
+
+    <IconCloseButton @close="close" />
 
     <h2 class="text-white text-center mt-4 mb-4">{{ t('contact') }}</h2>
     <span class="text-white mb-3">{{ t('contactLoginInfo') }}</span>
@@ -32,26 +30,26 @@
 
     <form @submit.prevent="sendContact" class="d-flex flex-column gap-2">
       <label class="form-label mb-0 text-white">{{ t('name') }}</label>
-      <div class="position-relative mb-3">
+      <div class="position-relative mb-2">
         <i class="bi bi-person-vcard position-absolute text-white" 
            style="left: 12px; top: 50%; transform: translateY(-50%); font-size: 1.2rem; opacity: 0.6;"></i>
         <input v-model="name" type="text" class="form-control ps-5 bg-transparent text-white border-white rounded-3" required />
       </div>
 
       <label class="form-label mb-0 text-white">{{ t('email') }}</label>
-      <div class="position-relative mb-3">
+      <div class="position-relative mb-2">
         <i class="bi bi-envelope position-absolute text-white" 
            style="left: 12px; top: 50%; transform: translateY(-50%); font-size: 1.2rem; opacity: 0.6;"></i>
         <input v-model="email" type="email" class="form-control ps-5 bg-transparent text-white border-white rounded-3" required />
       </div>
 
-      <div class="position-relative mb-3">
+      <div class="position-relative mb-2">
         <i class="bi bi-pencil-square position-absolute text-white" 
            style="left: 12px; top: 12px; font-size: 1.2rem; opacity: 0.6;"></i>
         <textarea v-model="message" rows="4" :placeholder="t('yourMessage')" class="form-control ps-5 pt-2 bg-transparent text-white border-white rounded-3" required></textarea>
       </div>
 
-      <button type="submit" class="btn-custom border border-white mb-3">{{ t('sendMessage') }}</button>
+      <button type="submit" class="btn-custom border border-white mb-2">{{ t('sendMessage') }}</button>
 
       <div class="text-center mt-auto ">
       <CloseButton @close="$emit('close')" />
@@ -75,10 +73,11 @@ import { defineComponent, ref } from 'vue'
 import { useI18n } from '../../i18n/useI18n'
 import GenericPopup from '../common/GenericPopup.vue'
 import CloseButton from '../common/CloseButton.vue'
+import IconCloseButton from '../common/IconCloseButton.vue'
 
 export default defineComponent({
   name: 'ContactPanel',
-  components: { GenericPopup, CloseButton },
+  components: { GenericPopup, CloseButton, IconCloseButton },
   emits: ['close'],
   setup(_, { emit }) {
     const { t } = useI18n()

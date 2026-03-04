@@ -14,7 +14,7 @@
 
     <!-- Länk som skickar event uppåt -->
     <a href="#" class="password-link d-block mb-3" @click.prevent="showDemands">
-      <i class="bi bi-question-circle"></i>{{ t('showPasswordDemands') }}
+      <i class="bi bi-question-circle"></i> {{ t('passwordRequirements') }}
     </a>
 
     <button class="btn-custom w-100" @click="change">{{ t('changePassword') }}</button>

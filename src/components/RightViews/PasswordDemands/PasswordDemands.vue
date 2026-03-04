@@ -3,6 +3,9 @@
     class="contact-panel position-relative rounded-4 text-white p-5 border border-white"
     style="background-color: rgba(100, 100, 100, 0.80); width: 90%; max-width: 900px; height: 85%; max-height: 90vh; margin: auto; display: flex; flex-direction: column;"
   >
+
+    <IconCloseButton @close="$emit('close')" />
+
     <h2 class="text-white text-start mt-4 mb-4 py-2">
       {{ t('passwordRequirements') }}
     </h2>
@@ -40,12 +43,13 @@ import { useI18n } from '../../../i18n/useI18n'
 import { passwordRuleTranslations } from '../../../i18n/passwordRulesI18n'
 import type { RuleTranslationKey } from '../../../i18n/passwordRulesI18n'
 import CloseButton from '../../common/CloseButton.vue'
+import IconCloseButton from '../../common/IconCloseButton.vue'
 
 export default defineComponent({
   name: 'PasswordDemands',
   emits: ['close'],
   components: {
-    CloseButton},
+    CloseButton, IconCloseButton},
 
   setup() {
     const { t, state } = useI18n()
