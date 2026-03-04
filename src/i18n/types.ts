@@ -47,6 +47,8 @@ export interface BaseTranslations {
   orBankId: string;
   password: string;
   passwordRequirements: string;
+  passwordNotAcceptable: string;
+  passwordsNotMatching: string;
   resendEmail: string;
   resetEmailSentMessage: string;
   ResetPasswordEmailNotDelivered: string;
