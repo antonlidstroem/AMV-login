@@ -27,11 +27,10 @@
       </li>
     </ul>
 
-    <div class="text-center mt-auto">
-      <button class="btn btn-secondary-custom" @click="$emit('close')">
-        {{ t('closeWindow') }}
-      </button>
+    <div class="text-center mt-auto ">
+      <CloseButton @close="$emit('close')" />
     </div>
+
   </div>
 </template>
 <script lang="ts">
@@ -40,10 +39,14 @@ import { passwordHeaderKey, passwordRules, freeTextKey, passwordConfig } from '.
 import { useI18n } from '../../../i18n/useI18n'
 import { passwordRuleTranslations } from '../../../i18n/passwordRulesI18n'
 import type { RuleTranslationKey } from '../../../i18n/passwordRulesI18n'
+import CloseButton from '../../common/CloseButton.vue'
 
 export default defineComponent({
   name: 'PasswordDemands',
   emits: ['close'],
+  components: {
+    CloseButton},
+
   setup() {
     const { t, state } = useI18n()
 

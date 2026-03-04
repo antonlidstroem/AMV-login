@@ -64,18 +64,10 @@
     {{ t('goBack') }}
   </button>
 
-
   <!-- Stäng fönster -->
-
-  <button 
-    type="button" 
-        class="btn btn-secondary-custom d-flex align-items-center justify-content-center px-4 btn-modal"
-
-    @click="close"
-  >
-    <i class="bi bi-x-circle-fill text-white fs-5"></i>
-    {{ t('closeWindow') }}
-  </button>
+    <div class="text-center mt-auto ">
+      <CloseButton @close="$emit('close')" />
+    </div>
 
 </div>
 
@@ -93,6 +85,7 @@ import { useI18n } from '../../i18n/useI18n'
 import { useHelpI18n } from '../../i18n/help-i18n'
 import { helpTopics } from '../../i18n/helpTopics'
 import type { HelpTopicDefinition } from '../../i18n/helpTopics'
+import CloseButton from '../common/CloseButton.vue'
 
 interface HelpTopic {
   id: string
@@ -102,6 +95,7 @@ interface HelpTopic {
 
 export default defineComponent({
   name: 'HelpPanel',
+  components: { CloseButton },
   emits: ['close'],
   setup(_, { emit }) {
     const { t } = useI18n()
@@ -109,7 +103,7 @@ export default defineComponent({
 
     const selectedTopicId = ref<string | null>(null)
 
-    // 🔥 topics är reaktiva mot språk
+ 
     const topics = computed<HelpTopic[]>(() =>
       helpTopics.map((topic: HelpTopicDefinition) => ({
         id: topic.id,
@@ -118,7 +112,7 @@ export default defineComponent({
       }))
     )
 
-    // 🔥 Detta är den viktiga delen
+ 
     const selectedTopic = computed<HelpTopic | null>(() => {
       if (!selectedTopicId.value) return null
 

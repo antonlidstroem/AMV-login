@@ -53,12 +53,11 @@
 
       <button type="submit" class="btn-custom border border-white mb-3">{{ t('sendMessage') }}</button>
 
-      <div class="btn-wrapper">
-        <button type="button" class="btn-secondary-custom mb-3" @click="close">
-          <i class="bi bi-x-circle-fill text-white fs-5"></i>
-          {{ t('closeWindow') }}
-        </button>
-      </div>
+      <div class="text-center mt-auto ">
+      <CloseButton @close="$emit('close')" />
+    </div>
+
+
     </form>
 
     <GenericPopup 
@@ -75,10 +74,11 @@
 import { defineComponent, ref } from 'vue'
 import { useI18n } from '../../i18n/useI18n'
 import GenericPopup from '../common/GenericPopup.vue'
+import CloseButton from '../common/CloseButton.vue'
 
 export default defineComponent({
   name: 'ContactPanel',
-  components: { GenericPopup },
+  components: { GenericPopup, CloseButton },
   emits: ['close'],
   setup(_, { emit }) {
     const { t } = useI18n()
