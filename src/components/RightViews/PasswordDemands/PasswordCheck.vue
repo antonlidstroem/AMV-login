@@ -1,6 +1,6 @@
 <template>
   <div v-if="password" class="password-check p-3 rounded-3 mb-3">
-    <strong>Lösenordet måste innehålla:</strong>
+    <strong>{{ t('passwordRequirements') }}:</strong>
 
     <ul class="list-unstyled mt-2">
       <li v-for="rule in rules" :key="rule.id" class="d-flex align-items-center mb-2">
@@ -10,7 +10,10 @@
         <i 
           v-else 
           class="bi bi-exclamation-circle me-2 text-danger fs-5"></i>
-        <span>{{ rule.label }}</span>
+        
+        <span :class="{ 'text-success': rule.test(password) }">
+          {{ getRuleLabel(rule.labelKey, rule.value) }}
+        </span>
       </li>
     </ul>
   </div>
@@ -19,6 +22,9 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { passwordRules } from './passwordRules'
+import { useI18n } from '../../../i18n/useI18n'
+import { passwordRuleTranslations } from '../../../i18n/passwordRulesI18n'
+import type { RuleTranslationKey } from '../../../i18n/passwordRulesI18n'
 
 export default defineComponent({
   name: 'PasswordCheck',
@@ -26,15 +32,45 @@ export default defineComponent({
     password: { type: String, required: true }
   },
   setup() {
-    return { rules: passwordRules }
+    const { t, state } = useI18n()
+
+    /**
+     * Samma logik som i PasswordDemands för att hämta rätt text 
+     * och byta ut {n} mot det faktiska värdet från konfigurationen.
+     */
+    const getRuleLabel = (key: RuleTranslationKey, value?: number | string): string => {
+      const lang = state.currentLang;
+      const currentTranslations = passwordRuleTranslations[lang];
+      
+      // Hämta texten (fallback till svenska om språket saknas)
+      let text = currentTranslations ? currentTranslations[key] : (passwordRuleTranslations['sv']![key] || key);
+
+      // Ersätt {n} med värdet (t.ex. siffran 8)
+      if (value !== undefined && text.includes('{n}')) {
+        text = text.replace('{n}', value.toString());
+      }
+
+      return text;
+    }
+
+    return { 
+      rules: passwordRules, 
+      t, 
+      getRuleLabel 
+    }
   }
 })
 </script>
 
 <style scoped>
 .password-check {
+  /* Använder din Error-Pink för att indikera att kraven inte är uppfyllda än */
   background: var(--Error-Pink, #FFEAEA);
   border-radius: 0.5rem;
-  color: #000; /* Svart text för kontrast */
+  color: #4C4C4B; /* Mörkgrå text för bra läsbarhet mot rosa bakgrund */
+}
+
+.text-success {
+  color: #28a745 !important; /* Tydlig grön färg när en regel är uppfylld */
 }
 </style>

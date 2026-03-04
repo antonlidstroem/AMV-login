@@ -1,41 +1,73 @@
 <template>
   <div
-    class="contact-panel position-relative rounded-4 text-white p-4 border border-white"
-     style="background-color: rgba(100, 100, 100, 0.80); width: 90%; max-width: 900px; height: 85%; max-height: 90vh; margin: auto; display: flex; flex-direction: column;">
+    class="contact-panel position-relative rounded-4 text-white p-5 border border-white"
+    style="background-color: rgba(100, 100, 100, 0.80); width: 90%; max-width: 900px; height: 85%; max-height: 90vh; margin: auto; display: flex; flex-direction: column;"
+  >
+    <h2 class="text-white text-start mt-4 mb-4 py-2">
+      {{ t('passwordRequirements') }}
+    </h2>
 
-    <h2 class="text-center mb-3">{{ t('passwordRequirements') }}</h2>
+    <div v-if="config.showFreeText" class="mt-3 px-2">
+      <p class="text-white t">
+        {{ getRuleLabel(freeTextKey) }}
+      </p>
+    </div>
 
-    <ul class="list-unstyled">
+    <div class="mt-3 px-2">
+      <label class="text-white mb-3">
+        {{ getRuleLabel(headerKey) }}
+      </label>
+    </div>
+
+    
+
+    <ul class="text-white ps-4">
       <li v-for="rule in rules" :key="rule.id" class="mb-2">
-        <strong>{{ rule.label }}</strong>
+        <span class="text-white">{{ getRuleLabel(rule.labelKey, rule.value) }}</span>
       </li>
     </ul>
 
-    <div class="text-center mt-4">
+    <div class="text-center mt-auto">
       <button class="btn btn-secondary-custom" @click="$emit('close')">
         {{ t('closeWindow') }}
       </button>
     </div>
   </div>
 </template>
-
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { passwordRules } from './passwordRules'
+import { passwordHeaderKey, passwordRules, freeTextKey, passwordConfig } from './passwordRules'
 import { useI18n } from '../../../i18n/useI18n'
+import { passwordRuleTranslations } from '../../../i18n/passwordRulesI18n'
+import type { RuleTranslationKey } from '../../../i18n/passwordRulesI18n'
 
 export default defineComponent({
   name: 'PasswordDemands',
   emits: ['close'],
   setup() {
-    const { t } = useI18n()
-    return { rules: passwordRules, t }
+    const { t, state } = useI18n()
+
+    const getRuleLabel = (key: RuleTranslationKey, value?: number | string): string => {
+      const lang = state.currentLang;
+      const currentTranslations = passwordRuleTranslations[lang];
+      
+      let text = currentTranslations ? currentTranslations[key] : (passwordRuleTranslations['sv']![key] || key);
+
+      if (value !== undefined && text.includes('{n}')) {
+        text = text.replace('{n}', value.toString());
+      }
+
+      return text;
+    }
+    
+    return { 
+      rules: passwordRules, 
+      headerKey: passwordHeaderKey,
+      freeTextKey: freeTextKey, 
+      config: passwordConfig,  
+      t, 
+      getRuleLabel 
+    }
   }
 })
 </script>
-
-<style scoped>
-.help-modal ul li {
-  font-size: 0.95rem;
-}
-</style>

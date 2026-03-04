@@ -628,6 +628,9 @@ body, body *:not([class]) {
 .bg-views .error-banner,
 .bg-views .btn-custom,
 .bg-views .help-modal,
-.bg-views .help-panel {
+.bg-views .help-panel 
+.bg-views .contact-panel,        /* <--- LÄGG TILL DENNA */
+.bg-views .contact-panel strong, /* <--- LÄGG TILL DENNA FÖR ATT FIXA LISTAN */
+.bg-views .contact-panel li{
   color: white !important;
 }
