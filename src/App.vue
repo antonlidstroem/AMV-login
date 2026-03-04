@@ -4,20 +4,21 @@
     <div class="main-container d-flex flex-column flex-md-row shadow rounded-5 w-100 overflow-hidden p-0"
          style="max-width:1120px; width:100%;">
       <!-- Desktop LPage -->
-      <div class="col-12 col-md-6 d-flex p-0">
-        <LPage
-          class="d-none d-md-flex flex-fill"
-          :currentView="currentView"
-          @change-view="currentView = $event"
-        />
-      </div>
+      <LPage
+        class="d-none d-md-flex flex-fill"
+        :currentView="currentView"
+        @change-view="currentView = $event"
+        @show-password-demands="showDemandsInRPage = !showDemandsInRPage"
+      />
 
       <!-- Right Page -->
       <div class="col-12 col-md-6 d-flex p-0">
         <RPage
           class="flex-fill d-flex flex-column"
           :currentView="currentView"
+          :externalShowDemands="showDemandsInRPage"
           @change-view="currentView = $event"
+          @close-demands="showDemandsInRPage = false"
         >
           <!-- Mobil-LPage ligger inuti RPage -->
           <template #mobile-left>
@@ -27,10 +28,21 @@
                 style="max-width: 460px; max-height: 90vh; border-radius: 20px; overflow: hidden;"
                 :currentView="currentView"
                 @change-view="currentView = $event"
+                @show-password-demands="showDemandsInRPage = !showDemandsInRPage"
               />
             </div>
           </template>
         </RPage>
+
+
+
+
+
+
+
+
+
+
       </div>
     </div>
   </div>
@@ -42,18 +54,24 @@ import LPage from './components/LPage.vue'
 import RPage from './components/RPage.vue'
 import type { ViewType } from './types/views'
 
-const currentView = ref<ViewType>('login')
+
 
 export default defineComponent({
   name: 'App',
   components: { LPage, RPage },
   setup() {
 
+    const currentView = ref<ViewType>('login')
 
 
-    return {
-      currentView
-    }
+  const showDemandsInRPage = ref(false)
+
+  return {
+    currentView,
+    showDemandsInRPage 
+  }
+
+
   }
 })
 </script>

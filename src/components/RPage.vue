@@ -4,9 +4,7 @@
     :style="{ backgroundImage: `url(${bgImage})`, backgroundSize: 'cover', backgroundPosition: 'center'}"
   >
 
-    <!-- Knapprad överst -->
     <div class="top-controls d-flex justify-content-center align-items-center gap-2 p-3 w-100">
-      <!-- Desktop-knappar -->
       <div class="d-none d-md-flex">
         <button @click="toggleContact" class="btn-secondary-custom flex-grow-1 me-2">
           <i class="bi bi-at text-white fs-5"></i>{{ t('contact') }}
@@ -16,7 +14,6 @@
         </button>
       </div>
 
-      <!-- Mobil dropdown -->
       <div class="action-dropdown position-relative d-md-none flex-grow-1 ms-2" style="gap: 0.5rem;">
         <button @click="toggleActionMenu" class="btn-secondary-custom btn-transparent">...</button>
         <div class="dropdown-menu-custom" :class="{ show: showActionMenu }">
@@ -25,7 +22,6 @@
         </div>
       </div>
 
-      <!-- Språk -->
       <div class="language-selector position-relative">
         <button @click="toggleLanguage" class="btn-secondary-custom d-flex align-items-center gap-2" style="width:140px;">
           <span :class="[flagClasses[state.currentLang], 'd-inline-block']" style="width:24px;height:16px;"></span>
@@ -40,31 +36,23 @@
       </div>
     </div>
 
-    <!-- Mobil: LPage inuti RPage -->
     <div v-show="!isOverlayVisible" class="mobile-left-page">
       <slot name="mobile-left"></slot>
     </div>
 
-    <!-- Modals -->
     <ContactModal v-if="showContact" @close="handleContactClose" />
     <HelpModal v-if="showHelp" @close="showHelp = false" />
 
-    <!-- Här visas PasswordDemands när användaren klickar på länken i ResetPasswordNew -->
     <PasswordDemands
       v-if="showPasswordDemands"
       @close="handleClosePasswordDemands"
     />
 
-    <!-- <ResetPasswordNew
-      v-if="isNewPasswordView"
-      @show-password-demands="handleShowPasswordDemands"
-    /> -->
-
   </div>
 </template>
 
 <script lang="ts">
-import { ref, computed } from 'vue'
+import { defineComponent, ref, computed, watch } from 'vue'
 import { useI18n } from '../i18n/useI18n'
 import type { Lang } from '../i18n/useI18n'
 import ContactModal from './RightViews/ContactModal.vue'
@@ -72,10 +60,15 @@ import HelpModal from './RightViews/HelpModal.vue'
 import PasswordDemands from './RightViews/PasswordDemands/PasswordDemands.vue'
 import bgImage from '../assets/RPageCard.jpg'
 
-export default {
-  props: { currentView: { type: String as () => string, required: true } },
+export default defineComponent({
+  name: 'RPage',
   components: { ContactModal, HelpModal, PasswordDemands },
-  setup() {
+  props: { 
+    currentView: { type: String, required: true },
+    externalShowDemands: { type: Boolean, default: false }
+  },
+  emits: ['change-view', 'close-demands'],
+  setup(props, { emit }) {
     const { state, changeLang, languageNames, t } = useI18n()
 
     const flagClasses: Record<string, string> = {
@@ -91,8 +84,38 @@ export default {
     const showActionMenu = ref(false)
     const showPasswordDemands = ref(false)
 
-    const toggleContact = () => { showContact.value = !showContact.value; if(showContact.value) showHelp.value = false; showLanguageMenu.value = false }
-    const toggleHelp = () => { showHelp.value = !showHelp.value; if(showHelp.value) showContact.value = false; showLanguageMenu.value = false }
+    // Lyssna på prop från App.vue (länken i ResetPasswordNew)
+    watch(() => props.externalShowDemands, (newVal) => {
+      showPasswordDemands.value = newVal
+      // Om PasswordDemands öppnas, stäng de andra
+      if (newVal) {
+        showContact.value = false
+        showHelp.value = false
+      }
+    })
+
+    const toggleContact = () => { 
+      showContact.value = !showContact.value
+      if(showContact.value) {
+        // Stäng alla andra
+        showHelp.value = false
+        showPasswordDemands.value = false
+        emit('close-demands') // Synka App.vue state
+      }
+      showLanguageMenu.value = false 
+    }
+    
+    const toggleHelp = () => { 
+      showHelp.value = !showHelp.value
+      if(showHelp.value) {
+        // Stäng alla andra
+        showContact.value = false
+        showPasswordDemands.value = false
+        emit('close-demands') // Synka App.vue state
+      }
+      showLanguageMenu.value = false 
+    }
+    
     const toggleLanguage = () => { showLanguageMenu.value = !showLanguageMenu.value }
     const toggleActionMenu = () => { showActionMenu.value = !showActionMenu.value }
     const selectLanguage = (langCode: string) => { changeLang(langCode as Lang); showLanguageMenu.value = false }
@@ -101,11 +124,20 @@ export default {
     const handleMobileHelp = () => { showActionMenu.value = false; toggleHelp() }
     const handleContactClose = () => { showContact.value = false }
 
-    // ❌ Här tar vi emot event från ResetPasswordNew och visar PasswordDemands
-    const handleShowPasswordDemands = () => { showPasswordDemands.value = true }
-    const handleClosePasswordDemands = () => { showPasswordDemands.value = false }
+    const handleShowPasswordDemands = () => { 
+      showPasswordDemands.value = true
+      showContact.value = false
+      showHelp.value = false
+    }
+    
+    const handleClosePasswordDemands = () => {
+      showPasswordDemands.value = false
+      emit('close-demands') 
+    }
 
-    const isOverlayVisible = computed(() => showContact.value || showHelp.value || showLanguageMenu.value)
+    const isOverlayVisible = computed(() => 
+      showContact.value || showHelp.value || showLanguageMenu.value || showPasswordDemands.value
+    )
 
     return {
       state, languageNames, t, flagClasses,
@@ -116,5 +148,5 @@ export default {
       showPasswordDemands, handleShowPasswordDemands, handleClosePasswordDemands
     }
   }
-}
+})
 </script>

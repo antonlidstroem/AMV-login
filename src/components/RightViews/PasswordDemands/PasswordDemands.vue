@@ -1,8 +1,8 @@
 <template>
   <div
     class="contact-panel position-relative rounded-4 text-white p-4 border border-white"
-    style="background-color: rgba(100, 100, 100, 0.80); color: white; max-width: 500px; margin: auto;"
-  >
+     style="background-color: rgba(100, 100, 100, 0.80); width: 90%; max-width: 900px; height: 85%; max-height: 90vh; margin: auto; display: flex; flex-direction: column;">
+
     <h2 class="text-center mb-3">{{ t('passwordRequirements') }}</h2>
 
     <ul class="list-unstyled">

@@ -2,13 +2,11 @@
   <div class="bg-lpage d-flex flex-column align-items-center justify-content-center h-100">
     <div class="w-100">
 
-      <!-- TwoFactor -->
       <div v-if="currentView === 'twofactor'" class="d-flex flex-column gap-3 w-100">
         <TwoFactor @change-view="handleChangeView" />
         <NoCodeReceived />
       </div>
 
-      <!-- ResetPasswordEmail -->
       <div v-else-if="currentView === 'resetpasswordemail'">
         <div class="reset-password-wrapper d-flex flex-column">
           <ResetPasswordEmail @change-view="handleChangeView" />
@@ -18,16 +16,15 @@
         </div>
       </div>
 
-      <!-- NoEmailReceived (vid direkt navigering) -->
       <div v-else-if="currentView === 'noemailreceived'" class="d-flex flex-column gap-3 w-100">
         <NoEmailReceived :email="emailForNoEmailReceived" @change-view="handleChangeView" />
       </div>
 
-      <!-- Övriga komponenter -->
       <component
         v-else
         :is="currentComponent"
         @change-view="handleChangeView"
+        @show-password-demands="$emit('show-password-demands')" 
       />
     </div>
   </div>
@@ -56,7 +53,7 @@ export default defineComponent({
   props: {
     currentView: { type: String as () => ViewType, required: true },
   },
-  emits: ['change-view'],
+  emits: ['change-view', 'show-password-demands'],
   components: { 
     LoginForm, ForgotPassword, MobileBankId, MobileBankIdPending, MobileBankIdApproved,
     BankIdDevice, BankIdDeviceApproved, TwoFactor, ResetPasswordNew, ResetPasswordEmail,
@@ -65,7 +62,6 @@ export default defineComponent({
   setup(props, { emit }) {
     const { t } = useI18n()
 
-    // Lokal state för email när man går till noemailreceived
     const emailForNoEmailReceived = ref('')
 
     const handleChangeView = (view: ViewType, email?: string) => {
