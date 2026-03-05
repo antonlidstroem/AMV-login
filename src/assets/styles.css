@@ -426,7 +426,7 @@ body, body *:not([class]) {
   align-items: center;
 }
 
-.language-selector { position: relative; }
+/* .language-selector { position: relative; }
 .language-dropdown {
   display: none;
   position: absolute;
@@ -451,7 +451,7 @@ body, body *:not([class]) {
   cursor:pointer;
 }
 .language-dropdown button:hover,
-.language-dropdown button.active { background: rgba(255,255,255,0.5); }
+.language-dropdown button.active { background: rgba(255,255,255,0.5); } */
 
 
 
@@ -527,7 +527,6 @@ body, body *:not([class]) {
   position: absolute;
   top: 100%;
   left: 0;
-  width: 169px;
   max-height: 155px;
   background: rgba(41, 60, 8, 0.9);
   border: 2px solid #ADB2A3;
@@ -633,4 +632,74 @@ body, body *:not([class]) {
 .bg-views .contact-panel strong, /* <--- LÄGG TILL DENNA FÖR ATT FIXA LISTAN */
 .bg-views .contact-panel li{
   color: white !important;
+}
+
+/* Basbredd för containern på mobil (smalare för SE, GB etc) */
+.language-selector {
+  width: 85px; 
+}
+
+/* Bredd för containern på desktop (768px och uppåt) */
+@media (min-width: 768px) {
+  .language-selector {
+    width: 140px;
+  }
+}
+
+/* Säkerställ att dropdownen inte har någon gammal min-width som spökar */
+.dropdown-menu-custom {
+  width: 100% !important;
+  min-width: 100% !important;
+  box-sizing: border-box;
+  padding: 0; /* Valfritt: för att knapparna inuti ska sitta snyggt */
+}
+
+/* Gör knapparna inuti menyn lika breda som menyn */
+.dropdown-menu-custom button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 8px 12px;
+  border: none;
+  background: transparent;
+}
+
+/* 1. Gör så att 100% bredd ENDAST gäller för språkväljaren */
+.language-selector .dropdown-menu-custom {
+  width: 100% !important;
+  min-width: 100% !important;
+}
+
+/* 2. Ge hamburgermenyn (Kontakt/Hjälp) en fast, smalare bredd på mobil */
+@media (max-width: 768px) {
+  .action-dropdown .dropdown-menu-custom {
+    width: 140px !important; /* Här styr du bredden på den vänstra menyn */
+    min-width: 140px !important;
+    left: 0;
+  }
+  
+  /* Gör språkmenyn ännu smalare om 85px känns för brett för "SE"/"GB" */
+  .language-selector {
+    width: 75px; /* Justera ner från 85px om du vill ha den tajtare */
+  }
+}
+
+.btn-secondary-custom {
+  background: rgbargba(0, 0, 0, 0.4); /* Svag ljus bakgrund istället för mörk */
+  color: white !important;
+  padding: 6px 12px;
+  border-radius: 6px;
+  transition: all 0.2s ease-in-out;
+}
+
+/* Visuell feedback när man hovrar eller trycker */
+.btn-secondary-custom:hover { 
+  background: rgba(255, 255, 255, 0.25); 
+  border-color: #fff !important;
+}
+
+.btn-secondary-custom:active { 
+  background: rgba(255, 255, 255, 0.4);
+  transform: scale(0.96); /* Knappen "trycks in" visuellt */
 }

@@ -18,8 +18,24 @@
     </a>
 
     <button class="btn-custom w-100" @click="change">{{ t('changePassword') }}</button>
+
+
+    <GenericPopup 
+      v-model:visible="showSuccessPopup"
+      :title="t('passwordChanged')" 
+      :buttons="[ { label: t('toLoginPage'), action: goToLogin } ]"
+    >
+      <template #icon>
+        <i class="bi bi-check-circle"></i>
+      </template>
+    </GenericPopup>
+
+
+
+
   </div>
 </template>
+
 
 <script lang="ts">
 import { defineComponent, ref, computed } from 'vue'
@@ -27,17 +43,19 @@ import { useI18n } from '../../../i18n/useI18n'
 import AMVLogo from '../../../assets/logo_horizontal.svg'
 import PasswordCheck from '../../RightViews/PasswordDemands/PasswordCheck.vue'
 import { passwordRules } from '../../RightViews/PasswordDemands/passwordRules'
+import GenericPopup from '../../common/GenericPopup.vue' // Glöm inte importen!
 
 export default defineComponent({
   name: 'ResetPasswordNew',
-  components: { PasswordCheck },
+  components: { PasswordCheck, GenericPopup },
   emits: ['change-view', 'show-password-demands'],
   setup(_, { emit }) {
     const { t } = useI18n()
-    const p1 = ref(''), p2 = ref(''), errorMsg = ref(''), success = ref(false)
-    
-    // ✅ Håller koll på om användaren klickat på "Byt lösenord"
+    const p1 = ref(''), p2 = ref(''), errorMsg = ref('')
     const hasAttemptedChange = ref(false)
+    
+    // State för popupen
+    const showSuccessPopup = ref(false)
     
     const inputClass = computed(() => errorMsg.value ? 'error-border' : '')
 
@@ -45,41 +63,42 @@ export default defineComponent({
       return passwordRules.every(rule => rule.test(p1.value))
     })
 
-    // ✅ Logiken för att visa checklistan:
-    // 1. Man måste ha klickat på knappen minst en gång (hasAttemptedChange)
-    // 2. Alla regler får inte vara uppfyllda ännu (!allRulesPassed)
     const shouldShowValidation = computed(() => {
       return hasAttemptedChange.value && !allRulesPassed.value
     })
 
     const change = () => {
-      // ✅ Nu aktiverar vi "validerings-läget" eftersom användaren försöker spara
       hasAttemptedChange.value = true
 
-      // Kolla matchning
       if (p1.value !== p2.value) { 
         errorMsg.value = t('passwordsNotMatching')
         return 
       }
       
-      // Kolla regler
       if (!allRulesPassed.value) { 
-        errorMsg.value = 'Ditt lösenord uppfyller inte alla krav'
+        errorMsg.value = t('passwordNotAcceptable')
         return 
       }
 
-      // Om allt går bra
+      // Om allt går bra: Visa popupen istället för att bara logga
       errorMsg.value = ''
-      success.value = true
-      console.log("Success!")
+      showSuccessPopup.value = true
+    }
+
+    // Funktion för att stänga och gå till login
+    const goToLogin = () => {
+      showSuccessPopup.value = false
+      emit('change-view', 'login')
     }
 
     const showDemands = () => { emit('show-password-demands') }
 
     return { 
-      t, p1, p2, errorMsg, success, inputClass, 
+      t, p1, p2, errorMsg, inputClass, 
       change, AMVLogo, showDemands, 
-      shouldShowValidation 
+      shouldShowValidation,
+      showSuccessPopup,
+      goToLogin
     }
   }
 })

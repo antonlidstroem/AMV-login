@@ -27,7 +27,7 @@
         <button @click="toggleLanguage" class="btn-secondary-custom d-flex align-items-center gap-2 w-100">
           <span :class="[flagClasses[state.currentLang], 'd-inline-block']" style="width:24px;height:16px;"></span>
           <span class="d-none d-md-inline">{{ languageNames[state.currentLang] }}</span>
-          <span class="d-md-none">{{ shortLanguageNames[state.currentLang] }}</span>
+          <span class="d-md-none">{{ shortLanguageNames[state.currentLang] }}<i class="bi bi-caret-down-fill"></i></span>
         </button>
 
         <div class="dropdown-menu-custom w-100" :class="{ show: showLanguageMenu }">
@@ -40,7 +40,7 @@
       </div>
     </div>
 
-    <div v-show="!isOverlayVisible" class="mobile-left-page">
+    <div v-show="!shouldHideMobileContent" class="mobile-left-page">
       <slot name="mobile-left"></slot>
     </div>
 
@@ -150,13 +150,18 @@ export default defineComponent({
       showContact.value || showHelp.value || showLanguageMenu.value || showPasswordDemands.value
     )
 
+    const shouldHideMobileContent = computed(() => 
+      showContact.value || showHelp.value || showPasswordDemands.value
+    )
+
     return {
       state, languageNames, t, flagClasses,
       showContact, showHelp, showLanguageMenu, showActionMenu,
       toggleContact, toggleHelp, toggleLanguage, toggleActionMenu,
       selectLanguage, bgImage, isOverlayVisible,
       handleMobileContact, handleMobileHelp, handleContactClose,
-      showPasswordDemands, handleShowPasswordDemands, handleClosePasswordDemands, shortLanguageNames
+      showPasswordDemands, handleShowPasswordDemands, handleClosePasswordDemands, 
+      shortLanguageNames, shouldHideMobileContent
     }
   }
 })

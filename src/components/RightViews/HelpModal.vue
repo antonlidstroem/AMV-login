@@ -18,59 +18,43 @@
       {{ panelTitle }}
     </h2>
 
-    <!-- Lista med hjälpämnen -->
+    <!-- Knappar med hjälpämnen -->
     <div 
-      v-if="!selectedTopic" 
-      class="d-flex flex-column gap-2 flex-grow-1 overflow-auto px-4">
-      <button 
-        v-for="(topic, index) in topics" 
-        :key="topic.id"
-        class="btn btn-secondary-custom w-100"
-        @click="selectTopic(topic)"
+        v-if="!selectedTopic" 
+        class="d-flex flex-column gap-2 flex-grow-1 overflow-auto px-4"
       >
-        {{ topic.label }}
-      </button>
-    </div>
+      <BaseButton 
+        v-for="topic in topics" 
+        :key="topic.id"
+        :label="topic.label"
+        class="w-100"
+        @action="selectTopic(topic)" 
+      />
+  </div>
 
     <!-- Detaljvy när ett ämne är valt -->
     <div v-else class="flex-column flex-grow-1 overflow-auto px-4">
-      <p class="text-white">{{ selectedTopic.content }}</p>
-
-     
+      <p class="text-white">{{ selectedTopic.content }}</p>   
     </div>
 
-    <!-- Stäng fönsterknapp längst ner -->
-    <div class="btn-wrapper mt-3">
-
+  <!-- Knapprad längst ner -->
+    <div class="d-flex justify-content-center align-items-center gap-3 mt-4">
+    <!-- Gå tillbaka -->
+      <BaseButton 
+        v-if="selectedTopic"
+        :label="t('goBack')"
+        icon="bi bi-arrow-left"
+        class="mt-auto px-4 btn-modal"
+        @action="backToTopics"
+      />
+    <!-- Stäng fönster -->
+      <BaseButton 
+          :label="t('closeWindow')" 
+          icon="bi bi-x-circle-fill" 
+          class="btn-modal"
+          @action="close" 
+        />
     </div>
-
-    <!-- Knapprad längst ner -->
-<div class="d-flex justify-content-center align-items-center gap-3 mt-4">
-
-  <!-- Tillbaka (visas bara i detaljvy) -->
-
-  <button 
-    v-if="selectedTopic"
-    type="button"
-    class="btn btn-secondary-custom d-flex align-items-center justify-content-center px-4 btn-modal"
-   
-    @click="backToTopics">
-    <i class="bi bi-arrow-left me-2 text-white"></i>
-    {{ t('goBack') }}
-  </button>
-
-  <!-- Stäng fönster -->
-    <div class="text-center mt-auto ">
-      <CloseButton @close="$emit('close')" />
-    </div>
-
-</div>
-
-
-
-
-
-
   </div>
 </template>
 
@@ -80,8 +64,8 @@ import { useI18n } from '../../i18n/useI18n'
 import { useHelpI18n } from '../../i18n/help-i18n'
 import { helpTopics } from '../../i18n/helpTopics'
 import type { HelpTopicDefinition } from '../../i18n/helpTopics'
-import CloseButton from '../common/CloseButton.vue'
 import IconCloseButton from '../common/IconCloseButton.vue'
+import BaseButton from '../common/BaseSecondaryButton.vue'
 
 interface HelpTopic {
   id: string
@@ -91,7 +75,7 @@ interface HelpTopic {
 
 export default defineComponent({
   name: 'HelpPanel',
-  components: { CloseButton, IconCloseButton },
+  components: { IconCloseButton, BaseButton },
   emits: ['close'],
   setup(_, { emit }) {
     const { t } = useI18n()

@@ -14,7 +14,7 @@
          style="background-color: rgba(128, 172, 47, 0.15);">
       <p class="mb-2" style="color: #ffffff !important;">
         <i class="bi bi-person-fill me-2"></i>
-        <strong>Emanuel Makhoul</strong>
+        <strong class="text-white">Emanuel Makhoul</strong>
       </p>
       <p class="mb-2" style="color: #ffffff !important;">
         <i class="bi bi-envelope me-2"></i>
@@ -55,8 +55,17 @@
       <CloseButton @close="$emit('close')" />
     </div>
 
+    
+
 
     </form>
+
+      <BaseButton 
+          :label="t('closeWindow')" 
+          icon="bi bi-x-circle-fill" 
+          class="btn-modal mx-auto"
+          @action="close" 
+        />
 
     <GenericPopup 
       v-model:visible="showPopup"
@@ -72,12 +81,12 @@
 import { defineComponent, ref } from 'vue'
 import { useI18n } from '../../i18n/useI18n'
 import GenericPopup from '../common/GenericPopup.vue'
-import CloseButton from '../common/CloseButton.vue'
+import BaseButton from '../common/BaseSecondaryButton.vue'
 import IconCloseButton from '../common/IconCloseButton.vue'
 
 export default defineComponent({
   name: 'ContactPanel',
-  components: { GenericPopup, CloseButton, IconCloseButton },
+  components: { GenericPopup, BaseButton, IconCloseButton },
   emits: ['close'],
   setup(_, { emit }) {
     const { t } = useI18n()

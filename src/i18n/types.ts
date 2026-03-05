@@ -46,6 +46,7 @@ export interface BaseTranslations {
   or: string;
   orBankId: string;
   password: string;
+  passwordChanged: string;
   passwordRequirements: string;
   passwordNotAcceptable: string;
   passwordsNotMatching: string;
@@ -64,6 +65,7 @@ export interface BaseTranslations {
   sendNewReset: string;
   sendReset: string;
   showPasswordDemands: string;
+  toLoginPage: string;
   username: string;
   verifyWithCode: string;
   waitingForAuth: string;

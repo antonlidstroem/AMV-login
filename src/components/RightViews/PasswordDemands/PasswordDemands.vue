@@ -22,16 +22,19 @@
       </label>
     </div>
 
-    
-
     <ul class="text-white ps-4">
       <li v-for="rule in rules" :key="rule.id" class="mb-2">
         <span class="text-white">{{ getRuleLabel(rule.labelKey, rule.value) }}</span>
       </li>
     </ul>
 
-    <div class="text-center mt-auto ">
-      <CloseButton @close="$emit('close')" />
+    <div class="text-center mt-auto">
+      <BaseButton 
+        :label="t('closeWindow')" 
+        icon="bi bi-x-circle-fill" 
+        class="btn-modal mx-auto"
+        @action="$emit('close')" 
+      />
     </div>
 
   </div>
@@ -44,12 +47,13 @@ import { passwordRuleTranslations } from '../../../i18n/passwordRulesI18n'
 import type { RuleTranslationKey } from '../../../i18n/passwordRulesI18n'
 import CloseButton from '../../common/CloseButton.vue'
 import IconCloseButton from '../../common/IconCloseButton.vue'
+import BaseButton from '../../common/BaseSecondaryButton.vue'
 
 export default defineComponent({
   name: 'PasswordDemands',
   emits: ['close'],
   components: {
-    CloseButton, IconCloseButton},
+    CloseButton, IconCloseButton, BaseButton},
 
   setup() {
     const { t, state } = useI18n()
