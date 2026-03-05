@@ -5,7 +5,7 @@
     <h4>{{ t('verifyWithCode') }}</h4>
     <p>{{ t('enterPinCode') }}</p>
 
-    <div v-if="error" class="error-banner">{{ t('newCodeSent') }}</div>
+    <div v-if="error" class="error-banner">{{ t('wrongCodeTryAgain') }}</div>
 
     <div class="d-flex gap-3 mb-3 justify-content-center">
       <input
