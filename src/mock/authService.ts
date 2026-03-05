@@ -17,3 +17,16 @@ export function loginMock(username: string, password: string): Promise<any> {
     }, 1000)
   })
 }
+
+// authservice.ts
+export function verifyCodeMock(code: string): Promise<boolean> {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      if (code === '1234') {
+        resolve(true);
+      } else {
+        reject("Felaktig verifieringskod");
+      }
+    }, 800); // Lite delay för realism
+  });
+}

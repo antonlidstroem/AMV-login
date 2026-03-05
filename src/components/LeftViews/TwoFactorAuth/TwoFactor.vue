@@ -11,62 +11,74 @@
       <input
         v-for="(d, i) in digits"
         :key="i"
+        ref="inputRefs" 
         v-model="digits[i]"
         maxlength="1"
+        type="tel"
         class="text-center code-input"
-        :class="{
-          'error-border': error,
-          'success-border': digits[i] && !error
-        }"
-        @input="clearError"
+        :class="{ 'error-border': error, 'success-border': digits[i] && !error }"
+        @input="onInput(i)"
       />
     </div>
 
-    <button class="btn-custom" @click="verify">{{ t('login') }}</button>
-    <button class="btn btn-link" @click="$emit('change-view','login')">{{ t('back') }}</button>
-
-    <!-- <Popup
-      v-if="successPopup"
-      title="✔"
-      :text="t('newCodeSent')"
-      :button="t('okClose')"
-      @close="successPopup = false"
-    /> -->
+    <button class="btn-custom" :disabled="loading" @click="verify">
+      {{ loading ? t('wait') : t('login') }}
+    </button>
+    
+    <button class="btn btn-link mt-2" @click="$emit('change-view','login')">
+      {{ t('back') }}
+    </button>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, computed } from 'vue'
-// import Popup from '../../common/LoginPopup.vue'
+import { defineComponent, ref, reactive, nextTick } from 'vue'
 import { useI18n } from '../../../i18n/useI18n'
 import AMVLogo from '../../../assets/logo_horizontal.svg'
+import { verifyCodeMock } from '../../../mock/authService'
 
 export default defineComponent({
   name: 'VerifyCode',
-  // components: { Popup },
   emits: ['change-view'],
   setup(_, { emit }) {
     const { t } = useI18n()
-
-    // Reaktiva state
     const digits = reactive<string[]>(['', '', '', ''])
     const error = ref<boolean>(false)
-    // const successPopup = ref<boolean>(false)
+    const loading = ref<boolean>(false)
 
-    // Computed (valfritt, här bara för exempel)
-    const inputClass = computed(() => {
-      if (error.value) return 'error-border'
-      if (digits.some(d => d)) return 'success-border'
-      return ''
-    })
+    // Referenser till input-fälten för att kunna flytta fokus
+    const inputRefs = ref<HTMLInputElement[]>([])
 
-    // Metoder
-    const verify = (): void => {
-      if (digits.join('') === '1234') {
-        alert('login success mock')
-        // successPopup.value = true
-      } else {
+    const onInput = (index: number) => {
+      clearError()
+      // Om man skrivit en siffra, flytta fokus till nästa ruta
+      if (digits[index] && index < 3) {
+        inputRefs.value[index + 1]?.focus()
+      }
+      // Om alla siffror är ifyllda, kör verifiering direkt? (Valfritt)
+      if (digits.every(d => d !== '')) {
+        verify()
+      }
+    }
+
+        // TwoFactor.vue inuti verify-funktionen
+    const verify = async (): Promise<void> => {
+      const code = digits.join('')
+      if (code.length < 4) return
+
+      loading.value = true
+      try {
+        await verifyCodeMock(code)
+        
+        // Ändra från 'dashboard' till 'loginview'
+        emit('change-view', 'loginview') 
+        
+      } catch (err) {
         error.value = true
+        digits.fill('')
+        inputRefs.value[0]?.focus()
+      } finally {
+        loading.value = false
       }
     }
 
@@ -75,15 +87,8 @@ export default defineComponent({
     }
 
     return {
-      t,
-      AMVLogo,
-      digits,
-      error,
-      // successPopup,
-      inputClass,
-      verify,
-      clearError,
-      emit
+      t, AMVLogo, digits, error, loading,
+      verify, clearError, onInput, inputRefs
     }
   }
 })

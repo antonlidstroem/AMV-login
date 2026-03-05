@@ -72,22 +72,24 @@ export default defineComponent({
     }
 
     const currentComponent = computed(() => {
-      const views: Record<ViewType, any> = {
-        login: LoginForm,
-        forgot: ForgotPassword,
-        mobilebankid: MobileBankId,
-        mobilebankidpending: MobileBankIdPending,
-        mobilebankidapproved: MobileBankIdApproved,
-        bankiddevice: BankIdDevice,
-        bankiddeviceapproved: BankIdDeviceApproved,
-        twofactor: TwoFactor,
-        newpassword: ResetPasswordNew,
-        resetpasswordemail: ResetPasswordEmail,
-        nocodereceived: NoCodeReceived,
-        noemailreceived: NoEmailReceived
-      }
-      return views[props.currentView] || LoginForm
-    })
+    const views: Record<ViewType, any> = {
+      login: LoginForm,
+      forgot: ForgotPassword,
+      mobilebankid: MobileBankId,
+      mobilebankidpending: MobileBankIdPending,
+      mobilebankidapproved: MobileBankIdApproved,
+      bankiddevice: BankIdDevice,
+      bankiddeviceapproved: BankIdDeviceApproved,
+      twofactor: TwoFactor,
+      newpassword: ResetPasswordNew,
+      resetpasswordemail: ResetPasswordEmail,
+      nocodereceived: NoCodeReceived,
+      noemailreceived: NoEmailReceived,
+      // LÄGG TILL DENNA RAD:
+      loginview: null 
+    }
+    return views[props.currentView] || LoginForm
+  })
 
     return { t, currentComponent, emailForNoEmailReceived, handleChangeView }
   }

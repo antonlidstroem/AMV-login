@@ -11,3 +11,4 @@ export type ViewType =
   | 'resetpasswordemail'
   | 'nocodereceived'
   | 'noemailreceived'
+  | 'loginview';
