@@ -23,14 +23,18 @@
       </div>
 
       <div class="language-selector position-relative">
-        <button @click="toggleLanguage" class="btn-secondary-custom d-flex align-items-center gap-2" style="width:140px;">
+  
+        <button @click="toggleLanguage" class="btn-secondary-custom d-flex align-items-center gap-2 w-100">
           <span :class="[flagClasses[state.currentLang], 'd-inline-block']" style="width:24px;height:16px;"></span>
-          {{ languageNames[state.currentLang] }}
+          <span class="d-none d-md-inline">{{ languageNames[state.currentLang] }}</span>
+          <span class="d-md-none">{{ shortLanguageNames[state.currentLang] }}</span>
         </button>
-        <div class="dropdown-menu-custom" :class="{ show: showLanguageMenu }">
-          <button v-for="(name, code) in languageNames" :key="code" @click="selectLanguage(code as Lang)" :class="{ active: state.currentLang === code }">
+
+        <div class="dropdown-menu-custom w-100" :class="{ show: showLanguageMenu }">
+          <button v-for="(name, code) in languageNames" :key="code" @click="selectLanguage(code as Lang)" :class="{ active: state.currentLang === code }" class="w-100">
             <span :class="[flagClasses[code as Lang], 'd-inline-block']" style="width:24px;height:16px;"></span>
-            {{ name }}
+            <span class="d-none d-md-inline">{{ name }}</span>
+            <span class="d-md-none">{{ shortLanguageNames[code] }}</span>
           </button>
         </div>
       </div>
@@ -77,6 +81,13 @@ export default defineComponent({
       fi: 'fi fi-fi',
       no: 'fi fi-no'
     }
+
+    const shortLanguageNames: Record<string, string> = {
+      sv: 'SE',
+      en: 'GB',
+      fi: 'FI',
+      no: 'NO'
+    };
 
     const showContact = ref(false)
     const showHelp = ref(false)
@@ -145,7 +156,7 @@ export default defineComponent({
       toggleContact, toggleHelp, toggleLanguage, toggleActionMenu,
       selectLanguage, bgImage, isOverlayVisible,
       handleMobileContact, handleMobileHelp, handleContactClose,
-      showPasswordDemands, handleShowPasswordDemands, handleClosePasswordDemands
+      showPasswordDemands, handleShowPasswordDemands, handleClosePasswordDemands, shortLanguageNames
     }
   }
 })
