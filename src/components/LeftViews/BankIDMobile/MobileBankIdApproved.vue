@@ -62,30 +62,48 @@
 
 
   </div>
+
+  <GenericPopup 
+      :visible="loading" 
+      :title="t('loginIn')" 
+      :loading="loading"
+    />
+
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue' // Importera ref för reaktivitet
 import { useRouter } from 'vue-router'
 import { useI18n } from '../../../i18n/useI18n'
 import BackLink from '../../common/BackLink.vue'
 import AMVLogo from '../../../assets/logo_horizontal.svg'
+import GenericPopup from '../../common/GenericPopup.vue'
 
-
+// 1. Initialisera hooks
 const { t } = useI18n()
-
 const router = useRouter()
 
-type ViewType = 'login'
+// 2. Definiera reaktiva variabler (som saknades tidigare)
+const loading = ref(false)
 
+// 3. Definiera typer och emits
+type ViewType = 'login'
 const emit = defineEmits<{
   (e: 'change-view', view: ViewType): void
 }>()
 
+// 4. Funktioner
 const goToLogin = () => {
   emit('change-view', 'login')
 }
 
 const simulateSuccess = () => {
-  router.push('/dashboard')
+  loading.value = true // Visa laddnings-popup
+  
+  // Simulera en kort väntetid innan routing
+  setTimeout(() => {
+    loading.value = false
+    router.push('/dashboard')
+  }, 1500)
 }
 </script>

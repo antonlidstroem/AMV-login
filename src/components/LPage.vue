@@ -25,7 +25,9 @@
         :is="currentComponent"
         @change-view="handleChangeView"
         @show-password-demands="$emit('show-password-demands')" 
+         @trigger-error="$emit('trigger-error')" 
       />
+
     </div>
   </div>
 </template>
@@ -53,7 +55,7 @@ export default defineComponent({
   props: {
     currentView: { type: String as () => ViewType, required: true },
   },
-  emits: ['change-view', 'show-password-demands'],
+  emits: ['change-view', 'show-password-demands', 'trigger-error'],
   components: { 
     LoginForm, ForgotPassword, MobileBankId, MobileBankIdPending, MobileBankIdApproved,
     BankIdDevice, BankIdDeviceApproved, TwoFactor, ResetPasswordNew, ResetPasswordEmail,

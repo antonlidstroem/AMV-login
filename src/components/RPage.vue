@@ -69,9 +69,10 @@ export default defineComponent({
   components: { ContactModal, HelpModal, PasswordDemands },
   props: { 
     currentView: { type: String, required: true },
-    externalShowDemands: { type: Boolean, default: false }
+    externalShowDemands: { type: Boolean, default: false },
+    forceOpenContact: { type: Boolean, default: false },
   },
-  emits: ['change-view', 'close-demands'],
+  emits: ['change-view', 'close-demands', 'contact-opened'],
   setup(props, { emit }) {
     const { state, changeLang, languageNames, t } = useI18n()
 
@@ -104,6 +105,15 @@ export default defineComponent({
         showHelp.value = false
       }
     })
+
+    watch(() => props.forceOpenContact, (newVal) => {
+      if (newVal) {
+        showContact.value = true;
+        showHelp.value = false;
+        showPasswordDemands.value = false;
+        emit('contact-opened'); // Berätta för App.vue att vi har fattat galoppen
+      }
+    });
 
     const toggleContact = () => { 
       showContact.value = !showContact.value

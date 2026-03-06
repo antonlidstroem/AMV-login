@@ -83,6 +83,10 @@
       Simulera lyckad inloggning
     </button>
 
+    <button class="btn-temp" @click="$emit('trigger-error')">
+      Simulera misslyckad inloggning
+    </button>
+
   </div>
 </template>
 
@@ -102,6 +106,7 @@ type ViewType =
 
 const emit = defineEmits<{
   (e: 'change-view', view: ViewType): void
+  (e: 'trigger-error'): void // Lägg till denna här
 }>()
 
 const goToLogin = () => {
@@ -115,4 +120,6 @@ const goToBankIdDevice = () => {
 const simulateSuccess = () => {
   emit('change-view', 'mobilebankidapproved')
 }
+
+
 </script>
