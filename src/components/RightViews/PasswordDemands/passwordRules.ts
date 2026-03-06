@@ -10,12 +10,12 @@ import type { RuleTranslationKey } from '../../../i18n/passwordRulesI18n';
  */
 export const passwordConfig = {
   // Ange minsta antal tecken (t.ex. 8, 10 eller 12)
-  minLength: 8,
+  minLength: 6,
   
-  // Kräva minst en liten bokstav (true = ja, false = nej)
-  requireLowercase: true,
+  // Kräva minst en gemen (true = ja, false = nej)
+  requireLowercase: false,
   
-  // Kräva minst en stor bokstav (true = ja, false = nej)
+  // Kräva minst en versal (true = ja, false = nej)
   requireUppercase: true,
   
   // Ange minsta antal siffror som krävs. 
@@ -25,8 +25,13 @@ export const passwordConfig = {
   // Kräva minst ett specialtecken (!@#$ osv) (true = ja, false = nej)
   requireSpecial: true,
   
+  //Lösenord får inte vara lätt att gissa sig till
+  requireNotGuessable: true, 
+
   // Visa eller dölj den extra informationstexten (fritexten) under listan
   showFreeText: true, 
+
+  
 };
 
 /**
@@ -42,7 +47,38 @@ export interface PasswordRule {
   test: (password: string) => boolean;
 }
 
-const buildRules = (): PasswordRule[] => {
+    const isEasyToGuess = (pw: string): boolean => {
+      if (pw.length < 3) return false; // För kort för att testa mönster
+
+      // 1. Kolla efter upprepade tecken (t.ex. "aaa", "111")
+      const repeats = /(.)\1\1/;
+      if (repeats.test(pw)) return true;
+
+      // 2. Kolla efter enkla tangentbordssekvenser (t.ex. "123", "abc", "qwe")
+      const sequences = [
+        '0123456789',
+        '9876543210',
+        'abcdefghijklmnopqrstuvwxyz',
+        'qwertyuiop',
+        'asdfghjkl',
+        'zxcvbnm'
+      ];
+      
+      const lowerPw = pw.toLowerCase();
+      for (const seq of sequences) {
+        for (let i = 0; i <= seq.length - 3; i++) {
+          if (lowerPw.includes(seq.substring(i, i + 3))) return true;
+        }
+      }
+
+      // 3. Kolla efter vanliga förbjudna ord
+      const forbidden = ['password', 'losenord', 'password123'];
+      if (forbidden.includes(lowerPw)) return true;
+
+      return false;
+    };
+
+  const buildRules = (): PasswordRule[] => {
   const rules: PasswordRule[] = [];
 
   // Längd
@@ -76,6 +112,14 @@ const buildRules = (): PasswordRule[] => {
   // Specialtecken
   if (passwordConfig.requireSpecial) {
     rules.push({ id: 'special', labelKey: 'ruleSpecial', test: (pw) => /[!@#$%^&*(),.?":{}|<>]/.test(pw) });
+  }
+
+  if (passwordConfig.requireNotGuessable) {
+    rules.push({ 
+      id: 'notGuessable', 
+      labelKey: 'ruleNotGuessable', 
+      test: (pw) => !isEasyToGuess(pw) // Vi vill att den INTE ska vara lättgissad
+    });
   }
 
   return rules;

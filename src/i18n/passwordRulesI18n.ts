@@ -8,7 +8,9 @@ export const passwordRuleTranslations: Record<Lang, {
   ruleUppercase: string;
   ruleNumber: string;
   ruleSpecial: string;
+  ruleNotGuessable: string;
   ruleFreeText: string; 
+
 }> = {
   sv: {
     ruleHeaderText: "Krav",
@@ -17,7 +19,8 @@ export const passwordRuleTranslations: Record<Lang, {
     ruleUppercase: 'Minst en stor bokstav',
     ruleNumber: 'Minst {n} siffra/siffror',
     ruleSpecial: 'Minst ett specialtecken',
-    ruleFreeText: "Lösenordet bör inte innehålla ditt namn eller användarnamn."
+    ruleNotGuessable: 'Får ej vara för enkelt (t.ex. 123 eller aaa)',
+    ruleFreeText: 'Lösenordet bör inte innehålla ditt namn eller användarnamn.'
   },
   en: {
     ruleHeaderText: "Demand",
@@ -26,7 +29,8 @@ export const passwordRuleTranslations: Record<Lang, {
     ruleUppercase: 'At least one uppercase letter',
     ruleNumber: 'At least {n} digit(s)',
     ruleSpecial: 'At least one special character',
-    ruleFreeText: "The password should not contain your name or username."
+    ruleNotGuessable: 'Must not be too simple (e.g. 123 or aaa)',
+    ruleFreeText: 'The password should not contain your name or username.'
   },
   no: {
     ruleHeaderText: "?",
@@ -35,7 +39,8 @@ export const passwordRuleTranslations: Record<Lang, {
     ruleUppercase: 'Minst én stor bokstav',
     ruleNumber: 'Minst {n} tall',
     ruleSpecial: 'Minst ett spesialtegn',
-    ruleFreeText: "Passordet bør ikke inneholde navnet ditt eller brukernavnet ditt."
+    ruleNotGuessable: '?',
+    ruleFreeText: '?'
   },
   fi: {
     ruleHeaderText: "?",
@@ -44,7 +49,8 @@ export const passwordRuleTranslations: Record<Lang, {
     ruleUppercase: 'Vähintään yksi iso kirjain',
     ruleNumber: 'Vähintään {n} numeroa',
     ruleSpecial: 'Vähintään yksi erikoismerkki',
-    ruleFreeText: "Salasana ei saa sisältää nimeäsi tai käyttäjätunnustasi."
+    ruleNotGuessable: 'Must not be too simple (e.g. 123 or aaa)',
+    ruleFreeText: 'The password should not contain your name or username.'
   }
 };
 
