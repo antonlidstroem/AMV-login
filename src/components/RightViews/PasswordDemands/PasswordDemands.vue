@@ -11,7 +11,7 @@
     </h2>
 
     <div v-if="config.showFreeText" class="mt-3 px-2">
-      <p class="text-white t">
+      <p class="text-white">
         {{ getRuleLabel(freeTextKey) }}
       </p>
     </div>
