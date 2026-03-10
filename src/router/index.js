@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 const routes=[
   { path:'/', component:()=>import('../App.vue') },
-  { path:'/dashboard',
+  { path:'/LoginView',
     component:()=>import('../views/LoginView.vue'),
     meta:{ requiresAuth:true }
   }

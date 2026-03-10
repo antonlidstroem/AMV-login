@@ -10,43 +10,49 @@
 
     <BackLink :label="t('back')" @click="goBack" />
 
-    <GenericPopup 
+    <!-- <GenericPopup 
       v-model:visible="showPopup"
       :title="t('newEmailSent')" 
       :buttons="[ { label: t('okClose'), action: closePopup } ]"
     >
         <template #icon><i class="bi bi-check-circle"></i></template>
       
-    </GenericPopup>
+    </GenericPopup> -->
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import { useI18n } from '../../../i18n/useI18n'
-import GenericPopup from '../../common/GenericPopup.vue'
 import BackLink from '../../common/BackLink.vue'
 
 export default defineComponent({
   name: 'NoEmailReceived',
-  components: { GenericPopup, BackLink },
+  components: { BackLink },
   props: { email: { type: String, default: '' } },
-  emits: ['change-view'],
+  emits: ['change-view', 'show-popup'],
+
   setup(_, { emit }) {
     const { t } = useI18n()
-    const success = ref(false)
-    const showPopup = ref(false)
-
+ 
     const send = () => {
-      success.value = true
-      showPopup.value = true
+          emit('show-popup', {
+        title: t('newEmailSent'),
+        icon: 'bi bi-check-circle',
+        buttons: [
+          { 
+            label: t('okClose'), 
+            action: () => {
+              emit('show-popup', { visible: false }); 
+            } 
+          }
+        ]
+      })
     }
-
-    const closePopup = () => { showPopup.value = false }
 
     const goBack = () => { emit('change-view', 'login') }
 
-    return { t, success, showPopup, send, closePopup, goBack }
+    return { t, send, goBack }
   }
 })
 </script>

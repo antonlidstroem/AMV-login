@@ -3,21 +3,29 @@
     <div class="w-100">
 
       <div v-if="currentView === 'twofactor'" class="d-flex flex-column gap-3 w-100">
-        <TwoFactor @change-view="handleChangeView" />
-        <NoCodeReceived />
+        <TwoFactor @change-view="handleChangeView" 
+        @show-popup="$emit('show-popup', $event)"/>
+        <NoCodeReceived 
+        @show-popup="$emit('show-popup', $event)"/>
       </div>
 
       <div v-else-if="currentView === 'resetpasswordemail'">
         <div class="reset-password-wrapper d-flex flex-column">
           <ResetPasswordEmail @change-view="handleChangeView" />
           <div class="no-email-received-wrapper mt-3 mt-md-0">
-            <NoEmailReceived :email="emailForNoEmailReceived" @change-view="handleChangeView" />
+            <NoEmailReceived 
+            :email="emailForNoEmailReceived" 
+            @change-view="handleChangeView" 
+            @show-popup="$emit('show-popup', $event)"/>
           </div>
         </div>
       </div>
 
       <div v-else-if="currentView === 'noemailreceived'" class="d-flex flex-column gap-3 w-100">
-        <NoEmailReceived :email="emailForNoEmailReceived" @change-view="handleChangeView" />
+        <NoEmailReceived 
+        :email="emailForNoEmailReceived" 
+        @change-view="handleChangeView" 
+        @show-popup="$emit('show-popup', $event)"/>
       </div>
 
       <component
@@ -26,6 +34,7 @@
         @change-view="handleChangeView"
         @show-password-demands="$emit('show-password-demands')" 
          @trigger-error="$emit('trigger-error')" 
+         @show-popup="$emit('show-popup', $event)"
       />
 
     </div>
@@ -55,7 +64,7 @@ export default defineComponent({
   props: {
     currentView: { type: String as () => ViewType, required: true },
   },
-  emits: ['change-view', 'show-password-demands', 'trigger-error'],
+  emits: ['change-view', 'show-password-demands', 'trigger-error', 'show-popup'],
   components: { 
     LoginForm, ForgotPassword, MobileBankId, MobileBankIdPending, MobileBankIdApproved,
     BankIdDevice, BankIdDeviceApproved, TwoFactor, ResetPasswordNew, ResetPasswordEmail,
@@ -87,7 +96,6 @@ export default defineComponent({
       resetpasswordemail: ResetPasswordEmail,
       nocodereceived: NoCodeReceived,
       noemailreceived: NoEmailReceived,
-      // LÄGG TILL DENNA RAD:
       loginview: null 
     }
     return views[props.currentView] || LoginForm

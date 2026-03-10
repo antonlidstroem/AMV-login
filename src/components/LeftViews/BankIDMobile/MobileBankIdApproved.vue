@@ -62,13 +62,6 @@
 
 
   </div>
-
-  <GenericPopup 
-      :visible="loading" 
-      :title="t('loginIn')" 
-      :loading="loading"
-    />
-
 </template>
 
 <script setup lang="ts">
@@ -77,33 +70,32 @@ import { useRouter } from 'vue-router'
 import { useI18n } from '../../../i18n/useI18n'
 import BackLink from '../../common/BackLink.vue'
 import AMVLogo from '../../../assets/logo_horizontal.svg'
-import GenericPopup from '../../common/GenericPopup.vue'
 
-// 1. Initialisera hooks
-const { t } = useI18n()
-const router = useRouter()
 
-// 2. Definiera reaktiva variabler (som saknades tidigare)
-const loading = ref(false)
+  const { t } = useI18n()
+  const router = useRouter()
 
-// 3. Definiera typer och emits
-type ViewType = 'login'
-const emit = defineEmits<{
-  (e: 'change-view', view: ViewType): void
-}>()
+  const emit = defineEmits<{
+    (e: 'change-view', view: string): void
+    (e: 'show-popup', config: any): void 
+  }>()
 
-// 4. Funktioner
-const goToLogin = () => {
-  emit('change-view', 'login')
-}
+  const goToLogin = () => {
+    emit('change-view', 'login')
+  }
 
-const simulateSuccess = () => {
-  loading.value = true // Visa laddnings-popup
-  
+
+
+  const simulateSuccess = () => {
+  emit('show-popup', { 
+    title: t('loginIn'), 
+    loading: true 
+  });
+
   // Simulera en kort väntetid innan routing
   setTimeout(() => {
-    loading.value = false
-    router.push('/dashboard')
+    emit('show-popup', { visible: false });
+    router.push('/LoginView');
   }, 1500)
 }
 </script>

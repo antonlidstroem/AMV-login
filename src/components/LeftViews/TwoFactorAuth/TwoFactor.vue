@@ -20,60 +20,75 @@
         @input="onInput(i)"
       />
     </div>
-
+<!-- 
     <button class="btn-custom" :disabled="loading" @click="verify">
-      {{ loading ? t('wait') : t('login') }}
-    </button>
+      {{ t('login') }}
+    </button> -->
     
-    <button class="btn btn-link mt-2" @click="$emit('change-view','login')">
-      {{ t('back') }}
-    </button>
+    <div class="mt-3">
+      <BackLink 
+        :label="t('back')" 
+        @click="$emit('change-view', 'login')" 
+      />
+    </div>
+
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, nextTick } from 'vue'
+import { defineComponent, ref, reactive } from 'vue'
 import { useI18n } from '../../../i18n/useI18n'
 import AMVLogo from '../../../assets/logo_horizontal.svg'
 import { verifyCodeMock } from '../../../mock/authService'
+import BackLink from '../../common/BackLink.vue'
 
 export default defineComponent({
   name: 'VerifyCode',
-  emits: ['change-view'],
+  components: {BackLink},
+  emits: ['change-view', 'show-popup'],
   setup(_, { emit }) {
     const { t } = useI18n()
     const digits = reactive<string[]>(['', '', '', ''])
     const error = ref<boolean>(false)
     const loading = ref<boolean>(false)
-
-    // Referenser till input-fälten för att kunna flytta fokus
     const inputRefs = ref<HTMLInputElement[]>([])
 
     const onInput = (index: number) => {
       clearError()
-      // Om man skrivit en siffra, flytta fokus till nästa ruta
       if (digits[index] && index < 3) {
         inputRefs.value[index + 1]?.focus()
       }
-      // Om alla siffror är ifyllda, kör verifiering direkt? (Valfritt)
       if (digits.every(d => d !== '')) {
         verify()
       }
     }
 
-        // TwoFactor.vue inuti verify-funktionen
     const verify = async (): Promise<void> => {
       const code = digits.join('')
       if (code.length < 4) return
 
       loading.value = true
+      
+      // 1. Trigga den globala popupen i App.vue
+      emit('show-popup', { title: t('loginIn'), loading: true })
+
+      // 2. Skapa en timer på 1 sekund
+      const delay = new Promise(resolve => setTimeout(resolve, 1000))
+
       try {
-        await verifyCodeMock(code)
+        // 3. Kör både API-anropet och timern samtidigt. 
+        // Vi väntar tills BÅDA är klara (Promise.all).
+        await Promise.all([verifyCodeMock(code), delay])
         
-        // Ändra från 'dashboard' till 'loginview'
+        // Om vi når hit var koden rätt
+        emit('show-popup', { visible: false })
         emit('change-view', 'loginview') 
         
       } catch (err) {
+        // Om API:et ger fel, väntar vi ut resten av sekunden innan vi stänger popupen
+        await delay 
+        emit('show-popup', { visible: false })
+        
         error.value = true
         digits.fill('')
         inputRefs.value[0]?.focus()

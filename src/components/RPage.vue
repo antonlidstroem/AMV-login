@@ -44,13 +44,21 @@
       <slot name="mobile-left"></slot>
     </div>
 
-    <ContactModal v-if="showContact" @close="handleContactClose" />
+    <ContactModal 
+      v-if="showContact" 
+      @close="handleContactClose"
+      @show-popup="$emit('show-popup', $event)" 
+      />
+
     <HelpModal v-if="showHelp" @close="showHelp = false" />
 
     <PasswordDemands
       v-if="showPasswordDemands"
       @close="handleClosePasswordDemands"
+      @show-popup="$emit('show-popup', $event)"
     />
+
+   
 
   </div>
 </template>
@@ -72,7 +80,7 @@ export default defineComponent({
     externalShowDemands: { type: Boolean, default: false },
     forceOpenContact: { type: Boolean, default: false },
   },
-  emits: ['change-view', 'close-demands', 'contact-opened'],
+  emits: ['change-view', 'close-demands', 'contact-opened', 'show-popup'],
   setup(props, { emit }) {
     const { state, changeLang, languageNames, t } = useI18n()
 

@@ -54,10 +54,6 @@
       <div class="text-center mt-auto ">
       <CloseButton @close="$emit('close')" />
     </div>
-
-    
-
-
     </form>
 
       <BaseButton 
@@ -67,13 +63,6 @@
           @action="close" 
         />
 
-    <GenericPopup 
-      v-model:visible="showPopup"
-      :title="t('messageSent')" 
-      :buttons="popupButtons"
-    >
-        <template #icon><i class="bi bi-check-circle"></i></template>
-    </GenericPopup>
   </div>
 </template>
 
@@ -86,8 +75,8 @@ import IconCloseButton from '../common/IconCloseButton.vue'
 
 export default defineComponent({
   name: 'ContactPanel',
-  components: { GenericPopup, BaseButton, IconCloseButton },
-  emits: ['close'],
+  components: { BaseButton, IconCloseButton },
+  emits: ['close', 'show-popup'],
   setup(_, { emit }) {
     const { t } = useI18n()
 
@@ -96,12 +85,14 @@ export default defineComponent({
     const message = ref<string>('')
     const showPopup = ref<boolean>(false)
 
-    const sendContact = (): void => {
-      // Här kan du lägga till själva API-anropet sen!
-      name.value = ''
-      email.value = ''
-      message.value = ''
-      showPopup.value = true
+
+      const sendContact = () => {
+
+    emit('show-popup', { 
+        title: t('messageSent'), 
+        icon: 'bi bi-check-circle',
+        buttons: [{ label: t('okClose'), action: () => { emit('close') } }] 
+      });
     }
 
     const close = (): void => {
@@ -110,7 +101,7 @@ export default defineComponent({
 
     const closeFromPopup = (): void => {
       showPopup.value = false
-      emit('close') // Stänger även panelen när man trycker OK i popupen
+      emit('close')
     }
 
     const popupButtons = [

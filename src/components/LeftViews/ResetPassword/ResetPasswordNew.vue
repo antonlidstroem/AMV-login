@@ -20,15 +20,6 @@
     <button class="btn-custom w-100" @click="change">{{ t('changePassword') }}</button>
 
 
-    <GenericPopup 
-      v-model:visible="showSuccessPopup"
-      :title="t('passwordChanged')" 
-      :buttons="[ { label: t('toLoginPage'), action: goToLogin } ]"
-    >
-      <template #icon>
-        <i class="bi bi-check-circle"></i>
-      </template>
-    </GenericPopup>
 
 
 
@@ -43,22 +34,16 @@ import { useI18n } from '../../../i18n/useI18n'
 import AMVLogo from '../../../assets/logo_horizontal.svg'
 import PasswordCheck from '../../RightViews/PasswordDemands/PasswordCheck.vue'
 import { passwordRules } from '../../RightViews/PasswordDemands/passwordRules'
-import GenericPopup from '../../common/GenericPopup.vue' // Glöm inte importen!
 
 export default defineComponent({
   name: 'ResetPasswordNew',
-  components: { PasswordCheck, GenericPopup },
-  emits: ['change-view', 'show-password-demands'],
+  emits: ['change-view', 'show-password-demands', 'show-popup'],
+
   setup(_, { emit }) {
     const { t } = useI18n()
     const p1 = ref(''), p2 = ref(''), errorMsg = ref('')
     const hasAttemptedChange = ref(false)
     
-    // State för popupen
-    const showSuccessPopup = ref(false)
-    
-    const inputClass = computed(() => errorMsg.value ? 'error-border' : '')
-
     const allRulesPassed = computed(() => {
       return passwordRules.every(rule => rule.test(p1.value))
     })
@@ -67,39 +52,47 @@ export default defineComponent({
       return hasAttemptedChange.value && !allRulesPassed.value
     })
 
+    const inputClass = computed(() => errorMsg.value ? 'error-border' : '')
+
+    const showDemands = () => { 
+      emit('show-password-demands') 
+    }
+
+
     const change = () => {
       hasAttemptedChange.value = true
-
-      if (p1.value !== p2.value) { 
+      if (p1.value !==  p2.value){
         errorMsg.value = t('passwordsNotMatching')
-        return 
+        return
       }
-      
-      if (!allRulesPassed.value) { 
+      if (!allRulesPassed.value){
         errorMsg.value = t('passwordNotAcceptable')
-        return 
+        return
       }
 
-      // Om allt går bra: Visa popupen istället för att bara logga
-      errorMsg.value = ''
-      showSuccessPopup.value = true
+
+      errorMsg.value = '';
+
+      emit('show-popup', {
+        title: t('passwordChanged'),
+        icon: 'bi bi-check-circle',
+        buttons: [{ 
+          label: t('toLoginPage'), 
+          action: () => emit('change-view', 'login')}]
+      })
     }
 
-    // Funktion för att stänga och gå till login
-    const goToLogin = () => {
-      showSuccessPopup.value = false
-      emit('change-view', 'login')
-    }
+      return { 
+        t, 
+        p1, 
+        p2, 
+        errorMsg, 
+        inputClass, 
+        change, 
+        shouldShowValidation, 
+        AMVLogo,
+        showDemands }
 
-    const showDemands = () => { emit('show-password-demands') }
-
-    return { 
-      t, p1, p2, errorMsg, inputClass, 
-      change, AMVLogo, showDemands, 
-      shouldShowValidation,
-      showSuccessPopup,
-      goToLogin
-    }
   }
 })
 </script>

@@ -10,6 +10,7 @@
         @change-view="handleViewChange" 
         @show-password-demands="showDemandsInRPage = !showDemandsInRPage"
         @trigger-error="handleLoginError"
+        @show-popup="handleShowPopup"
       />
       <div class="col-12 col-md-6 d-flex p-0">
         <RPage
@@ -20,6 +21,7 @@
           @change-view="handleViewChange"
           @contact-opened="contactTrigger = false"
           @close-demands="showDemandsInRPage = false"
+          @show-popup="handleShowPopup"
         >
           <template #mobile-left>
             <div class="d-block d-md-none w-100 d-flex justify-content-center align-items-start py-3 px-2">
@@ -30,6 +32,7 @@
                 @change-view="handleViewChange"
                 @trigger-error="handleLoginError"
                 @show-password-demands="showDemandsInRPage = !showDemandsInRPage"
+                @show-popup="handleShowPopup" 
               />
             </div>
           </template>
@@ -37,7 +40,7 @@
       </div>
     </div>
 
-    <LoginView v-else @logout="isLoggedIn = false" />
+    <LoginView v-else @logout="handleLogout" />
 
     <ErrPopup 
       v-model:visible="errorState.visible"
@@ -47,6 +50,17 @@
       @action="errorState.action"
     />
 
+    <GenericPopup 
+      v-model:visible="popupState.visible"
+      :title="popupState.title"
+      :loading="popupState.loading"
+      :buttons="popupState.buttons"
+    >
+      <template #icon v-if="popupState.icon">
+        <i :class="popupState.icon"></i>
+      </template>
+    </GenericPopup>
+
   </div>
 </template>
 
@@ -54,50 +68,78 @@
 import { defineComponent, ref, reactive } from 'vue'
 import LPage from './components/LPage.vue'
 import RPage from './components/RPage.vue'
-import type { ViewType } from './types/views'
 import LoginView from './views/LoginView.vue' 
 import ErrPopup from './components/common/Err-Popup.vue'
+import GenericPopup from './components/common/GenericPopup.vue'
+import type { ViewType } from './types/views'
 
 export default defineComponent({
   name: 'App',
-  components: { LPage, RPage, LoginView, ErrPopup },
+  components: { LPage, RPage, LoginView, ErrPopup, GenericPopup },
   setup() {
+
     const currentView = ref<ViewType>('login')
     const showDemandsInRPage = ref(false)
     const isLoggedIn = ref(false)
-
-   
-    const handleViewChange = (view: ViewType) => {
-      // Vi kollar om strängen är 'loginview'
-      if (view === 'loginview') {
-        isLoggedIn.value = true
-      } else {
-        currentView.value = view
-      }
-    }
-
     const contactTrigger = ref(false);
-    const errorState = reactive({
+
+    // Globalt state för GenericPopup
+   const popupState = reactive({
       visible: false,
+      title: '',
+      loading: false,
       icon: '',
-      message: '',
-      buttonLabel: '',
-      action: () => {}
+      buttons: [] as any[]
     });
+
+    // Globalt state för ErrPopup
+    const errorState = reactive({
+          visible: false,
+          icon: '',
+          message: '',
+          buttonLabel: '',
+          action: () => {}
+    });
+
+    const handleLogout = () => {
+      isLoggedIn.value = false;      // Hoppa ur LoginView
+      currentView.value = 'login';   // Återställ vyn till inloggningsformuläret
+    };
+
+
+    const handleShowPopup = (config: any) => {
+      popupState.title = config.title || '';
+      popupState.loading = config.loading || false;
+      popupState.icon = config.icon || '';
+      popupState.buttons = config.buttons || [];
+      popupState.visible = config.visible !== undefined ? config.visible : true
+      
+      // Om det är en laddnings-popup som ska stängas automatiskt
+      if (config.duration) {
+        setTimeout(() => { popupState.visible = false }, config.duration);
+
+      }
+    };
 
     const handleLoginError = () => {
       errorState.icon = 'bi bi-shield-exclamation';
       errorState.message = 'Inloggningen misslyckades. Kontrollera att du har BankID-appen öppen.';
       errorState.buttonLabel = 'Kontakta support';
       errorState.visible = true;
-      
-      // Här definierar vi vad som händer när man trycker på knappen
       errorState.action = () => {
         errorState.visible = false;
-        contactTrigger.value = true; // Detta triggar ContactModal i RPage
-      };
-    };
+        contactTrigger.value = true; 
+      }
+    }
 
+
+    const handleViewChange = (view: ViewType) => {
+      if (view === 'loginview') {
+        isLoggedIn.value = true
+      } else {
+        currentView.value = view
+      }
+    };
 
     return {
       currentView,
@@ -106,7 +148,10 @@ export default defineComponent({
       handleViewChange,
       contactTrigger,  
       errorState,      
-      handleLoginError
+      handleLoginError,
+      popupState,
+      handleShowPopup,
+      handleLogout
     }
   }
 })

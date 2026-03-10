@@ -80,16 +80,6 @@
         </a>
       </div>
     </form>
-
-    <!-- <Popup v-if="loading" :title="t('loginIn')" :loading="true" /> -->
-
-    <GenericPopup 
-      :visible="loading" 
-      :title="t('loginIn')" 
-      :loading="loading"
-    />
-
-
   </div>
 </template>
 
@@ -112,23 +102,18 @@ export default defineComponent({
     const { t } = useI18n()
 
     const login = async () => {
-      error.value = false
-      loading.value = true
+      error.value=false;
 
-      await nextTick()
-
-
-
+      emit('show-popup', { title: t('loginIn'), loading: true }); 
       try {
-        await new Promise(resolve => setTimeout(resolve, 300))
-
-        await loginMock(username.value, password.value)
-        localStorage.setItem('mockLogin', 'true')
+        await loginMock(username.value, password.value);
+        emit('show-popup', { visible: false }); 
         emit('change-view', 'twofactor')
-      } catch {
-        error.value = true
-      } finally {
-        loading.value = false
+
+      } catch (err) {
+        emit('show-popup', { visible: false });
+        error.value = true;
+        console.error("Inloggningen misslyckades", err)
       }
     }
 

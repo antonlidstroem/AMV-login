@@ -8,8 +8,14 @@
 
     <!-- QR -->
     <div class="qr-wrapper mb-5">
-      <div class="fake-qr"></div>
+      <div v-if="isQrLoaded" class="fake-qr"></div>
+
+      <div v-else class="qr-placeholder d-flex align-items-center justify-content-center border rounded-3" style="height: 200px; background: rgba(0,0,0,0.1);">
+        <div class="spinner-border text-light" role="status"></div>
+      </div>
     </div>
+
+
 
     
 
@@ -65,21 +71,30 @@
       {{ t('bankIDThisDevice') }}
     </button>
 
-<!-- 🔹 Tillfällig knapp för test -->
-    <button
-      @click="simulatePending"
-      class="btn-temp"
-    >
-      Simulera lyckad inloggning
-    </button>
-
-
+<!-- Tillfälliga knappar för test -->
     
 
+    <div class="d-flex flex-column gap-2 mt-4">
+      <button
+      @click="simulatePending"
+      class="btn-temp"
+      >
+      Simulera lyckad inloggning
+      </button>
+
+      <button @click="simulateSuccess" class="btn-temp">
+        Simulera lyckad inloggning
+      </button>
+
+      <button @click="checkQrStatus" class="btn-temp">
+        Testa QR-laddning (Simulera fel)
+      </button>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { ref, onMounted } from 'vue'
 import { useI18n } from '../../../i18n/useI18n'
 import bankIdLogo from '../../../assets/BankID_logo_white.png'
 import BackLink from '../../common/BackLink.vue'
@@ -87,6 +102,7 @@ import BankIdLink from '../../common/BankIdLink.vue'
 import AMVLogo from '../../../assets/logo_horizontal.svg'
 
 const { t } = useI18n()
+const isQrLoaded = ref(true)
 
 type ViewType = 
 | 'login'
@@ -94,7 +110,17 @@ type ViewType =
 | 'mobilebankidpending'
 
 const emit = defineEmits<{
-  (e: 'change-view', view: ViewType): void}>()
+  (e: 'change-view', view: ViewType): void
+  (e: 'trigger-error'): void }>()
+
+  const checkQrStatus = () => {
+    isQrLoaded.value = false;
+    emit('trigger-error');
+  }
+
+  const simulateSuccess = () => {
+    emit('change-view', 'mobilebankidpending')
+  }
 
   const goToLogin = () => {
     emit ('change-view', 'login')
