@@ -39,7 +39,7 @@
 import { defineComponent, ref, reactive } from 'vue'
 import { useI18n } from '../../../i18n/useI18n'
 import AMVLogo from '../../../assets/logo_horizontal.svg'
-import { verifyCodeMock } from '../../../mock/authService'
+import { apiClient } from '../../../services/apiClient'
 import BackLink from '../../common/BackLink.vue'
 
 export default defineComponent({
@@ -78,7 +78,7 @@ export default defineComponent({
       try {
         // 3. Kör både API-anropet och timern samtidigt. 
         // Vi väntar tills BÅDA är klara (Promise.all).
-        await Promise.all([verifyCodeMock(code), delay])
+        await Promise.all([apiClient.verifyCode(code), delay])
         
         // Om vi når hit var koden rätt
         emit('show-popup', { visible: false })

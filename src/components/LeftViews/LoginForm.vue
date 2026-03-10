@@ -85,7 +85,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, nextTick } from 'vue'
-import { loginMock } from '../../mock/authService'
+import { apiClient } from '../../services/apiClient'
 import GenericPopup from '../common/GenericPopup.vue'
 import { useI18n } from '../../i18n/useI18n'
 import bankIdLogo from '../../assets/BankID_logo_white.png'
@@ -106,7 +106,7 @@ export default defineComponent({
 
       emit('show-popup', { title: t('loginIn'), loading: true }); 
       try {
-        await loginMock(username.value, password.value);
+        await apiClient.login(username.value, password.value);
         emit('show-popup', { visible: false }); 
         emit('change-view', 'twofactor')
 

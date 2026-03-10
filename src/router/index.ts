@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import { AuthService } from '../services/authService';
-import { MockAuthService } from '../services/authService.mock';
+import { AuthService } from '../services/apiClient';
+
 
 // 1. Vi definierar vilka fält som ska finnas i 'meta' för att få autocompletion
 declare module 'vue-router' {
@@ -37,6 +37,3 @@ router.beforeEach((to) => {
   }
 })
 
-const isMock = process.env.REACT_APP_USE_MOCKS === 'true';
-
-export const authService = isMock ? new MockAuthService() : new AuthService();
