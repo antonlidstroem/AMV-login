@@ -2,39 +2,52 @@
   <div class="bg-lpage d-flex flex-column align-items-center justify-content-center h-100">
     <div class="w-100">
 
+      <!-- TwoFactor + NoCodeReceived visas alltid tillsammans -->
       <div v-if="currentView === 'twofactor'" class="d-flex flex-column gap-3 w-100">
-        <TwoFactor @change-view="handleChangeView" 
-        @show-popup="$emit('show-popup', $event)"/>
-        <NoCodeReceived 
-        @show-popup="$emit('show-popup', $event)"/>
+        <TwoFactor
+          @change-view="handleChangeView"
+          @show-popup="$emit('show-popup', $event)"
+        />
+        <NoCodeReceived
+          @show-popup="$emit('show-popup', $event)"
+        />
       </div>
 
+      <!-- ResetPasswordEmail + NoEmailReceived visas alltid tillsammans -->
       <div v-else-if="currentView === 'resetpasswordemail'">
         <div class="reset-password-wrapper d-flex flex-column">
           <ResetPasswordEmail @change-view="handleChangeView" />
           <div class="no-email-received-wrapper mt-3 mt-md-0">
-            <NoEmailReceived 
-            :email="emailForNoEmailReceived" 
-            @change-view="handleChangeView" 
-            @show-popup="$emit('show-popup', $event)"/>
+            <NoEmailReceived
+              :email="emailForNoEmailReceived"
+              @change-view="handleChangeView"
+              @show-popup="$emit('show-popup', $event)"
+            />
           </div>
         </div>
       </div>
 
+      <!-- Fristående NoEmailReceived (om man navigerar hit direkt) -->
       <div v-else-if="currentView === 'noemailreceived'" class="d-flex flex-column gap-3 w-100">
-        <NoEmailReceived 
-        :email="emailForNoEmailReceived" 
-        @change-view="handleChangeView" 
-        @show-popup="$emit('show-popup', $event)"/>
+        <NoEmailReceived
+          :email="emailForNoEmailReceived"
+          @change-view="handleChangeView"
+          @show-popup="$emit('show-popup', $event)"
+        />
       </div>
 
+      <!--
+        Alla andra vyer.
+        'loginview' mappas till null i currentComponent – vi renderar ingenting
+        för den vyn (App.vue tar hand om övergången till /dashboard).
+      -->
       <component
-        v-else
+        v-else-if="currentComponent"
         :is="currentComponent"
         @change-view="handleChangeView"
-        @show-password-demands="$emit('show-password-demands')" 
-         @trigger-error="$emit('trigger-error')" 
-         @show-popup="$emit('show-popup', $event)"
+        @show-password-demands="$emit('show-password-demands')"
+        @trigger-error="$emit('trigger-error')"
+        @show-popup="$emit('show-popup', $event)"
       />
 
     </div>
@@ -43,7 +56,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed } from 'vue'
-import { useI18n } from '../i18n/useI18n'
+import type { ViewType } from '../types/views'
 
 import LoginForm from './LeftViews/LoginForm.vue'
 import ForgotPassword from './LeftViews/ResetPassword/ForgotPassword.vue'
@@ -57,22 +70,37 @@ import TwoFactor from './LeftViews/TwoFactorAuth/TwoFactor.vue'
 import NoCodeReceived from './LeftViews/TwoFactorAuth/NoCodeReceived.vue'
 import MobileBankIdPending from './LeftViews/BankIDMobile/MobileBankIdPending.vue'
 import MobileBankIdApproved from './LeftViews/BankIDMobile/MobileBankIdApproved.vue'
-import type { ViewType } from '../types/views'
+
+// Komponentkarta – null = App.vue hanterar övergången, inget renderas här
+const VIEW_MAP: Record<ViewType, any> = {
+  login:                LoginForm,
+  forgot:               ForgotPassword,
+  mobilebankid:         MobileBankId,
+  mobilebankidpending:  MobileBankIdPending,
+  mobilebankidapproved: MobileBankIdApproved,
+  bankiddevice:         BankIdDevice,
+  bankiddeviceapproved: BankIdDeviceApproved,
+  twofactor:            TwoFactor,
+  newpassword:          ResetPasswordNew,
+  resetpasswordemail:   ResetPasswordEmail,
+  nocodereceived:       NoCodeReceived,
+  noemailreceived:      NoEmailReceived,
+  loginview:            null  // Hanteras av App.vue → router.push('/dashboard')
+}
 
 export default defineComponent({
   name: 'LeftPageContainer',
-  props: {
-    currentView: { type: String as () => ViewType, required: true },
-  },
-  emits: ['change-view', 'show-password-demands', 'trigger-error', 'show-popup'],
-  components: { 
+  components: {
     LoginForm, ForgotPassword, MobileBankId, MobileBankIdPending, MobileBankIdApproved,
     BankIdDevice, BankIdDeviceApproved, TwoFactor, ResetPasswordNew, ResetPasswordEmail,
     NoCodeReceived, NoEmailReceived
   },
-  setup(props, { emit }) {
-    const { t } = useI18n()
+  props: {
+    currentView: { type: String as () => ViewType, required: true }
+  },
+  emits: ['change-view', 'show-password-demands', 'trigger-error', 'show-popup'],
 
+  setup(props, { emit }) {
     const emailForNoEmailReceived = ref('')
 
     const handleChangeView = (view: ViewType, email?: string) => {
@@ -82,26 +110,9 @@ export default defineComponent({
       emit('change-view', view)
     }
 
-    const currentComponent = computed(() => {
-    const views: Record<ViewType, any> = {
-      login: LoginForm,
-      forgot: ForgotPassword,
-      mobilebankid: MobileBankId,
-      mobilebankidpending: MobileBankIdPending,
-      mobilebankidapproved: MobileBankIdApproved,
-      bankiddevice: BankIdDevice,
-      bankiddeviceapproved: BankIdDeviceApproved,
-      twofactor: TwoFactor,
-      newpassword: ResetPasswordNew,
-      resetpasswordemail: ResetPasswordEmail,
-      nocodereceived: NoCodeReceived,
-      noemailreceived: NoEmailReceived,
-      loginview: null 
-    }
-    return views[props.currentView] || LoginForm
-  })
+    const currentComponent = computed(() => VIEW_MAP[props.currentView] ?? null)
 
-    return { t, currentComponent, emailForNoEmailReceived, handleChangeView }
+    return { currentComponent, emailForNoEmailReceived, handleChangeView }
   }
 })
 </script>

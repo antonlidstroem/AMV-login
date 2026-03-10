@@ -1,22 +1,20 @@
+// src/router/index.ts
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import { AuthService } from '../services/apiClient';
+import { useAuthStore } from '../stores/auth'
 
-
-// 1. Vi definierar vilka fält som ska finnas i 'meta' för att få autocompletion
 declare module 'vue-router' {
   interface RouteMeta {
     requiresAuth?: boolean
   }
 }
 
-// 2. Vi använder typen RouteRecordRaw[] för vår array
 const routes: RouteRecordRaw[] = [
-  { 
-    path: '/', 
-    component: () => import('../App.vue') 
+  {
+    path: '/',
+    component: () => import('../App.vue')
   },
-  { 
-    path: '/LoginView',
+  {
+    path: '/dashboard',
     component: () => import('../views/LoginView.vue'),
     meta: { requiresAuth: true }
   }
@@ -27,13 +25,12 @@ export const router = createRouter({
   routes
 })
 
-// 3. 'to' och 'from' typas automatiskt av Vue Router här
 router.beforeEach((to) => {
-  const isLoggedIn = localStorage.getItem('mockLogin')
+  // useAuthStore() kan bara anropas EFTER att Pinia är installerat,
+  // vilket det är när routern körs (se main.ts).
+  const auth = useAuthStore()
 
-  // Tack vare 'declare module' ovan vet TS nu att requiresAuth finns på meta
-  if (to.meta.requiresAuth && !isLoggedIn) {
+  if (to.meta.requiresAuth && !auth.isLoggedIn) {
     return '/'
   }
 })
-
