@@ -10,10 +10,8 @@ declare module 'vue-router' {
 
 const routes: RouteRecordRaw[] = [
   {
-    path: '/',
-    component: () => import('../App.vue')
-  },
-  {
+    // App.vue monteras direkt i main.ts – ska INTE vara en route.
+    // Routern hanterar bara sidor man navigerar TILL efter inloggning.
     path: '/dashboard',
     component: () => import('../views/LoginView.vue'),
     meta: { requiresAuth: true }
@@ -26,11 +24,8 @@ export const router = createRouter({
 })
 
 router.beforeEach((to) => {
-  // useAuthStore() kan bara anropas EFTER att Pinia är installerat,
-  // vilket det är när routern körs (se main.ts).
   const auth = useAuthStore()
-
   if (to.meta.requiresAuth && !auth.isLoggedIn) {
-    return '/'
+    return false // blockera – stanna kvar, App.vue hanterar visningen
   }
 })

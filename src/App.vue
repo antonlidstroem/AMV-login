@@ -43,8 +43,8 @@
       </div>
     </div>
 
-    <!-- Visas aldrig direkt – router hanterar /dashboard -->
-    <router-view v-else @logout="handleLogout" />
+    <!-- Inloggad: visa LoginView direkt (ingen router-view behövs) -->
+    <LoginView v-else @logout="handleLogout" />
 
     <ErrPopup
       v-model:visible="errorState.visible"
@@ -70,20 +70,19 @@
 
 <script lang="ts">
 import { defineComponent, ref, reactive } from 'vue'
-import { useRouter } from 'vue-router'
 import { useAuthStore } from './stores/auth'
 import LPage from './components/LPage.vue'
 import RPage from './components/RPage.vue'
+import LoginView from './views/LoginView.vue'
 import ErrPopup from './components/common/Err-Popup.vue'
 import GenericPopup from './components/common/GenericPopup.vue'
 import type { ViewType } from './types/views'
 
 export default defineComponent({
   name: 'App',
-  components: { LPage, RPage, ErrPopup, GenericPopup },
+  components: { LPage, RPage, LoginView, ErrPopup, GenericPopup },
 
   setup() {
-    const router = useRouter()
     const auth = useAuthStore()
 
     const currentView = ref<ViewType>('login')
@@ -109,15 +108,10 @@ export default defineComponent({
 
     // ── Handlers ─────────────────────────────────────────────────────────────
 
-    /**
-     * ENDA platsen i appen som bestämmer vad som händer vid vybyte.
-     * 'loginview' = lyckad inloggning → sätt auth-state och navigera till /dashboard.
-     */
     const handleViewChange = (view: ViewType) => {
       if (view === 'loginview') {
-        // Sätt inloggad (user kan utökas med verklig data från API-svaret)
+        // Sätt auth-state → v-else i template visar LoginView automatiskt
         auth.login({ username: 'inloggad' })
-        router.push('/dashboard')
       } else {
         currentView.value = view
       }
@@ -126,7 +120,6 @@ export default defineComponent({
     const handleLogout = () => {
       auth.logout()
       currentView.value = 'login'
-      router.push('/')
     }
 
     const handleShowPopup = (config: any) => {
