@@ -1,6 +1,6 @@
 <template>
   <div class="bg-views p-4 rounded-4 mb-3">
-    <img :src="AMVLogo" class="logo-top" />
+    <AppLogo />
     <h2>{{ t('loginWithMobileBankID') }}</h2>
     <p class="mb-5">{{ t('waitingForAuth') }}</p>
     <div class="d-flex justify-content-center align-items-center gap-2 mb-5">
@@ -29,12 +29,14 @@
     </div>
   </div>
 </template>
+
 <script setup lang="ts">
 import { useI18n } from '../../../i18n/useI18n'
 import bankIdLogo from '../../../assets/BankID_logo_white.png'
 import BackLink from '../../common/BackLink.vue'
 import BankIdLink from '../../common/BankIdLink.vue'
-import AMVLogo from '../../../assets/logo_horizontal.svg'
+import AppLogo from '../../common/AppLogo.vue'
+
 const { t } = useI18n()
 const isDev = import.meta.env.DEV
 const emit = defineEmits<{ (e: 'change-view', view: string): void; (e: 'trigger-error'): void }>()

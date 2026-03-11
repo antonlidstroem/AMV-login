@@ -1,6 +1,6 @@
 <template>
   <div class="bg-views p-4 rounded-4 mb-3">
-    <img :src="AMVLogo" class="logo-top" />
+    <AppLogo/>
 
     <div v-if="error" class="error-banner">{{ t('wrongUserNamePassword') }}</div>
 
@@ -98,13 +98,16 @@ import { defineComponent, ref } from 'vue'
 import { apiClient } from '../../services/apiClient'
 import { useI18n } from '../../i18n/useI18n'
 import bankIdLogo from '../../assets/BankID_logo_white.png'
-import AMVLogo from '../../assets/logo_horizontal.svg'
+import AppLogo from '../common/AppLogo.vue' // Dubbelkolla att sökvägen stämmer
 
 export default defineComponent({
   name: 'LoginForm',
+  
+  // Registrera den nya komponenten här
+  components: { 
+    AppLogo 
+  },
 
-  // Bug fix: emits were missing entirely — Vue would warn and event bubbling
-  // could silently fail in strict mode / vue-tsc type-checking.
   emits: ['change-view', 'show-popup'],
 
   setup(_, { emit }) {
@@ -115,7 +118,6 @@ export default defineComponent({
     const { t } = useI18n()
 
     const login = async () => {
-      // Guard: prevent double-submit while a request is in flight
       if (loading.value) return
 
       error.value = false
@@ -147,7 +149,6 @@ export default defineComponent({
       loading,
       t,
       bankIdLogo,
-      AMVLogo,
       login,
       changeView,
     }

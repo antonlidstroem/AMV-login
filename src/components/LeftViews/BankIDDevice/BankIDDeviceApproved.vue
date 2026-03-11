@@ -1,6 +1,7 @@
 <template>
   <div class="bg-views p-4 rounded-4 mb-3">
-    <img :src="AMVLogo" class="logo-top" />
+    <AppLogo />
+    
     <h2>{{ t('loginWithBankID') }}</h2>
     <p>{{ t('SecurityCodeApproved') }}</p>
     <div class="d-flex flex-column justify-content-center align-items-center text-center mt-4 mb-4">
@@ -19,9 +20,11 @@
     <button v-if="isDev" @click="simulateSuccess" class="btn-temp" type="button">Simulera lyckad inloggning</button>
   </div>
 </template>
+
 <script setup lang="ts">
 import { useI18n } from '../../../i18n/useI18n'
-import AMVLogo from '../../../assets/logo_horizontal.svg'
+import AppLogo from '../../common/AppLogo.vue'
+
 const { t } = useI18n()
 const isDev = import.meta.env.DEV
 const emit = defineEmits<{ (e: 'change-view', view: string): void }>()
