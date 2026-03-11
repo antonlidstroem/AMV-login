@@ -1,22 +1,18 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import { AuthService } from '../services/apiClient';
+// src/router/index.ts
+import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
+import { useAuthStore } from '../stores/auth'
 
-
-// 1. Vi definierar vilka fält som ska finnas i 'meta' för att få autocompletion
 declare module 'vue-router' {
   interface RouteMeta {
     requiresAuth?: boolean
   }
 }
 
-// 2. Vi använder typen RouteRecordRaw[] för vår array
 const routes: RouteRecordRaw[] = [
-  { 
-    path: '/', 
-    component: () => import('../App.vue') 
-  },
-  { 
-    path: '/LoginView',
+  {
+    // App.vue monteras direkt i main.ts – ska INTE vara en route.
+    // Routern hanterar bara sidor man navigerar TILL efter inloggning.
+    path: '/dashboard',
     component: () => import('../views/LoginView.vue'),
     meta: { requiresAuth: true }
   }
@@ -27,13 +23,9 @@ export const router = createRouter({
   routes
 })
 
-// 3. 'to' och 'from' typas automatiskt av Vue Router här
 router.beforeEach((to) => {
-  const isLoggedIn = localStorage.getItem('mockLogin')
-
-  // Tack vare 'declare module' ovan vet TS nu att requiresAuth finns på meta
-  if (to.meta.requiresAuth && !isLoggedIn) {
-    return '/'
+  const auth = useAuthStore()
+  if (to.meta.requiresAuth && !auth.isLoggedIn) {
+    return false // blockera – stanna kvar, App.vue hanterar visningen
   }
 })
-
