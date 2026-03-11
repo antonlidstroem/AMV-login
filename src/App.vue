@@ -3,7 +3,7 @@
 
     <div
       v-if="!auth.isLoggedIn"
-      class="main-container d-flex flex-column flex-md-row shadow rounded-5 w-100 overflow-hidden p-0"
+      class="main-container d-flex flex-column flex-md-row shadow rounded-5 w-100 p-0""
       style="max-width:1120px; width:100%;"
     >
       <LPage

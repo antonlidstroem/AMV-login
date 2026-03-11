@@ -4,9 +4,7 @@
 
     <div v-if="error" class="error-banner">{{ t('wrongUserNamePassword') }}</div>
 
-    <!-- FIX: removed p-3 from form — the outer .bg-views card already has p-4,
-         so adding p-3 here created 2.5rem of horizontal padding on each side,
-         making inputs noticeably narrower than the card. -->
+
     <form @submit.prevent="login" class="d-flex flex-column gap-2 text-dark">
       <h1 class="mb-3">{{ t('login') }}</h1>
 
@@ -40,7 +38,7 @@
       </button>
 
       <!-- Forgot password link -->
-      <div class="d-flex justify-content-end mb-4">
+      <div class="d-flex justify-content-end mb-1">
         <span>{{ t('forgotPasswordQuestion') }}</span>
         <a
           href="#"
@@ -51,8 +49,7 @@
         </a>
       </div>
 
-      <!-- FIX: removed <br/> — .divider is now a pure CSS flex row with
-           pseudo-element lines on each side. The <br> added ~20px dead space. -->
+
       <div class="divider my-3">
         <h2>{{ t('orBankId') }}</h2>
       </div>

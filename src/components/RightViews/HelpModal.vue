@@ -1,7 +1,13 @@
 <template>
-  <div class="contact-panel position-relative rounded-4 text-white p-4 border border-white"
-    style="background-color: rgba(100,100,100,0.80); width: 90%; max-width: 900px; height: 85%; max-height: 90vh; margin: auto; display: flex; flex-direction: column;">
+  <div class="contact-panel position-relative rounded-4 text-white p-2 border border-white"
+    style="background-color: rgba(100,100,100,0.80); width: 90%; max-width: 900px; height: 85%; min-height: 85%; margin: auto; display: flex; flex-direction: column; overflow-y: auto">
+    
+  
+
+
+
     <IconCloseButton @close="close" />
+
     <h2 class="text-white text-center mt-4 mb-4 py-2">{{ panelTitle }}</h2>
     <div v-if="!selectedTopic" class="d-flex flex-column gap-2 flex-grow-1 overflow-auto px-4">
       <BaseButton v-for="topic in topics" :key="topic.id" :label="topic.label" class="w-100" @action="selectTopic(topic)" />
