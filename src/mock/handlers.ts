@@ -1,30 +1,23 @@
 import { http, HttpResponse, delay } from 'msw'
-import { users } from '../mock/users' // Vi återanvänder dina test-användare
+import { users } from './users'
 
 export const handlers = [
-  // Login anrop
   http.post('/api/login', async ({ request }) => {
-    const { username, password } = await request.json() as any
-    await delay(1000) // Behåll din realism-fördröjning
-
+    const { username, password } = await request.json() as { username: string; password: string }
+    await delay(1000)
     const user = users.find(u => u.username === username && u.password === password)
-
     if (user) {
       return HttpResponse.json({ success: true, user })
-    } else {
-      return new HttpResponse(null, { status: 401, statusText: 'Fel användarnamn eller lösenord' })
     }
+    return new HttpResponse(null, { status: 401 })
   }),
 
-  // Verifiera kod (2FA)
   http.post('/api/verify-code', async ({ request }) => {
-    const { code } = await request.json() as any
+    const { code } = await request.json() as { code: string }
     await delay(800)
-
     if (code === '1234') {
       return HttpResponse.json({ success: true })
-    } else {
-      return new HttpResponse(null, { status: 400 })
     }
+    return new HttpResponse(null, { status: 400 })
   })
 ]

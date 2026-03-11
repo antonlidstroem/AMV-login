@@ -28,13 +28,13 @@
 
 <script setup lang="ts">
 defineProps<{
-  visible: boolean;
-  icon: string;      // t.ex. 'bi bi-exclamation-octagon'
-  message: string;
-  buttonLabel?: string;
-}>();
+  visible: boolean
+  icon: string
+  message: string
+  buttonLabel?: string
+}>()
 
-defineEmits(['update:visible', 'action']);
+defineEmits(['update:visible', 'action'])
 </script>
 
 <style scoped>
@@ -47,9 +47,8 @@ defineEmits(['update:visible', 'action']);
   justify-content: center;
   z-index: 9999;
 }
-
 .popup-box {
-  background: rgba(134, 43, 43, 0.95); /* Lite rödare ton för fel */
+  background: rgba(134, 43, 43, 0.95);
   color: white;
   padding: 40px;
   border-radius: 20px;
@@ -58,12 +57,7 @@ defineEmits(['update:visible', 'action']);
   text-align: center;
   position: relative;
 }
-
-.error-icon {
-  font-size: 4rem;
-  color: white;
-}
-
+.error-icon { font-size: 4rem; color: white; }
 .btn-close-x {
   position: absolute;
   top: 10px;
@@ -74,7 +68,6 @@ defineEmits(['update:visible', 'action']);
   font-size: 1.5rem;
   cursor: pointer;
 }
-
 .popup-fade-enter-active, .popup-fade-leave-active { transition: opacity 0.2s; }
 .popup-fade-enter-from, .popup-fade-leave-to { opacity: 0; }
 </style>

@@ -1,9 +1,5 @@
 {
   "extends": "@vue/tsconfig/tsconfig.json",
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.vue"],
-  "exclude": ["node_modules"],
-  
-  "compilerOptions": {
-    "types": ["vite/client"]
-  }
+  "exclude": ["node_modules"]
 }

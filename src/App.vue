@@ -27,10 +27,15 @@
           @show-popup="handleShowPopup"
         >
           <template #mobile-left>
-            <div class="d-block d-md-none w-100 d-flex justify-content-center align-items-start py-3 px-2">
+            <!-- FIX: was `d-block d-md-none d-flex` — d-block overrides d-flex so
+                 flex centering never worked. Changed to `d-flex d-md-none`.
+                 Also removed border-radius/overflow:hidden/max-height from LPage:
+                 those applied to a transparent element so they clipped form cards
+                 at arbitrary heights and cut off long views on small phones. -->
+            <div class="d-flex d-md-none w-100 justify-content-center align-items-start py-3 px-2">
               <LPage
-                class="w-100 h-100"
-                style="max-width: 460px; max-height: 90vh; border-radius: 20px; overflow: hidden;"
+                class="w-100"
+                style="max-width: 460px; width: 100%;"
                 :currentView="currentView"
                 @change-view="handleViewChange"
                 @trigger-error="handleLoginError"
@@ -43,7 +48,6 @@
       </div>
     </div>
 
-    <!-- Inloggad: visa LoginView direkt (ingen router-view behövs) -->
     <LoginView v-else @logout="handleLogout" />
 
     <ErrPopup
@@ -89,7 +93,6 @@ export default defineComponent({
     const showDemandsInRPage = ref(false)
     const contactTrigger = ref(false)
 
-    // ── Popup-state ──────────────────────────────────────────────────────────
     const popupState = reactive({
       visible: false,
       title: '',
@@ -106,11 +109,8 @@ export default defineComponent({
       action: () => {}
     })
 
-    // ── Handlers ─────────────────────────────────────────────────────────────
-
     const handleViewChange = (view: ViewType) => {
       if (view === 'loginview') {
-        // Sätt auth-state → v-else i template visar LoginView automatiskt
         auth.login({ username: 'inloggad' })
       } else {
         currentView.value = view

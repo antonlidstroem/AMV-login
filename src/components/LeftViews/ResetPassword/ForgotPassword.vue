@@ -1,67 +1,31 @@
 <template>
   <div class="bg-views p-3 rounded-4 mb-3">
     <img :src="AMVLogo" class="logo-top" />
-
-    <div v-if="error" class="error-banner mb-4">
-      {{ t('enterValidEmail') }}
-    </div>
-
+    <div v-if="error" class="error-banner mb-4">{{ t('enterValidEmail') }}</div>
     <h2 class="mb-3">{{ t('resetPassword') }}</h2>
     <p class="mb-5">{{ t('resetPasswordDescription') }}</p>
-
     <p class="mb-2">{{ t('email') }}:</p>
-
-    
-
-    <input
-      v-model="email"
-      class="form-control mb-3 form-size"
-      :class="{ 'error-border': error }"
-      placeholder="example@mail.com"
-    />
-
-    <button class="btn-custom mb-4" @click="sendEmail">
-      {{ t('sendReset') }}
-    </button>
-
-  
-
+    <input v-model="email" class="form-control mb-3 form-size" :class="{ 'error-border': error }" placeholder="example@mail.com" type="email" autocomplete="email" />
+    <button class="btn-custom mb-4" @click="sendEmail" type="button">{{ t('sendReset') }}</button>
     <BackLink :label="t('back')" @click="goToLogin" />
   </div>
 </template>
-
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useI18n } from '../../../i18n/useI18n'
 import AMVLogo from '../../../assets/logo_horizontal.svg'
 import BackLink from '../../common/BackLink.vue'
-
 const { t } = useI18n()
 const email = ref('')
 const error = ref(false)
-
 type ViewType = 'login' | 'resetpasswordemail' | 'noemailreceived'
-
-const emit = defineEmits<{
-  (e: 'change-view', view: ViewType, email?: string): void
-}>()
-
-const isValidEmail = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
-
+const emit = defineEmits<{ (e: 'change-view', view: ViewType, email?: string): void }>()
+const isValidEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)
 const sendEmail = () => {
-  if (!isValidEmail(email.value)) {
-    error.value = true
-    return
-  }
+  if (!isValidEmail(email.value)) { error.value = true; return }
   error.value = false
-  emit('change-view', 'resetpasswordemail')
+  // Fix: forward the email so LPage can store it and NoEmailReceived can use it
+  emit('change-view', 'resetpasswordemail', email.value)
 }
-
-const noEmailReceived = () => {
-  emit('change-view', 'noemailreceived', email.value)
-}
-
-const goToLogin = () => {
-  emit('change-view', 'login')
-}
+const goToLogin = () => emit('change-view', 'login')
 </script>

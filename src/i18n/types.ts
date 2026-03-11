@@ -1,4 +1,3 @@
-// src/i18n/types.ts
 export interface BaseTranslations {
   aboutBankID: string;
   aboutBankIDText: string;

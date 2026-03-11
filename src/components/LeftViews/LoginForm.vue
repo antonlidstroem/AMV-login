@@ -4,7 +4,10 @@
 
     <div v-if="error" class="error-banner">{{ t('wrongUserNamePassword') }}</div>
 
-    <form @submit.prevent="login" class="d-flex flex-column gap-2 p-3 text-dark">
+    <!-- FIX: removed p-3 from form — the outer .bg-views card already has p-4,
+         so adding p-3 here created 2.5rem of horizontal padding on each side,
+         making inputs noticeably narrower than the card. -->
+    <form @submit.prevent="login" class="d-flex flex-column gap-2 text-dark">
       <h1 class="mb-3">{{ t('login') }}</h1>
 
       <!-- Username -->
@@ -15,6 +18,7 @@
           v-model="username"
           class="form-size form-control ps-5"
           :class="{ 'error-border': error }"
+          autocomplete="username"
         />
       </div>
 
@@ -27,10 +31,13 @@
           v-model="password"
           class="form-size form-control ps-5"
           :class="{ 'error-border': error }"
+          autocomplete="current-password"
         />
       </div>
 
-      <button type="submit" class="btn-custom w-100 mb-2">Logga in</button>
+      <button type="submit" class="btn-custom w-100 mb-2" :disabled="loading">
+        {{ loading ? t('wait') : t('login') }}
+      </button>
 
       <!-- Forgot password link -->
       <div class="d-flex justify-content-end mb-4">
@@ -44,8 +51,9 @@
         </a>
       </div>
 
-      <div class="divider mb-2">
-        <br />
+      <!-- FIX: removed <br/> — .divider is now a pure CSS flex row with
+           pseudo-element lines on each side. The <br> added ~20px dead space. -->
+      <div class="divider my-3">
         <h2>{{ t('orBankId') }}</h2>
       </div>
 
@@ -53,6 +61,7 @@
         <button
           @click.prevent="changeView('mobilebankid')"
           class="btn-custom d-flex align-items-center justify-content-start gap-2"
+          type="button"
         >
           <img :src="bankIdLogo" alt="BankID" class="bankid-icon" />
           {{ t('mobileBankID') }}
@@ -61,6 +70,7 @@
         <button
           @click.prevent="changeView('bankiddevice')"
           class="btn-custom d-flex align-items-center justify-content-start gap-2"
+          type="button"
         >
           <img :src="bankIdLogo" alt="BankID" class="bankid-icon" />
           {{ t('bankIDThisDevice') }}
@@ -84,16 +94,19 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, nextTick } from 'vue'
+import { defineComponent, ref } from 'vue'
 import { apiClient } from '../../services/apiClient'
-import GenericPopup from '../common/GenericPopup.vue'
 import { useI18n } from '../../i18n/useI18n'
 import bankIdLogo from '../../assets/BankID_logo_white.png'
 import AMVLogo from '../../assets/logo_horizontal.svg'
 
 export default defineComponent({
   name: 'LoginForm',
-  components: { GenericPopup },
+
+  // Bug fix: emits were missing entirely — Vue would warn and event bubbling
+  // could silently fail in strict mode / vue-tsc type-checking.
+  emits: ['change-view', 'show-popup'],
+
   setup(_, { emit }) {
     const username = ref('')
     const password = ref('')
@@ -102,18 +115,24 @@ export default defineComponent({
     const { t } = useI18n()
 
     const login = async () => {
-      error.value=false;
+      // Guard: prevent double-submit while a request is in flight
+      if (loading.value) return
 
-      emit('show-popup', { title: t('loginIn'), loading: true }); 
+      error.value = false
+      loading.value = true
+
+      emit('show-popup', { title: t('loginIn'), loading: true })
+
       try {
-        await apiClient.login(username.value, password.value);
-        emit('show-popup', { visible: false }); 
+        await apiClient.login(username.value, password.value)
+        emit('show-popup', { visible: false })
         emit('change-view', 'twofactor')
-
       } catch (err) {
-        emit('show-popup', { visible: false });
-        error.value = true;
-        console.error("Inloggningen misslyckades", err)
+        emit('show-popup', { visible: false })
+        error.value = true
+        console.error('Login failed:', err)
+      } finally {
+        loading.value = false
       }
     }
 

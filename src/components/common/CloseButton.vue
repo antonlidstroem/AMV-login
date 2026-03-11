@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { useI18n } from '../../i18n/useI18n' // Justera sökvägen så den stämmer
+import { useI18n } from '../../i18n/useI18n'
 
 export default defineComponent({
   name: 'CloseButton',

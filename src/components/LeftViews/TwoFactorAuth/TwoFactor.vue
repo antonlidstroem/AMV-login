@@ -11,27 +11,26 @@
       <input
         v-for="(d, i) in digits"
         :key="i"
-        ref="inputRefs" 
+        ref="inputRefs"
         v-model="digits[i]"
         maxlength="1"
         type="tel"
+        inputmode="numeric"
+        pattern="[0-9]*"
         class="text-center code-input"
         :class="{ 'error-border': error, 'success-border': digits[i] && !error }"
+        :disabled="loading"
         @input="onInput(i)"
-      />
-    </div>
-<!-- 
-    <button class="btn-custom" :disabled="loading" @click="verify">
-      {{ t('login') }}
-    </button> -->
-    
-    <div class="mt-3">
-      <BackLink 
-        :label="t('back')" 
-        @click="$emit('change-view', 'login')" 
+        @paste.prevent="onPaste"
       />
     </div>
 
+    <div class="mt-3">
+      <BackLink
+        :label="t('back')"
+        @click="$emit('change-view', 'login')"
+      />
+    </div>
   </div>
 </template>
 
@@ -44,8 +43,9 @@ import BackLink from '../../common/BackLink.vue'
 
 export default defineComponent({
   name: 'VerifyCode',
-  components: {BackLink},
+  components: { BackLink },
   emits: ['change-view', 'show-popup'],
+
   setup(_, { emit }) {
     const { t } = useI18n()
     const digits = reactive<string[]>(['', '', '', ''])
@@ -55,9 +55,15 @@ export default defineComponent({
 
     const onInput = (index: number) => {
       clearError()
+
+      // Only allow digits — strip anything else the user typed
+      digits[index] = digits[index].replace(/\D/g, '').slice(0, 1)
+
       if (digits[index] && index < 3) {
         inputRefs.value[index + 1]?.focus()
       }
+
+      // Auto-submit once all four fields are filled
       if (digits.every(d => d !== '')) {
         verify()
       }
@@ -67,30 +73,34 @@ export default defineComponent({
       const code = digits.join('')
       if (code.length < 4) return
 
+      // Bug fix: guard against concurrent invocations (e.g. fast typing
+      // could trigger onInput → verify() multiple times before the first
+      // call resolves, causing multiple popups and network requests).
+      if (loading.value) return
+
       loading.value = true
-      
-      // 1. Trigga den globala popupen i App.vue
+
+      // Show the global loading popup immediately
       emit('show-popup', { title: t('loginIn'), loading: true })
 
-      // 2. Skapa en timer på 1 sekund
-      const delay = new Promise(resolve => setTimeout(resolve, 1000))
+      // Enforce a minimum visible duration so the spinner doesn't flash
+      const minDelay = new Promise<void>(resolve => setTimeout(resolve, 1000))
 
       try {
-        // 3. Kör både API-anropet och timern samtidigt. 
-        // Vi väntar tills BÅDA är klara (Promise.all).
-        await Promise.all([apiClient.verifyCode(code), delay])
-        
-        // Om vi når hit var koden rätt
+        // Run the API call and the minimum delay in parallel; wait for both
+        await Promise.all([apiClient.verifyCode(code), minDelay])
+
         emit('show-popup', { visible: false })
-        emit('change-view', 'loginview') 
-        
+        emit('change-view', 'loginview')
       } catch (err) {
-        // Om API:et ger fel, väntar vi ut resten av sekunden innan vi stänger popupen
-        await delay 
+        // Ensure the delay has also finished before removing the spinner
+        await minDelay
         emit('show-popup', { visible: false })
-        
+
         error.value = true
         digits.fill('')
+
+        // Re-focus first input so the user can immediately try again
         inputRefs.value[0]?.focus()
       } finally {
         loading.value = false
@@ -101,9 +111,22 @@ export default defineComponent({
       if (error.value) error.value = false
     }
 
+    // Fix: handle paste so copying "1234" from an SMS fills all four boxes.
+    // Without this, pasting puts all chars into the focused input and the
+    // v-model strips them down to 1 character, leaving the rest empty.
+    const onPaste = (e: ClipboardEvent): void => {
+      const pasted = (e.clipboardData?.getData('text') ?? '').replace(/\D/g, '').slice(0, 4)
+      if (!pasted) return
+      pasted.split('').forEach((ch, i) => { digits[i] = ch })
+      // Move focus to the last filled box (or last box if all 4 filled)
+      const lastIdx = Math.min(pasted.length - 1, 3)
+      inputRefs.value[lastIdx]?.focus()
+      if (pasted.length === 4) verify()
+    }
+
     return {
       t, AMVLogo, digits, error, loading,
-      verify, clearError, onInput, inputRefs
+      verify, clearError, onInput, onPaste, inputRefs,
     }
   }
 })
