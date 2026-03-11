@@ -9,19 +9,25 @@ import { router } from './router'
 async function prepareApp() {
   if (import.meta.env.DEV) {
     const { worker } = await import('./mock/browser')
-    return worker.start()
+    
+    // Notera måsvingarna runt hela objektet här:
+    return worker.start({
+      serviceWorker: {
+        // I en standard Vue/Vite-setup ligger filen på roten i "public"
+        url: '/mockServiceWorker.js' 
+      },
+      onUnhandledRequest: 'bypass',
+    })
   }
 }
 
 prepareApp()
   .catch((err) => {
-    // MSW failed to register — log the error but don't block app startup.
-    // The app still works; API calls will hit the real network instead of mocks.
     console.warn('[MSW] Service worker failed to start, continuing without mocks:', err)
   })
   .then(() => {
-  const app = createApp(App)
-  app.use(createPinia())
-  app.use(router)
-  app.mount('#app')
-})
+    const app = createApp(App)
+    app.use(createPinia())
+    app.use(router)
+    app.mount('#app')
+  })
