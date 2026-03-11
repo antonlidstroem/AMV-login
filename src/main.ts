@@ -12,9 +12,14 @@ async function prepareApp() {
   }
 }
 
-prepareApp().then(() => {
-  const app = createApp(App)
-  app.use(createPinia())
-  app.use(router)
-  app.mount('#app')
-})
+prepareApp()
+  .then(() => {
+    console.log("Appen förberedd, monterar...");
+    const app = createApp(App)
+    app.use(createPinia())
+    app.use(router)
+    app.mount('#app')
+  })
+  .catch((err) => {
+    console.error("Hoppsan! Appen dog vid start:", err);
+  });
