@@ -9,13 +9,7 @@
       <AppSpinner />
     </div>
 
-    <div class="d-none d-md-flex justify-content-center align-items-center w-100 mb-4">
-      <svg width="131" height="25" viewBox="0 0 131 25" fill="none">
-        <circle cx="118.87" cy="12.1296" r="12.1296" fill="#ADB2A3"/>
-        <circle cx="65.5" cy="12.1296" r="12.1296" fill="#7B9B3F"/>
-        <circle cx="12.1296" cy="12.1296" r="12.1296" fill="#ADB2A3"/>
-      </svg>
-    </div>
+    <StepIndicator :total-steps="3" :active-step="2" />
     
     <div class="d-flex justify-content-between align-items-center mt-3">
       <BackLink :label="t('back')" @click="goToLogin" />
@@ -42,6 +36,7 @@ import BackLink from '../../common/BackLink.vue'
 import BankIdLink from '../../common/BankIdLink.vue'
 import AppLogo from '../../common/AppLogo.vue'
 import AppSpinner from '../../common/AppSpinner.vue'
+import StepIndicator from '../../common/StepIndicator.vue'
 
 const { t } = useI18n()
 const isDev = import.meta.env.DEV

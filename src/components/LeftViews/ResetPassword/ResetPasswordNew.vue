@@ -3,7 +3,9 @@
     <img :src="AMVLogo" class="logo-top" />
     <h4 class="mb-4">{{ t('EnterNewPassword') }}</h4>
     <div v-if="errorMsg" class="error-banner mb-3">{{ errorMsg }}</div>
+
     <PasswordCheck v-if="shouldShowValidation" :password="p1" />
+    
     <label class="mb-2">{{ t('newPassword') }}</label>
     <input type="password" v-model="p1" class="form-control mb-2" :class="inputClass" autocomplete="new-password" />
     <label class="mb-2">{{ t('confirmPassword') }}</label>

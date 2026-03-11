@@ -11,13 +11,7 @@
       <AppSuccess />
       </div>
 
-      <div class="d-flex justify-content-center align-items-center gap-2 mb-4">
-       <svg width="131" height="25" viewBox="0 0 131 25" fill="none">
-         <circle cx="118.87" cy="12.1296" r="12.1296" fill="#7B9B3F"/>
-         <circle cx="65.5002" cy="12.1296" r="12.1296" fill="#ADB2A3"/>
-         <circle cx="12.1296" cy="12.1296" r="12.1296" fill="#ADB2A3"/>
-       </svg>
-      </div>
+      <StepIndicator :total-steps="2" :active-step="2" />
 
 <button v-if="isDev" @click="emit('change-view', 'loginview')" class="btn-temp" type="button">
       Simulera lyckad inloggning (Dev)
@@ -31,6 +25,7 @@ import { onMounted } from 'vue'
 import { useI18n } from '../../../i18n/useI18n'
 import AppLogo from '../../common/AppLogo.vue'
 import AppSuccess from '../../common/AppSuccess.vue'
+import StepIndicator from '../../common/StepIndicator.vue'
 
 const { t } = useI18n()
 const isDev = import.meta.env.DEV

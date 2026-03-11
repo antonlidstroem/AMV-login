@@ -20,14 +20,7 @@
       </div>
     </div>
 
-    <!-- Step indicator -->
-    <div class="d-none d-md-flex w-100 justify-content-center align-items-center gap-2 mb-3">
-      <svg width="131" height="25" viewBox="0 0 131 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="118.87" cy="12.1296" r="12.1296" fill="#ADB2A3"/>
-        <circle cx="65.5" cy="12.1296" r="12.1296" fill="#ADB2A3"/>
-        <circle cx="12.1296" cy="12.1296" r="12.1296" fill="#7B9B3F"/>
-      </svg>
-    </div>
+    <StepIndicator :total-steps="3" :active-step="1" />
 
     <!-- Link row -->
     <div class="d-flex justify-content-between align-items-center mt-3">
@@ -66,6 +59,7 @@ import bankIdLogo from '../../../assets/BankID_logo_white.png'
 import BackLink from '../../common/BackLink.vue'
 import BankIdLink from '../../common/BankIdLink.vue'
 import AppLogo from '../../common/AppLogo.vue'
+import StepIndicator from '../../common/StepIndicator.vue'
 
 const { t } = useI18n()
 const isQrLoaded = ref(true)

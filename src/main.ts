@@ -23,9 +23,9 @@ async function prepareApp() {
 
 prepareApp()
   .catch((err) => {
-    console.warn('[MSW] Service worker failed to start, continuing without mocks:', err)
+    console.warn('[MSW] Service worker failed, continuing without mocks:', err)
   })
-  .then(() => {
+  .finally(() => {          // ← replaces .then()
     const app = createApp(App)
     app.use(createPinia())
     app.use(router)

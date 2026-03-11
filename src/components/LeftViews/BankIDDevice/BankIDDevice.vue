@@ -2,13 +2,15 @@
   <div class="bg-views p-4 rounded-4 mb-3">
     <AppLogo />
     <h2>{{ t('loginWithBankID') }}</h2>
-    <p>{{ t('enterSecurityCode') }}</p>
+    <p class="mb-5">{{ t('enterSecurityCode') }}</p>
 
     
    
     <div class="d-flex justify-content-center mb-5">
       <AppSpinner />
     </div>
+
+    <StepIndicator :total-steps="2" :active-step="1" />
 
     <a href="#" @click.prevent="emit('change-view','login')" class="text-decoration-none fw-medium mb-4">{{ t('cancel') }}</a>
 
@@ -35,6 +37,7 @@ import BackLink from '../../common/BackLink.vue'
 import BankIdLink from '../../common/BankIdLink.vue'
 import AppLogo from '../../common/AppLogo.vue'
 import AppSpinner from '../../common/AppSpinner.vue'
+import StepIndicator from '../../common/StepIndicator.vue'
 
 const { t } = useI18n()
 const isDev = import.meta.env.DEV
