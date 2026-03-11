@@ -664,3 +664,29 @@ input.form-control { width: 100%; }
     align-items: center;
   }
 }
+
+/* Animation för att byta innehåll inuti popupen */
+.popup-media-enter-active,
+.popup-media-leave-active {
+  transition: all 0.25s ease;
+}
+
+.popup-media-enter-from {
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+.popup-media-leave-to {
+  opacity: 0;
+  transform: scale(1.1);
+}
+
+.popup-fade-enter-active,
+.popup-fade-leave-active {
+  transition: opacity 0.25s ease;
+}
+
+.popup-fade-enter-from,
+.popup-fade-leave-to {
+  opacity: 0;
+}

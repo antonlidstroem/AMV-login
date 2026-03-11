@@ -19,5 +19,36 @@ export const handlers = [
       return HttpResponse.json({ success: true })
     }
     return new HttpResponse(null, { status: 400 })
-  })
+  }),
+
+  http.post('/api/reset-password', async ({ request }) => {
+    const { password } = await request.json() as { password: string }
+    await delay(1500)
+
+    // SIMULERA ETT FEL: 
+    // Om lösenordet är "fail", skicka ett felmeddelande
+    if (password === 'DenyChange123!') {
+      return new HttpResponse(
+        JSON.stringify({ message: 'Servern nekar ändringen (Simulerat fel)' }), 
+        { status: 400 }
+      )
+    }
+
+    // Annars: Success som vanligt
+    console.log(`Backend-simulering: Lösenordet ändrat till "${password}".`);
+    return HttpResponse.json({ success: true })
+  }),
+
+  http.post('/api/contact', async ({ request }) => {
+    const payload = await request.json() as { name: string; email: string; message: string }
+    
+    // Simulera nätverksfördröjning
+    await delay(1200)
+
+    // Logga resultatet för att verifiera testet
+    console.log('%c [BACKEND MOCK] Nytt kontaktmeddelande mottaget:', 'color: #80AC2F; font-weight: bold;');
+    console.table(payload);
+
+    return HttpResponse.json({ success: true })
+  }),
 ]

@@ -2,15 +2,12 @@
   <transition name="popup-fade">
     <div class="popup-overlay" v-if="visible">
       <div class="popup-box border border-white">
-
-        <AppSpinner v-if="loading" color="white" class="mb-3" />
-
-        <div v-if="$slots.icon" class="popup-icon mb-2">
+        
+        <div v-if="$slots.icon" class="popup-icon mb-3">
           <slot name="icon"></slot>
         </div>
 
         <h5 v-if="title" class="popup-title mb-1">{{ title }}</h5>
-
         <slot name="text"></slot>
 
         <div class="mt-3" v-if="buttons && buttons.length">
@@ -23,7 +20,6 @@
             {{ btn.label }}
           </button>
         </div>
-
       </div>
     </div>
   </transition>

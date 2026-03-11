@@ -6,6 +6,7 @@ export interface BaseTranslations {
   bankIDThisDevice: string;
   cancel: string;
   changePassword: string;
+  changingPassword: string;
   clickHere: string;
   close: string;
   closeWindow: string;
@@ -16,6 +17,7 @@ export interface BaseTranslations {
   contactUs: string;
   email: string;
   emailSent: string;
+  errorChangingPassword: string;
   enterEmail: string;
   EnterNewPassword: string;
   enterPassword: string;

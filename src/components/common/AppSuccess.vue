@@ -2,26 +2,24 @@
   <div class="success-checkmark">
     <svg width="80" height="80" viewBox="0 0 80 80">
       <circle 
-        class="circle" 
-        cx="40" 
-        cy="40" 
-        r="35" 
-        fill="none" 
-        stroke="var(--success)" 
-        stroke-width="7" 
+        class="circle" cx="40" cy="40" r="35" fill="none" 
+        :stroke="successColor" stroke-width="7" 
       />
       <path 
-        class="check" 
-        d="M23 41l11 11 23-23" 
-        fill="none" 
-        stroke="var(--success)" 
-        stroke-width="7" 
-        stroke-linecap="round" 
-        stroke-linejoin="round" 
+        class="check" d="M23 41l11 11 23-23" fill="none" 
+        :stroke="successColor" stroke-width="7" 
+        stroke-linecap="round" stroke-linejoin="round" 
       />
     </svg>
   </div>
 </template>
+
+<script setup lang="ts">
+import { computed } from 'vue'
+
+const props = defineProps<{ color?: string }>()
+const successColor = computed(() => props.color || 'var(--success)')
+</script>
 
 <style scoped>
 .success-checkmark {
@@ -31,7 +29,6 @@
 }
 
 .circle {
-  /* dasharray beräknas på omkretsen (2 * pi * r). 2 * 3.14 * 35 ≈ 220 */
   stroke-dasharray: 220;
   stroke-dashoffset: 220;
   animation: draw-circle 0.6s ease-out forwards;

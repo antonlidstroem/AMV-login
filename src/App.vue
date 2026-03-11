@@ -27,11 +27,6 @@
           @show-popup="handleShowPopup"
         >
           <template #mobile-left>
-            <!-- FIX: was `d-block d-md-none d-flex` — d-block overrides d-flex so
-                 flex centering never worked. Changed to `d-flex d-md-none`.
-                 Also removed border-radius/overflow:hidden/max-height from LPage:
-                 those applied to a transparent element so they clipped form cards
-                 at arbitrary heights and cut off long views on small phones. -->
             <div class="d-flex d-md-none w-100 justify-content-center align-items-start py-3 px-2">
               <LPage
                 class="w-100"
@@ -64,8 +59,17 @@
       :loading="popupState.loading"
       :buttons="popupState.buttons"
     >
-      <template #icon v-if="popupState.icon">
-        <i :class="popupState.icon"></i>
+      <template #icon>
+        <transition name="popup-media" mode="out-in">
+          <AppSpinner v-if="popupState.loading" color="white" key="spinner" />
+          <component 
+            v-else-if="popupState.component" 
+            :is="popupState.component" 
+            color="white" 
+            :key="popupState.component ? popupState.component.__name || popupState.component.name : 'none'"
+          />
+          <i v-else-if="popupState.icon" :class="popupState.icon" key="icon"></i>
+        </transition>
       </template>
     </GenericPopup>
 
@@ -80,11 +84,13 @@ import RPage from './components/RPage.vue'
 import LoginView from './views/LoginView.vue'
 import ErrPopup from './components/common/Err-Popup.vue'
 import GenericPopup from './components/common/GenericPopup.vue'
+import AppSpinner from './components/common/AppSpinner.vue'
+import AppSuccess from './components/common/AppSuccess.vue'
 import type { ViewType } from './types/views'
 
 export default defineComponent({
   name: 'App',
-  components: { LPage, RPage, LoginView, ErrPopup, GenericPopup },
+  components: { LPage, RPage, LoginView, ErrPopup, GenericPopup, AppSpinner, AppSuccess },
 
   setup() {
     const auth = useAuthStore()
@@ -97,6 +103,7 @@ export default defineComponent({
       visible: false,
       title: '',
       loading: false,
+      component: null as any, 
       icon: '',
       buttons: [] as any[]
     })
@@ -125,6 +132,7 @@ export default defineComponent({
     const handleShowPopup = (config: any) => {
       popupState.title = config.title ?? ''
       popupState.loading = config.loading ?? false
+      popupState.component = config.component ?? null 
       popupState.icon = config.icon ?? ''
       popupState.buttons = config.buttons ?? []
       popupState.visible = config.visible !== undefined ? config.visible : true
@@ -155,7 +163,9 @@ export default defineComponent({
       handleViewChange,
       handleLogout,
       handleShowPopup,
-      handleLoginError
+      handleLoginError,
+      AppSpinner,
+      AppSuccess
     }
   }
 })

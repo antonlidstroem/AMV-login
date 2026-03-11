@@ -72,8 +72,9 @@
 </style>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, markRaw } from 'vue'
 import { useI18n } from '../../i18n/useI18n'
+import { apiClient } from '../../services/apiClient'
 import BaseButton from '../common/BaseSecondaryButton.vue'
 import IconCloseButton from '../common/IconCloseButton.vue'
 
@@ -81,17 +82,52 @@ export default defineComponent({
   name: 'ContactPanel',
   components: { BaseButton, IconCloseButton },
   emits: ['close', 'show-popup'],
+
   setup(_, { emit }) {
+
     const { t } = useI18n()
     const name = ref(''), email = ref(''), message = ref('')
-    const sendContact = () => {
+
+    const sendContact = async () => {
+      // 1. Visa spinner medan vi "skickar"
       emit('show-popup', {
-        title: t('messageSent'),
-        icon: 'bi bi-check-circle',
-        buttons: [{ label: t('okClose'), action: () => { emit('show-popup', { visible: false }); emit('close') } }]
+        title: t('sendingMessage'), // t.ex. "Skickar meddelande..."
+        loading: true
       })
+
+      try {
+        // 2. Anropa mocken
+        await apiClient.sendContactMessage({
+          name: name.value,
+          email: email.value,
+          message: message.value
+        })
+
+        // 3. Visa succé-bocken när det är klart
+        emit('show-popup', {
+          title: t('messageSent'),
+          loading: false,
+          component: markRaw(AppSuccess),
+          buttons: [{ 
+            label: t('okClose'), 
+            action: () => { 
+              emit('show-popup', { visible: false }); 
+              emit('close'); 
+            } 
+          }]
+        })
+      } catch (err) {
+        // Hantera eventuella fel
+        emit('show-popup', {
+          title: t('errorTitle'),
+          icon: 'bi bi-exclamation-triangle',
+          buttons: [{ label: t('okClose'), action: () => emit('show-popup', { visible: false }) }]
+        })
+      }
     }
+
     const close = () => emit('close')
+    
     return { t, name, email, message, sendContact, close }
   }
 })

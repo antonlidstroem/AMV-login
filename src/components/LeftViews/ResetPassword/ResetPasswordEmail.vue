@@ -9,7 +9,17 @@
 
     <p>{{ sentMessage }}</p>
     <button class="btn-custom mb-3" @click="emit('change-view', 'login')">{{ t('goToStart') }}</button>
+    <button 
+      v-if="isDev" 
+      class="btn-temp" 
+      @click="emit('change-view', 'newpassword')"
+    >
+      Simulera lösenordsåterställning
+    </button>
   </div>
+
+
+  
 </template>
 
 <script setup lang="ts">
