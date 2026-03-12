@@ -157,26 +157,43 @@ label {
 }
 
 /* ================================================================
-   RIGHT PANEL  (right-page)
+   RIGHT PANEL & MOBILE FIXES
    ================================================================ */
+
 .right-page {
   position: relative;
   min-height: 100%;
 }
 
 @media (min-width: 769px) {
-  /* Fixed height on desktop to match the left panel */
   .right-page { height: 846px; }
 }
 
 @media (max-width: 768px) {
+  /* Här skedde felet förut - ingen nästling tillåten */
   .right-page {
-    min-height: 100dvh;
-    height: auto;
-display: flex;
-    flex-direction: column;
+    height: 100dvh !important;
+    overflow-y: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  .top-controls-sticky-wrapper {
+    position: sticky;
+    top: 0;
+    z-index: 1020;
+    background: transparent;
   }
 }
+
+/* Säkerställ att body inte skrollar dubbelt på mobil */
+@media (max-width: 768px) {
+  body, html {
+    overflow: hidden;
+    height: 100%;
+  }
+}
+
 
 /* ================================================================
    FORM CARDS  (bg-views)
@@ -256,7 +273,7 @@ display: flex;
   border: 1px solid #fff;
   color: white !important;
   padding: 6px 12px;
-  font-size: 16px;
+  font-size: 13px;
   border-radius: 6px;
   cursor: pointer;
   display: inline-flex;

@@ -1,7 +1,6 @@
 <template>
   <div class="contact-panel position-relative rounded-4 text-white p-4 border border-white"
-    style="background-color: rgba(100,100,100,0.85); width: 95%; max-width: 900px; max-height: 90vh; margin: auto; display: flex; flex-direction: column; overflow-y: auto;">
-    
+  style="background-color: rgba(100,100,100,0.85); width: 95%; max-width: 900px; margin: 0 auto; display: flex; flex-direction: column;">
     <div class="position-relative mb-3">
       <h2 class="text-white text-center m-0">{{ t('contact') }}</h2>
       <IconCloseButton @close="close" style="position: absolute; right: -10px; top: -10px; margin: 0 !important;" />
@@ -54,22 +53,7 @@
   </div>
 </template>
 
-<style scoped>
-/* Hjälpklass för att centrera ikonerna vertikalt i fälten */
-.input-icon-modal {
-  left: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 1.2rem;
-  opacity: 0.6;
-}
 
-/* Tvingar bort Bootstraps default-marginaler på raden om det behövs */
-.row {
-  margin-left: 0;
-  margin-right: 0;
-}
-</style>
 
 <script lang="ts">
 import { defineComponent, ref, markRaw } from 'vue'
@@ -132,3 +116,20 @@ export default defineComponent({
   }
 })
 </script>
+
+<style scoped>
+/* Hjälpklass för att centrera ikonerna vertikalt i fälten */
+.input-icon-modal {
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.2rem;
+  opacity: 0.6;
+}
+
+/* Tvingar bort Bootstraps default-marginaler på raden om det behövs */
+.row {
+  margin-left: 0;
+  margin-right: 0;
+}
+</style>
