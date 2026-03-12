@@ -18,6 +18,7 @@ export interface BaseTranslations {
   email: string;
   emailSent: string;
   errorChangingPassword: string;
+  errorTitle: string;
   enterEmail: string;
   EnterNewPassword: string;
   enterPassword: string;
@@ -61,6 +62,7 @@ export interface BaseTranslations {
   scanQRCode: string;
   SecurityCodeApproved: string;
   send: string;
+  sendingMessage: string;
   sendMessage: string;
   sendNewCode: string;
   sendNewReset: string;

@@ -29,6 +29,7 @@ import { helpTopics } from '../../i18n/helpTopics'
 import type { HelpTopicDefinition } from '../../i18n/helpTopics'
 import IconCloseButton from '../common/IconCloseButton.vue'
 import BaseButton from '../common/BaseSecondaryButton.vue'
+
 interface HelpTopic { id: string; label: string; content: string }
 export default defineComponent({
   name: 'HelpPanel',

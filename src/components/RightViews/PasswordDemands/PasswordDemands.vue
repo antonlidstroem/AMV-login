@@ -19,6 +19,7 @@
     </div>
   </div>
 </template>
+
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { passwordHeaderKey, passwordRules, freeTextKey, passwordConfig } from './passwordRules'

@@ -77,6 +77,7 @@ import { useI18n } from '../../i18n/useI18n'
 import { apiClient } from '../../services/apiClient'
 import BaseButton from '../common/BaseSecondaryButton.vue'
 import IconCloseButton from '../common/IconCloseButton.vue'
+import AppSuccess from '../common/AppSuccess.vue'
 
 export default defineComponent({
   name: 'ContactPanel',
@@ -117,7 +118,6 @@ export default defineComponent({
           }]
         })
       } catch (err) {
-        // Hantera eventuella fel
         emit('show-popup', {
           title: t('errorTitle'),
           icon: 'bi bi-exclamation-triangle',
