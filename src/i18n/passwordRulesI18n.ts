@@ -24,26 +24,6 @@ export const passwordRuleTranslations: Record<Lang, {
     ruleNotGuessable: 'Must not be too simple (e.g. 123 or aaa)',
     ruleFreeText: 'The password should not contain your name or username.'
   },
-  no: {
-    ruleHeaderText: 'Krav',
-    ruleMinLength: 'Minst {n} tegn',
-    ruleLowercase: 'Minst én liten bokstav',
-    ruleUppercase: 'Minst én stor bokstav',
-    ruleNumber: 'Minst {n} tall',
-    ruleSpecial: 'Minst ett spesialtegn',
-    ruleNotGuessable: 'Må ikke være for enkelt (f.eks. 123 eller aaa)',
-    ruleFreeText: 'Passordet bør ikke inneholde navn eller brukernavn.'
-  },
-  fi: {
-    ruleHeaderText: 'Vaatimukset',
-    ruleMinLength: 'Vähintään {n} merkkiä',
-    ruleLowercase: 'Vähintään yksi pieni kirjain',
-    ruleUppercase: 'Vähintään yksi iso kirjain',
-    ruleNumber: 'Vähintään {n} numeroa',
-    ruleSpecial: 'Vähintään yksi erikoismerkki',
-    ruleNotGuessable: 'Ei saa olla liian yksinkertainen (esim. 123 tai aaa)',
-    ruleFreeText: 'Salasana ei saa sisältää nimeäsi tai käyttäjätunnustasi.'
-  }
 };
 
 export type RuleTranslationKey = keyof typeof passwordRuleTranslations['sv'];

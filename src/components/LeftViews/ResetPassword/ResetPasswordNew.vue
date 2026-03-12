@@ -80,7 +80,7 @@ export default defineComponent({
       } catch (err) {
         // 4. Hantera om något går fel (t.ex. serverfel i mocken)
         emit('show-popup', { visible: false }) // Stäng popupen
-        errorMsg.value = 'errorChangingPassword' // Visa felmeddelande i formuläret
+        errorMsg.value = t('errorChangingPassword') // Visa felmeddelande i formuläret
         console.error("Password reset error:", err)
       }
     }

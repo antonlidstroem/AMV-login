@@ -30,6 +30,7 @@ import { onMounted } from 'vue' // Importera onMounted
 import { useI18n } from '../../../i18n/useI18n'
 import AppLogo from '../../common/AppLogo.vue'
 import AppSuccess from '../../common/AppSuccess.vue'
+import StepIndicator from '../../common/StepIndicator.vue'
 
 const { t } = useI18n()
 const emit = defineEmits<{ (e: 'change-view', view: string): void }>()

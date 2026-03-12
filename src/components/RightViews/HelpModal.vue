@@ -7,9 +7,6 @@
       <IconCloseButton @close="close" style="position: absolute; right: -10px; top: -10px; margin: 0 !important;" />
     </div>
 
-
-    <IconCloseButton @close="close" />
-
     <h2 class="text-white text-center mt-4 mb-4 py-2">{{ panelTitle }}</h2>
 
     

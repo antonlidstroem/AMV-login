@@ -90,8 +90,8 @@ const props = defineProps<{
 const emit = defineEmits(['change-view', 'close-demands', 'contact-opened', 'show-popup'])
 
 const { state, changeLang, languageNames, t } = useI18n()
-const flagClasses: Record<string, string> = { sv: 'fi fi-se', en: 'fi fi-gb', fi: 'fi fi-fi', no: 'fi fi-no' }
-const shortLanguageNames: Record<string, string> = { sv: 'SE', en: 'GB', fi: 'FI', no: 'NO' }
+const flagClasses: Record<string, string> = { sv: 'fi fi-se', en: 'fi fi-gb'}
+const shortLanguageNames: Record<string, string> = { sv: 'SE', en: 'GB' }
 
 const showContact = ref(false)
 const showHelp = ref(false)
