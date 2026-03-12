@@ -9,3 +9,5 @@ export interface IAuthService {
   logout(): Promise<void>
   getCurrentUser(): Promise<User | null>
 }
+
+

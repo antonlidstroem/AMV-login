@@ -78,7 +78,6 @@
 
 <script lang="ts">
 import { defineComponent, ref, reactive } from 'vue'
-import { useAuthStore } from './stores/auth'
 import LPage from './components/LPage.vue'
 import RPage from './components/RPage.vue'
 import LoginView from './views/LoginView.vue'
@@ -87,6 +86,8 @@ import GenericPopup from './components/common/GenericPopup.vue'
 import AppSpinner from './components/common/AppSpinner.vue'
 import AppSuccess from './components/common/AppSuccess.vue'
 import type { ViewType } from './types/views'
+import { useAuthStore, type AuthUser } from './stores/auth'
+
 
 export default defineComponent({
   name: 'App',
@@ -94,7 +95,6 @@ export default defineComponent({
 
   setup() {
     const auth = useAuthStore()
-
     const currentView = ref<ViewType>('login')
     const showDemandsInRPage = ref(false)
     const contactTrigger = ref(false)
@@ -116,12 +116,22 @@ export default defineComponent({
       action: () => {}
     })
 
-    const handleViewChange = (view: ViewType) => {
-      if (view === 'loginview') {
-        auth.login({ username: 'inloggad' })
-      } else {
-        currentView.value = view
+    const handleViewChange = (view: ViewType, payload?: AuthUser) => {
+      // Om vi får med en användare i eventet (t.ex. från Login-steget), 
+      // spara den som 'pending' i storen.
+      if (payload) {
+        console.log("Saving pending user:", payload);
+        auth.setPendingUser(payload)
       }
+
+      // Om vyn vi byter till är 'home' (eller efter lyckad verifiering),
+      // aktivera den riktiga inloggningen i storen.
+      if (view === 'authenticated-view') { 
+        auth.confirmLogin()
+        console.log("Login confirmed. Status:", auth.isLoggedIn);
+      }
+
+      currentView.value = view
     }
 
     const handleLogout = () => {

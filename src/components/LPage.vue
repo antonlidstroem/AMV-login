@@ -62,9 +62,14 @@ const VIEW_MAP: Record<string, any> = {
 
 const emailForNoEmailReceived = ref('')
 
-const handleChangeView = (view: ViewType, email?: string) => {
-  if (email) emailForNoEmailReceived.value = email
-  emit('change-view', view)
+const handleChangeView = (view: ViewType, payload?: any) => {
+  // Om det är en sträng (e-post), spara den internt i LPage
+  if (typeof payload === 'string') {
+    emailForNoEmailReceived.value = payload
+  }
+  
+  // VIKTIGT: Skicka vidare payloaden till App.vue!
+  emit('change-view', view, payload)
 }
 
 const currentComponent = computed(() => VIEW_MAP[props.currentView] ?? null)

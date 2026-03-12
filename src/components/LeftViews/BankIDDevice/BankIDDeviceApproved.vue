@@ -26,15 +26,19 @@ import { useI18n } from '../../../i18n/useI18n'
 import AppLogo from '../../common/AppLogo.vue'
 import AppSuccess from '../../common/AppSuccess.vue'
 import StepIndicator from '../../common/StepIndicator.vue'
+import type { AuthUser } from '../../../stores/auth'
 
 const { t } = useI18n()
 const isDev = import.meta.env.DEV
-const emit = defineEmits<{ (e: 'change-view', view: string): void }>()
+const emit = defineEmits<{ 
+  (e: 'change-view', view: string, payload?: AuthUser): void 
+}>()
 
 onMounted(() => {
-  // Vänta på animationen (1s) + fördröjning (1s) = 2s innan vi skickas till LoginView
   setTimeout(() => {
-    emit('change-view', 'loginview')
+    const bankIdUser = { username: 'BankID-användare', name: 'Sven Svensson' }
+
+    emit('change-view', 'authenticated-view', bankIdUser)
   }, 2000)
 })
 </script>

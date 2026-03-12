@@ -1,7 +1,8 @@
 <template>
   <div class="dashboard-container p-5 text-center">
-    <h1 class="text-dark">Välkommen!</h1>
-    <p class="text-muted">Du är nu inloggad i systemet.</p>
+    <h1 class="text-dark">Välkommen, {{ auth.user?.name || auth.user?.username }}!</h1>
+    <p class="text-muted">Du är inloggad med kontot: {{ auth.user?.username }}</p>
+    
     <button class="btn btn-danger mt-4" type="button" @click="$emit('logout')">
       Logga ut
     </button>
@@ -10,18 +11,14 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import { useAuthStore } from '../stores/auth'
 
 export default defineComponent({
   name: 'LoginView',
   emits: ['logout'],
-  setup() { return {} }
+  setup() {
+    const auth = useAuthStore() // Hämta storen här
+    return { auth }
+  }
 })
 </script>
-
-<style scoped>
-.dashboard-container {
-  min-height: 100vh;
-  background: white;
-  width: 100%;
-}
-</style>

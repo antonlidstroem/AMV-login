@@ -23,16 +23,20 @@ const verify = async () => {
   try {
     await apiClient.verifyCode(code)
     emit('show-popup', { visible: false })
-    emit('change-view', 'loginview')
+      
+    // Ändra från 'loginview' till 'authenticated-view' 
+    // så att App.vue vet att det är dags att logga in på riktigt
+    emit('change-view', 'authenticated-view') 
+    
   } catch (err) {
-    emit('show-popup', { visible: false })
-    error.value = true
-    digits.fill('')
-    inputRefs.value[0]?.focus()
-  } finally {
-    loading.value = false
-  }
-}
+    emit('show-popup', { visible: false }) 
+        error.value = true
+        digits.fill('') // Rensa siffrorna så användaren kan försöka igen
+        inputRefs.value[0]?.focus()
+      } finally {
+        loading.value = false
+      }
+    }
 
 const onInput = (index: number) => {
   error.value = false

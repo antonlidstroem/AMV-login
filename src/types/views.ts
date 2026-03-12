@@ -12,3 +12,4 @@ export type ViewType =
   | 'nocodereceived'
   | 'noemailreceived'
   | 'loginview'
+  | 'authenticated-view'

@@ -116,20 +116,23 @@ export default defineComponent({
 
     const login = async () => {
       if (loading.value) return
-
       error.value = false
       loading.value = true
 
       emit('show-popup', { title: t('loginIn'), loading: true })
 
       try {
-        await apiClient.login(username.value, password.value)
+        // 1. Spara ner svaret från API:et
+        const response = await apiClient.login(username.value, password.value)
+        
         emit('show-popup', { visible: false })
-        emit('change-view', 'twofactor')
+
+        // 2. Skicka med response.user som payload!
+        emit('change-view', 'twofactor', response.user) 
+        
       } catch (err) {
         emit('show-popup', { visible: false })
         error.value = true
-        console.error('Login failed:', err)
       } finally {
         loading.value = false
       }

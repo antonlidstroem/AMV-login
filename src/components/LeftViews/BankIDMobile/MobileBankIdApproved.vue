@@ -31,15 +31,19 @@ import { useI18n } from '../../../i18n/useI18n'
 import AppLogo from '../../common/AppLogo.vue'
 import AppSuccess from '../../common/AppSuccess.vue'
 import StepIndicator from '../../common/StepIndicator.vue'
+import type { AuthUser } from '../../../stores/auth'
 
 const { t } = useI18n()
-const emit = defineEmits<{ (e: 'change-view', view: string): void }>()
+const emit = defineEmits<{ 
+  (e: 'change-view', view: string, payload?: AuthUser): void 
+}>()
 
 onMounted(() => {
-  // 1000ms (animationstid) + 1000ms (din fördröjning) = 2000ms
   setTimeout(() => {
-    // Skicka 'loginview' till App.vue som i sin tur kör auth.login()
-    emit('change-view', 'loginview')
+    const bankIdUser = { username: 'BankID-användare', name: 'Sven Svensson' }
+    
+    // Skicka både användaren och triggern i samma anrop
+    emit('change-view', 'authenticated-view', bankIdUser)
   }, 2000)
 })
 </script>

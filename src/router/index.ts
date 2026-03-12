@@ -11,6 +11,10 @@ declare module 'vue-router' {
 
 const routes: RouteRecordRaw[] = [
   {
+    path: '/',
+    component: { render: () => null } // En tom komponent eftersom App.vue sköter vyn
+  },
+  {
     path: '/dashboard',
     component: () => import('../views/LoginView.vue'),
     meta: { requiresAuth: true }

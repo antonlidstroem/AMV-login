@@ -1,5 +1,7 @@
+// stores/auth.ts
 import { defineStore } from 'pinia'
 
+// 1. Lägg till export här!
 export interface AuthUser {
   username: string
   name?: string
@@ -8,16 +10,24 @@ export interface AuthUser {
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     isLoggedIn: false,
-    user: null as AuthUser | null
+    user: null as AuthUser | null,
+    pendingUser: null as AuthUser | null 
   }),
   actions: {
-    login(user: AuthUser) {
-      this.isLoggedIn = true
-      this.user = user
+    setPendingUser(user: AuthUser) {
+      this.pendingUser = user
+    },
+    confirmLogin() {
+      if (this.pendingUser) {
+        this.isLoggedIn = true
+        this.user = this.pendingUser
+        this.pendingUser = null
+      }
     },
     logout() {
       this.isLoggedIn = false
       this.user = null
+      this.pendingUser = null
     }
   }
 })
