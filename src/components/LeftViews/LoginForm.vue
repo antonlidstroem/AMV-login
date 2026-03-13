@@ -33,25 +33,6 @@
         />
       </div>
 
-      <div v-if="auth.isLockedOut" class="alert alert-danger d-flex align-items-center gap-2 py-2 small mb-3">
-        <i class="bi bi-clock-history"></i>
-        <span>För många försök. Vänta {{ auth.lockoutSecondsLeft }} sekunder.</span>
-      </div>
-
-      <button 
-        type="submit" 
-        class="btn-custom w-100 mb-2" 
-        :disabled="loading || auth.isLockedOut"
-        :class="{ 'opacity-50': auth.isLockedOut }"
-      >
-      <template v-if="auth.isLockedOut">
-          {{ auth.lockoutSecondsLeft }}s {{ t('wait') }}
-        </template>
-        <template v-else>
-          {{ loading ? t('wait') : t('login') }}
-        </template>
-      </button>
-
       <button type="submit" class="btn-custom w-100 mb-2" :disabled="loading">
         {{ loading ? t('wait') : t('login') }}
       </button>
@@ -114,8 +95,7 @@ import { defineComponent, ref } from 'vue'
 import { apiClient } from '../../services/apiClient'
 import { useI18n } from '../../i18n/useI18n'
 import bankIdLogo from '../../assets/BankID_logo_white.png'
-import AppLogo from '../common/AppLogo.vue'
-import { useAuthStore } from '../../stores/auth'
+import AppLogo from '../common/AppLogo.vue' // Dubbelkolla att sökvägen stämmer
 
 export default defineComponent({
   name: 'LoginForm',
@@ -133,41 +113,26 @@ export default defineComponent({
     const error = ref(false)
     const loading = ref(false)
     const { t } = useI18n()
-    const auth = useAuthStore()
 
     const login = async () => {
-      // 3. Blockera anrop om vi är spärrade
-      if (loading.value || auth.isLockedOut) return
-      
+      if (loading.value) return
       error.value = false
       loading.value = true
 
       emit('show-popup', { title: t('loginIn'), loading: true })
 
       try {
+        // 1. Spara ner svaret från API:et
         const response = await apiClient.login(username.value, password.value)
         
-        // Vid lyckad inloggning: nollställ eventuella tidigare misslyckanden
-        auth.resetSecurity() 
-        
         emit('show-popup', { visible: false })
+
+        // 2. Skicka med response.user som payload!
         emit('change-view', 'twofactor', response.user) 
         
-      } catch (err: any) {
+      } catch (err) {
         emit('show-popup', { visible: false })
-        
-        // 4. Registrera misslyckat försök i storen
-        auth.registerFailure()
-        
         error.value = true
-        
-        // Valfritt: Om man precis blev spärrad, visa en specifik popup
-        if (auth.isLockedOut) {
-          emit('show-popup', { 
-            title: 'Kontot tillfälligt låst', 
-            message: 'Du har angett fel uppgifter för många gånger. Prova igen om 30 sekunder.' 
-          })
-        }
       } finally {
         loading.value = false
       }
@@ -178,7 +143,6 @@ export default defineComponent({
     }
 
     return {
-      auth, // 5. Glöm inte att returnera auth så templaten kan läsa isLockedOut
       username,
       password,
       error,
