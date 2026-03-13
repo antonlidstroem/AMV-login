@@ -1,5 +1,5 @@
 <template>
-  <button 
+  <button
     type="button"
     class="btn btn-transparent btn-sm rounded-circle position-absolute top-0 end-0 m-3 d-flex align-items-center justify-content-center p-0"
     @click="$emit('close')"
@@ -19,7 +19,6 @@ export default defineComponent({
 </script>
 
 <style scoped>
-/* En liten hover-effekt gör att det känns mer interaktivt */
 .btn-transparent:hover i {
   opacity: 0.8;
   transform: scale(1.1);

@@ -10,8 +10,14 @@
 </template>
 
 <script lang="ts" setup>
+import { computed } from 'vue'
+
 const props = defineProps<{ label?: string }>()
-const label = props.label ?? 'back'
+
+// Must be computed so it stays reactive when the prop changes.
+// Using a plain `const label = props.label ?? 'back'` reads the value
+// once at setup time and never updates — that is a bug.
+const label = computed(() => props.label ?? 'back')
 
 const emit = defineEmits<{ (event: 'click'): void }>()
 

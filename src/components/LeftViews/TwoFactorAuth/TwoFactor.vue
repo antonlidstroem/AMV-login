@@ -1,110 +1,76 @@
-<template>
-  <div class="bg-views p-4 rounded-4 mb-3">
-    <img :src="AMVLogo" class="logo-top" />
-
-    <h4>{{ t('verifyWithCode') }}</h4>
-    <p>{{ t('enterPinCode') }}</p>
-
-    <div v-if="error" class="error-banner">{{ t('wrongCodeTryAgain') }}</div>
-
-    <div class="d-flex gap-3 mb-3 justify-content-center">
-      <input
-        v-for="(d, i) in digits"
-        :key="i"
-        ref="inputRefs" 
-        v-model="digits[i]"
-        maxlength="1"
-        type="tel"
-        class="text-center code-input"
-        :class="{ 'error-border': error, 'success-border': digits[i] && !error }"
-        @input="onInput(i)"
-      />
-    </div>
-<!-- 
-    <button class="btn-custom" :disabled="loading" @click="verify">
-      {{ t('login') }}
-    </button> -->
-    
-    <div class="mt-3">
-      <BackLink 
-        :label="t('back')" 
-        @click="$emit('change-view', 'login')" 
-      />
-    </div>
-
-  </div>
-</template>
-
-<script lang="ts">
-import { defineComponent, ref, reactive } from 'vue'
+<script setup lang="ts">
+import { ref, reactive } from 'vue'
 import { useI18n } from '../../../i18n/useI18n'
-import AMVLogo from '../../../assets/logo_horizontal.svg'
 import { apiClient } from '../../../services/apiClient'
 import BackLink from '../../common/BackLink.vue'
+import AppLogo from '../../common/AppLogo.vue'
 
-export default defineComponent({
-  name: 'VerifyCode',
-  components: {BackLink},
-  emits: ['change-view', 'show-popup'],
-  setup(_, { emit }) {
-    const { t } = useI18n()
-    const digits = reactive<string[]>(['', '', '', ''])
-    const error = ref<boolean>(false)
-    const loading = ref<boolean>(false)
-    const inputRefs = ref<HTMLInputElement[]>([])
+const emit = defineEmits(['change-view', 'show-popup'])
+const { t } = useI18n()
 
-    const onInput = (index: number) => {
-      clearError()
-      if (digits[index] && index < 3) {
-        inputRefs.value[index + 1]?.focus()
-      }
-      if (digits.every(d => d !== '')) {
-        verify()
-      }
-    }
+const digits = reactive(['', '', '', ''])
+const error = ref(false)
+const loading = ref(false)
+const inputRefs = ref<HTMLInputElement[]>([])
 
-    const verify = async (): Promise<void> => {
-      const code = digits.join('')
-      if (code.length < 4) return
+const verify = async () => {
+  const code = digits.join('')
+  if (code.length < 4 || loading.value) return
 
-      loading.value = true
+  loading.value = true
+  emit('show-popup', { title: t('loginIn'), loading: true })
+
+  try {
+    await apiClient.verifyCode(code)
+    emit('show-popup', { visible: false })
       
-      // 1. Trigga den globala popupen i App.vue
-      emit('show-popup', { title: t('loginIn'), loading: true })
-
-      // 2. Skapa en timer på 1 sekund
-      const delay = new Promise(resolve => setTimeout(resolve, 1000))
-
-      try {
-        // 3. Kör både API-anropet och timern samtidigt. 
-        // Vi väntar tills BÅDA är klara (Promise.all).
-        await Promise.all([apiClient.verifyCode(code), delay])
-        
-        // Om vi når hit var koden rätt
-        emit('show-popup', { visible: false })
-        emit('change-view', 'loginview') 
-        
-      } catch (err) {
-        // Om API:et ger fel, väntar vi ut resten av sekunden innan vi stänger popupen
-        await delay 
-        emit('show-popup', { visible: false })
-        
+    // Ändra från 'loginview' till 'authenticated-view' 
+    // så att App.vue vet att det är dags att logga in på riktigt
+    emit('change-view', 'authenticated-view') 
+    
+  } catch (err) {
+    emit('show-popup', { visible: false }) 
         error.value = true
-        digits.fill('')
+        digits.fill('') // Rensa siffrorna så användaren kan försöka igen
         inputRefs.value[0]?.focus()
       } finally {
         loading.value = false
       }
     }
 
-    const clearError = (): void => {
-      if (error.value) error.value = false
-    }
+const onInput = (index: number) => {
+  error.value = false
+  
+  // Vi hämtar värdet eller en tom sträng om det mot förmodan vore undefined
+  const val = digits[index] ?? '' 
+  digits[index] = val.replace(/\D/g, '').slice(0, 1)
 
-    return {
-      t, AMVLogo, digits, error, loading,
-      verify, clearError, onInput, inputRefs
-    }
+  // Samma sak här, använd valfritt chaining för att vara säker
+  if (digits[index] && index < 3) {
+    inputRefs.value[index + 1]?.focus()
   }
-})
+  
+  if (digits.every(d => d !== '')) verify()
+}
+
+const onPaste = (e: ClipboardEvent) => {
+  const pasted = (e.clipboardData?.getData('text') ?? '').replace(/\D/g, '').slice(0, 4)
+  pasted.split('').forEach((ch, i) => { digits[i] = ch })
+  if (pasted.length === 4) verify()
+}
 </script>
+
+<template>
+  <div class="bg-views p-4 rounded-4 mb-3">
+    <AppLogo />
+    <h4>{{ t('verifyWithCode') }}</h4>
+    <p>{{ t('enterPinCode') }}</p>
+    <div v-if="error" class="error-banner">{{ t('wrongCodeTryAgain') }}</div>
+    <div class="d-flex gap-3 mb-3 justify-content-center">
+      <input v-for="(d, i) in digits" :key="i" ref="inputRefs" v-model="digits[i]" maxlength="1" 
+             type="tel" class="text-center code-input" :class="{ 'error-border': error }"
+             @input="onInput(i)" @paste.prevent="onPaste" />
+    </div>
+    <BackLink :label="t('back')" @click="emit('change-view', 'login')" />
+  </div>
+</template>

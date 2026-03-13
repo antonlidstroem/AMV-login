@@ -1,5 +1,6 @@
 // src/router/index.ts
-import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
+import type { RouteRecordRaw } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
 
 declare module 'vue-router' {
@@ -10,8 +11,10 @@ declare module 'vue-router' {
 
 const routes: RouteRecordRaw[] = [
   {
-    // App.vue monteras direkt i main.ts – ska INTE vara en route.
-    // Routern hanterar bara sidor man navigerar TILL efter inloggning.
+    path: '/',
+    component: { render: () => null } // En tom komponent eftersom App.vue sköter vyn
+  },
+  {
     path: '/dashboard',
     component: () => import('../views/LoginView.vue'),
     meta: { requiresAuth: true }
@@ -25,7 +28,11 @@ export const router = createRouter({
 
 router.beforeEach((to) => {
   const auth = useAuthStore()
+  // Fix: redirect to '/' instead of returning false.
+  // Returning false cancels navigation silently; the user gets a blank screen
+  // if they arrive at a protected URL directly (e.g. bookmark, back button).
+  // Redirecting to '/' ensures they always land on the login page.
   if (to.meta.requiresAuth && !auth.isLoggedIn) {
-    return false // blockera – stanna kvar, App.vue hanterar visningen
+    return { path: '/' }
   }
 })

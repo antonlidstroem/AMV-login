@@ -1,35 +1,29 @@
-// i18n/useI18n.ts
 import { reactive } from 'vue'
 import { translations, languageNames } from './translations'
 
+export type Lang = keyof typeof translations
+export type TranslationKey = keyof typeof translations['sv']
 
-
-
-// Typa språken automatiskt från objektet
-export type Lang = keyof typeof translations  // 'sv' | 'en' | 'no' | 'fi'
-
-// Typa alla möjliga nycklar (alla nycklar måste finnas i alla språk)
-export type TranslationKey = keyof typeof translations['sv'] 
-
-const state = reactive<{ currentLang: Lang }>({
-  currentLang: 'sv'
-})
+const state = reactive<{ currentLang: Lang }>({ currentLang: 'sv' })
 
 export function useI18n() {
-  // Funktion för att hämta text
-  function t(key: TranslationKey): string {
-  return translations[state.currentLang]?.[key] ?? key
+  /**
+   * Translate a key with optional variable interpolation.
+   * Variables in translation strings are written as {name} and replaced by
+   * the matching key in the `vars` map.
+   *
+   * Example:
+   *   translation: 'Email sent to {email}.'
+   *   t('resetEmailSentMessage', { email: 'me@example.com' })
+   *   → 'Email sent to me@example.com.'
+   */
+  function t(key: TranslationKey, vars?: Record<string, string>): string {
+    let raw = translations[state.currentLang]?.[key] ?? key
+    if (vars) {
+      raw = raw.replace(/\{(\w+)\}/g, (_, name) => vars[name] ?? `{${name}}`)
+    }
+    return raw
   }
-
-  // Byta språk
-  function changeLang(lang: Lang) {
-    state.currentLang = lang
-  }
-
-  return {
-    state,
-    t,
-    changeLang,
-    languageNames
-  }
+  function changeLang(lang: Lang) { state.currentLang = lang }
+  return { state, t, changeLang, languageNames }
 }

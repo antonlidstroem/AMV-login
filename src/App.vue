@@ -3,7 +3,7 @@
 
     <div
       v-if="!auth.isLoggedIn"
-      class="main-container d-flex flex-column flex-md-row shadow rounded-5 w-100 overflow-hidden p-0"
+      class="main-container d-flex flex-column flex-md-row shadow rounded-5 w-100 p-0"
       style="max-width:1120px; width:100%;"
     >
       <LPage
@@ -27,10 +27,10 @@
           @show-popup="handleShowPopup"
         >
           <template #mobile-left>
-            <div class="d-block d-md-none w-100 d-flex justify-content-center align-items-start py-3 px-2">
+            <div class="d-flex d-md-none w-100 justify-content-center align-items-start py-3 px-2">
               <LPage
-                class="w-100 h-100"
-                style="max-width: 460px; max-height: 90vh; border-radius: 20px; overflow: hidden;"
+                class="w-100"
+                style="max-width: 460px; width: 100%;"
                 :currentView="currentView"
                 @change-view="handleViewChange"
                 @trigger-error="handleLoginError"
@@ -43,7 +43,6 @@
       </div>
     </div>
 
-    <!-- Inloggad: visa LoginView direkt (ingen router-view behövs) -->
     <LoginView v-else @logout="handleLogout" />
 
     <ErrPopup
@@ -60,8 +59,17 @@
       :loading="popupState.loading"
       :buttons="popupState.buttons"
     >
-      <template #icon v-if="popupState.icon">
-        <i :class="popupState.icon"></i>
+      <template #icon>
+        <transition name="popup-media" mode="out-in">
+          <AppSpinner v-if="popupState.loading" color="white" key="spinner" />
+          <component 
+            v-else-if="popupState.component" 
+            :is="popupState.component" 
+            color="white" 
+            :key="popupState.component ? popupState.component.__name || popupState.component.name : 'none'"
+          />
+          <i v-else-if="popupState.icon" :class="popupState.icon" key="icon"></i>
+        </transition>
       </template>
     </GenericPopup>
 
@@ -70,30 +78,32 @@
 
 <script lang="ts">
 import { defineComponent, ref, reactive } from 'vue'
-import { useAuthStore } from './stores/auth'
 import LPage from './components/LPage.vue'
 import RPage from './components/RPage.vue'
 import LoginView from './views/LoginView.vue'
 import ErrPopup from './components/common/Err-Popup.vue'
 import GenericPopup from './components/common/GenericPopup.vue'
+import AppSpinner from './components/common/AppSpinner.vue'
+import AppSuccess from './components/common/AppSuccess.vue'
 import type { ViewType } from './types/views'
+import { useAuthStore, type AuthUser } from './stores/auth'
+
 
 export default defineComponent({
   name: 'App',
-  components: { LPage, RPage, LoginView, ErrPopup, GenericPopup },
+  components: { LPage, RPage, LoginView, ErrPopup, GenericPopup, AppSpinner, AppSuccess },
 
   setup() {
     const auth = useAuthStore()
-
     const currentView = ref<ViewType>('login')
     const showDemandsInRPage = ref(false)
     const contactTrigger = ref(false)
 
-    // ── Popup-state ──────────────────────────────────────────────────────────
     const popupState = reactive({
       visible: false,
       title: '',
       loading: false,
+      component: null as any, 
       icon: '',
       buttons: [] as any[]
     })
@@ -106,15 +116,22 @@ export default defineComponent({
       action: () => {}
     })
 
-    // ── Handlers ─────────────────────────────────────────────────────────────
-
-    const handleViewChange = (view: ViewType) => {
-      if (view === 'loginview') {
-        // Sätt auth-state → v-else i template visar LoginView automatiskt
-        auth.login({ username: 'inloggad' })
-      } else {
-        currentView.value = view
+    const handleViewChange = (view: ViewType, payload?: AuthUser) => {
+      // Om vi får med en användare i eventet (t.ex. från Login-steget), 
+      // spara den som 'pending' i storen.
+      if (payload) {
+        console.log("Saving pending user:", payload);
+        auth.setPendingUser(payload)
       }
+
+      // Om vyn vi byter till är 'home' (eller efter lyckad verifiering),
+      // aktivera den riktiga inloggningen i storen.
+      if (view === 'authenticated-view') { 
+        auth.confirmLogin()
+        console.log("Login confirmed. Status:", auth.isLoggedIn);
+      }
+
+      currentView.value = view
     }
 
     const handleLogout = () => {
@@ -125,6 +142,7 @@ export default defineComponent({
     const handleShowPopup = (config: any) => {
       popupState.title = config.title ?? ''
       popupState.loading = config.loading ?? false
+      popupState.component = config.component ?? null 
       popupState.icon = config.icon ?? ''
       popupState.buttons = config.buttons ?? []
       popupState.visible = config.visible !== undefined ? config.visible : true
@@ -155,7 +173,9 @@ export default defineComponent({
       handleViewChange,
       handleLogout,
       handleShowPopup,
-      handleLoginError
+      handleLoginError,
+      AppSpinner
+      
     }
   }
 })
