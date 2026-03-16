@@ -6,7 +6,7 @@ export type ViewType =
   | 'authbankidqrsuccess'
   | 'authbankidlocal'
   | 'authbankidlocalsuccess'
-  | 'twofactor'
+  | 'auth2faverify'
   | 'newpassword'
   | 'authpasswordresetsent'
   | 'nocodereceived'

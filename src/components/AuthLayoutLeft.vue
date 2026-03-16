@@ -1,9 +1,9 @@
 <template>
   <div class="bg-AuthLayoutLeft d-flex flex-column align-items-center justify-content-center h-100 rounded-4">
     <div class="w-100 px-1">
-      <div v-if="currentView === 'twofactor'" class="d-flex flex-column gap-3 w-100">
-        <TwoFactor @change-view="handleChangeView" @show-popup="emit('show-popup', $event)" />
-        <NoCodeReceived @show-popup="emit('show-popup', $event)" />
+      <div v-if="currentView === 'auth2faverify'" class="d-flex flex-column gap-3 w-100">
+        <Auth2FAVerify @change-view="handleChangeView" @show-popup="emit('show-popup', $event)" />
+        <Auth2FARetry @show-popup="emit('show-popup', $event)" />
       </div>
 
       <div v-else-if="currentView === 'authpasswordresetsent'">
@@ -37,8 +37,8 @@ import AuthPasswordResetRetry from './LeftViews/ResetPassword/AuthPasswordResetR
 import MobileBankId from './LeftViews/BankIDMobile/AuthBankIdQr.vue'
 import AuthBankIdLocal from './LeftViews/BankIDDevice/AuthBankIdLocal.vue'
 import AuthBankIdLocalSuccess from './LeftViews/BankIDDevice/AuthBankIdLocalSuccess.vue'
-import TwoFactor from './LeftViews/TwoFactorAuth/TwoFactor.vue'
-import NoCodeReceived from './LeftViews/TwoFactorAuth/NoCodeReceived.vue'
+import Auth2FAVerify from './LeftViews/TwoFactorAuth/Auth2FAVerify.vue'
+import Auth2FARetry from './LeftViews/TwoFactorAuth/Auth2FARetry.vue'
 import AuthBankIdQrPending from './LeftViews/BankIDMobile/AuthBankIdQrPending.vue'
 import AuthBankIdQrSuccess from './LeftViews/BankIDMobile/AuthBankIdQrSuccess.vue'
 
@@ -53,10 +53,10 @@ const VIEW_MAP: Record<string, any> = {
   authbankidqrsuccess: AuthBankIdQrSuccess,
   authbankidlocal: AuthBankIdLocal,
   authbankidlocalsuccess: AuthBankIdLocalSuccess,
-  twofactor: TwoFactor,
+  auth2FAVerify: Auth2FAVerify,
   newpassword: AuthPasswordResetForm,
   authPasswordResetSent: AuthPasswordResetSent,
-  nocodereceived: NoCodeReceived,
+  auth2FARetry: Auth2FARetry,
   authPasswordResetRetry: AuthPasswordResetRetry
 }
 
