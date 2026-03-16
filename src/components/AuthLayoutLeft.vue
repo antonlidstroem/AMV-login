@@ -28,36 +28,38 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import type { ViewType } from '../types/views'
-import AuthLoginForm from './LeftViews/AuthLoginForm.vue'
-import AuthPasswordResetRequest from './LeftViews/ResetPassword/AuthPasswordResetRequest.vue'
-import AuthPasswordResetSent from './LeftViews/ResetPassword/AuthPasswordResetSent.vue'
-import AuthPasswordResetForm from './LeftViews/ResetPassword/AuthPasswordResetForm.vue'
-import AuthPasswordResetRetry from './LeftViews/ResetPassword/AuthPasswordResetRetry.vue'
-import MobileBankId from './LeftViews/BankIDMobile/AuthBankIdQr.vue'
-import AuthBankIdLocal from './LeftViews/BankIDDevice/AuthBankIdLocal.vue'
-import AuthBankIdLocalSuccess from './LeftViews/BankIDDevice/AuthBankIdLocalSuccess.vue'
-import Auth2FAVerify from './LeftViews/TwoFactorAuth/Auth2FAVerify.vue'
-import Auth2FARetry from './LeftViews/TwoFactorAuth/Auth2FARetry.vue'
-import AuthBankIdQrPending from './LeftViews/BankIDMobile/AuthBankIdQrPending.vue'
-import AuthBankIdQrSuccess from './LeftViews/BankIDMobile/AuthBankIdQrSuccess.vue'
+import type { ViewType } from '../modules/types/views'
+import AuthLoginForm from './auth/AuthLoginForm.vue'
+import AuthPasswordResetRequest from './auth/reset-password/AuthPasswordResetRequest.vue'
+import AuthPasswordResetSent from './auth/reset-password/AuthPasswordResetSent.vue'
+import AuthPasswordResetForm from './auth/reset-password/AuthPasswordResetForm.vue'
+import AuthPasswordResetRetry from './auth/reset-password/AuthPasswordResetRetry.vue'
+import AuthBankIdQr from './auth/bankid-mobile/AuthBankIdQr.vue'
+import AuthBankIdLocal from './auth/bankid-device/AuthBankIdLocal.vue'
+import AuthBankIdLocalSuccess from './auth/bankid-device/AuthBankIdLocalSuccess.vue'
+import Auth2FAVerify from './auth/2fa/Auth2FAVerify.vue'
+import Auth2FARetry from './auth/2fa/Auth2FARetry.vue'
+import AuthBankIdQrPending from './auth/bankid-mobile/AuthBankIdQrPending.vue'
+import AuthBankIdQrSuccess from './auth/bankid-mobile/AuthBankIdQrSuccess.vue'
 
 const props = defineProps<{ currentView: ViewType }>()
 const emit = defineEmits(['change-view', 'show-password-demands', 'trigger-error', 'show-popup'])
 
+// src/components/AuthLayoutLeft.vue
+
 const VIEW_MAP: Record<string, any> = {
   login: AuthLoginForm,
   forgot: AuthPasswordResetRequest,
-  mobilebankid: MobileBankId,
+  authBankIdQr: AuthBankIdQr,
   authbankidqrpending: AuthBankIdQrPending,
   authbankidqrsuccess: AuthBankIdQrSuccess,
   authbankidlocal: AuthBankIdLocal,
   authbankidlocalsuccess: AuthBankIdLocalSuccess,
-  auth2FAVerify: Auth2FAVerify,
+  auth2faverify: Auth2FAVerify, // Fixat: gemener
   newpassword: AuthPasswordResetForm,
-  authPasswordResetSent: AuthPasswordResetSent,
-  auth2FARetry: Auth2FARetry,
-  authPasswordResetRetry: AuthPasswordResetRetry
+  authpasswordresetsent: AuthPasswordResetSent, // Fixat: gemener
+  auth2faretry: Auth2FARetry, // Fixat: gemener
+  authpasswordresetretry: AuthPasswordResetRetry // Fixat: gemener
 }
 
 const emailForAuthPasswordResetRetry = ref('')

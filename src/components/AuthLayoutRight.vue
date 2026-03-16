@@ -74,11 +74,11 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
-import { useI18n } from '../i18n/useI18n'
-import type { Lang } from '../i18n/useI18n'
-import OverlayContact from './RightViews/OverlayContact.vue'
-import OverlayHelp from './RightViews/OverlayHelp.vue'
-import OverlayPasswordDemands from './RightViews/PasswordDemands/OverlayPasswordDemands.vue'
+import { useI18n } from '../modules/i18n/useI18n'
+import type { Lang } from '../modules/i18n/useI18n'
+import OverlayContact from './overlays/OverlayContact.vue'
+import OverlayHelp from './overlays/OverlayHelp.vue'
+import OverlayPasswordDemands from './overlays/password-demands/OverlayPasswordDemands.vue'
 import bgImage from '../assets/auth-background.jpg'
 
 const props = defineProps<{

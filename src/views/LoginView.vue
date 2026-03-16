@@ -43,8 +43,8 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import AuthLayoutLeft from '../components/AuthLayoutLeft.vue'
 import AuthLayoutRight from '../components/AuthLayoutRight.vue'
-import { useAuthStore, type AuthUser } from '../stores/auth'
-import type { ViewType } from '../types/views'
+import { useAuthStore, type AuthUser } from '../modules/stores/auth'
+import type { ViewType } from '../modules/types/views'
 
 const emit = defineEmits(['show-popup', 'trigger-error'])
 const auth = useAuthStore()
