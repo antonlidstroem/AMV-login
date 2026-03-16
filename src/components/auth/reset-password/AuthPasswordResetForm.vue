@@ -26,9 +26,9 @@
 import { defineComponent, ref, computed, markRaw } from 'vue'
 import { useI18n } from '../../../modules/i18n/useI18n'
 import AMVLogo from '../../../assets/logo-horizontal.svg'
-import AuthPasswordCheck from '../../RightViews/PasswordDemands/AuthPasswordCheck.vue'
+import AuthPasswordCheck from '../../overlays/password-demands/AuthPasswordCheck.vue'
 import AppSuccess from '../../common/AppSuccess.vue'
-import { passwordRules } from '../../RightViews/PasswordDemands/password-rules'
+import { passwordRules } from '../../overlays/password-demands/password-rules'
 import { apiClient } from '../../../modules/services/api-client'
 
 export default defineComponent({
