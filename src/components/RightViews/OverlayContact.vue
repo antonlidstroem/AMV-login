@@ -58,7 +58,7 @@
 <script lang="ts">
 import { defineComponent, ref, markRaw } from 'vue'
 import { useI18n } from '../../i18n/useI18n'
-import { apiClient } from '../../services/apiClient'
+import { apiClient } from '../../services/api-client'
 import SecondaryButton from '../common/AppButtonSecondary.vue'
 import AppIconButtonClose from '../common/AppIconButtonClose.vue'
 import AppSuccess from '../common/AppSuccess.vue'

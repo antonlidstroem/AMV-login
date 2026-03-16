@@ -28,7 +28,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { passwordHeaderKey, passwordRules, freeTextKey, passwordConfig } from './passwordRules'
+import { passwordHeaderKey, passwordRules, freeTextKey, passwordConfig } from './password-rules'
 import { useI18n } from '../../../i18n/useI18n'
 import { passwordRuleTranslations } from '../../../i18n/passwordRulesI18n'
 import type { RuleTranslationKey } from '../../../i18n/passwordRulesI18n'

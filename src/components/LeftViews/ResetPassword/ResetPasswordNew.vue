@@ -28,8 +28,8 @@ import { useI18n } from '../../../i18n/useI18n'
 import AMVLogo from '../../../assets/logo-horizontal.svg'
 import AuthPasswordCheck from '../../RightViews/PasswordDemands/AuthPasswordCheck.vue'
 import AppSuccess from '../../common/AppSuccess.vue'
-import { passwordRules } from '../../RightViews/PasswordDemands/passwordRules'
-import { apiClient } from '../../../services/apiClient'
+import { passwordRules } from '../../RightViews/PasswordDemands/password-rules'
+import { apiClient } from '../../../services/api-client'
 
 export default defineComponent({
   name: 'ResetPasswordNew',
@@ -63,7 +63,7 @@ export default defineComponent({
       })
 
       try {
-        // 2. Anropa din MSW-mock via apiClient
+        // 2. Anropa din MSW-mock via api-client
         // Här väntar vi i 1.5 sekunder (pga delay i din handler)
         await apiClient.resetPassword(p1.value)
 
