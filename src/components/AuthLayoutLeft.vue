@@ -49,28 +49,26 @@ const emit = defineEmits(['change-view', 'show-password-demands', 'trigger-error
 
 const VIEW_MAP: Record<string, any> = {
   login: AuthLoginForm,
-  forgot: AuthPasswordResetRequest,
+  forgotpassword: AuthPasswordResetRequest,
   authBankIdQr: AuthBankIdQr,
   authbankidqrpending: AuthBankIdQrPending,
   authbankidqrsuccess: AuthBankIdQrSuccess,
   authbankidlocal: AuthBankIdLocal,
   authbankidlocalsuccess: AuthBankIdLocalSuccess,
-  auth2faverify: Auth2FAVerify, // Fixat: gemener
+  auth2faverify: Auth2FAVerify, 
   newpassword: AuthPasswordResetForm,
-  authpasswordresetsent: AuthPasswordResetSent, // Fixat: gemener
-  auth2faretry: Auth2FARetry, // Fixat: gemener
-  authpasswordresetretry: AuthPasswordResetRetry // Fixat: gemener
+  authpasswordresetsent: AuthPasswordResetSent, 
+  auth2faretry: Auth2FARetry, 
+  authpasswordresetretry: AuthPasswordResetRetry 
 }
 
 const emailForAuthPasswordResetRetry = ref('')
 
 const handleChangeView = (view: ViewType, payload?: any) => {
-  // Om det är en sträng (e-post), spara den internt i AuthLayoutLeft
   if (typeof payload === 'string') {
     emailForAuthPasswordResetRetry.value = payload
   }
   
-  // VIKTIGT: Skicka vidare payloaden till App.vue!
   emit('change-view', view, payload)
 }
 

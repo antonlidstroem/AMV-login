@@ -29,12 +29,14 @@
       <template #icon>
         <transition name="popup-media" mode="out-in">
           <AppSpinner v-if="popupState.loading" color="white" key="spinner" />
+          
           <component 
             v-else-if="popupState.component" 
             :is="popupState.component" 
             color="white" 
             :key="popupState.component.__name || 'comp'"
           />
+          
           <i v-else-if="popupState.icon" :class="popupState.icon" key="icon"></i>
         </transition>
       </template>
@@ -44,7 +46,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from 'vue'
+import { defineComponent, reactive, Component as VueComponent } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from './modules/stores/auth'
 
@@ -53,6 +55,24 @@ import AppPopupError from './components/common/AppPopupError.vue'
 import AppPopupGeneric from './components/common/AppPopupGeneric.vue'
 import AppSpinner from './components/common/AppSpinner.vue'
 import AppSuccess from './components/common/AppSuccess.vue'
+
+// Typer för bättre kodstöd
+interface PopupState {
+  visible: boolean;
+  title: string;
+  loading: boolean;
+  component: VueComponent | null;
+  icon: string;
+  buttons: any[];
+}
+
+interface ErrorState {
+  visible: boolean;
+  icon: string;
+  message: string;
+  buttonLabel: string;
+  action: () => void;
+}
 
 export default defineComponent({
   name: 'App',
@@ -67,18 +87,18 @@ export default defineComponent({
     const auth = useAuthStore()
     const router = useRouter()
 
-    // Globalt state för vanliga popups (t.ex. "Skickar...")
-    const popupState = reactive({
+    // Globalt state för vanliga popups
+    const popupState = reactive<PopupState>({
       visible: false,
       title: '',
       loading: false,
-      component: null as any,
+      component: null,
       icon: '',
-      buttons: [] as any[]
+      buttons: []
     })
 
-    // Globalt state för felmeddelanden (t.ex. BankID-strul)
-    const errorState = reactive({
+    // Globalt state för felmeddelanden
+    const errorState = reactive<ErrorState>({
       visible: false,
       icon: '',
       message: '',
@@ -86,14 +106,12 @@ export default defineComponent({
       action: () => {}
     })
 
-    // Hanterar logga ut och skickar användaren till start
     const handleLogout = () => {
       auth.logout()
       router.push('/')
     }
 
-    // Öppnar den generiska popupen (anropas via emit från vyer)
-    const handleShowPopup = (config: any) => {
+    const handleShowPopup = (config: Partial<PopupState & { duration?: number }>) => {
       popupState.title = config.title ?? ''
       popupState.loading = config.loading ?? false
       popupState.component = config.component ?? null
@@ -101,12 +119,14 @@ export default defineComponent({
       popupState.buttons = config.buttons ?? []
       popupState.visible = config.visible !== undefined ? config.visible : true
 
+      // Stäng automatiskt om duration finns (t.ex. vid "Klart!")
       if (config.duration) {
-        setTimeout(() => { popupState.visible = false }, config.duration)
+        setTimeout(() => { 
+          popupState.visible = false 
+        }, config.duration)
       }
     }
 
-    // Visar felmeddelandet (t.ex. om BankID misslyckas)
     const handleLoginError = (payload?: any) => {
       errorState.icon = 'bi bi-shield-exclamation'
       errorState.message = 'Inloggningen misslyckades. Kontrollera att du har BankID-appen öppen.'
@@ -114,9 +134,8 @@ export default defineComponent({
       errorState.visible = true
       errorState.action = () => {
         errorState.visible = false
-        // Om vi vill trigga något i vyn (t.ex. öppna kontakt-overlay)
         if (payload?.triggerContact) {
-            // Här kan vi lägga logik om det behövs
+           // Logik för kontakt-overlay kan läggas här
         }
       }
     }
@@ -134,7 +153,7 @@ export default defineComponent({
 </script>
 
 <style>
-/* Enkel transition för sidbyten */
+/* Transition för sidbyten */
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.2s ease;
@@ -143,5 +162,27 @@ export default defineComponent({
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+/* Transition för ikoner/spinners inuti popupen */
+.popup-media-enter-active,
+.popup-media-leave-active {
+  transition: all 0.3s ease;
+}
+
+.popup-media-enter-from {
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+.popup-media-leave-to {
+  opacity: 0;
+  transform: scale(1.2);
+}
+
+/* Bas-styling för att säkerställa att wrapper tar hela höjden */
+.page-wrapper {
+  background-color: #f8f9fa; /* Eller din önskade bakgrundsfärg */
+  overflow-x: hidden;
 }
 </style>

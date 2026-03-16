@@ -14,6 +14,7 @@ export interface LoginResponse {
 
 // --- 2. Skapa instansen ---
 const api = axios.create({
+  //ÄNDRA TILL BACKENDS URL FÖR ATT KOPPLA PÅ
   baseURL: '/api', 
   headers: { 'Content-Type': 'application/json' }
 })
@@ -22,7 +23,7 @@ const api = axios.create({
 api.interceptors.response.use(
   (response) => {
     if (response.status === 204) return null
-    return response.data // Här skalar vi av Axios-skalet
+    return response.data 
   },
   (error) => {
     const message = error.response?.data?.message || 'Ett oväntat fel uppstod'
@@ -35,9 +36,7 @@ api.interceptors.response.use(
 
 // --- 4. Exportera klienten med typer ---
 export const apiClient = {
-  // Vi använder "as unknown as Promise<...>" för att tvinga TS att förstå 
-  // att interceptorn har ändrat returtypen från AxiosResponse till ren data.
-  
+ 
   login: (username: string, password: string) => 
     api.post('/login', { username, password }) as unknown as Promise<LoginResponse>,
 

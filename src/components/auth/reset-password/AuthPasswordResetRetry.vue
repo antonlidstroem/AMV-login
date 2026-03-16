@@ -24,7 +24,7 @@ const { t } = useI18n()
 const send = () => {
   // 1. Visa spinner först
   emit('show-popup', {
-    title: "skcikar", // t.ex. "Skickar..."
+    title: "skickar", 
     loading: true
   })
 

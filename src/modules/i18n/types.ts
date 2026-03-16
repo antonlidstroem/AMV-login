@@ -1,3 +1,10 @@
+export interface PopupTranslations {
+  sending: string;
+  error: string;
+  bankIdManual: string;
+  contactSupport: string;
+}
+
 export interface BaseTranslations {
   aboutBankID: string;
   aboutBankIDText: string;
@@ -80,6 +87,7 @@ export interface BaseTranslations {
   writeMessage: string;
   yourMessage: string;
   wait: string;
+  popups: PopupTranslations;
 
-  [key: string]: string | any;
+  [key: string]: string | PopupTranslations | any;
 }
