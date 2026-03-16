@@ -3,7 +3,7 @@
   style="background-color: rgba(100,100,100,0.85); width: 95%; max-width: 900px; margin: 0 auto; display: flex; flex-direction: column;">
     <div class="position-relative mb-3">
       <h2 class="text-white text-center m-0">{{ t('contact') }}</h2>
-      <IconCloseButton @close="close" style="position: absolute; right: -10px; top: -10px; margin: 0 !important;" />
+      <AppIconButtonClose @close="close" style="position: absolute; right: -10px; top: -10px; margin: 0 !important;" />
     </div>
     
     <span class="text-white mb-3">{{ t('contactLoginInfo') }}</span>
@@ -59,13 +59,13 @@
 import { defineComponent, ref, markRaw } from 'vue'
 import { useI18n } from '../../i18n/useI18n'
 import { apiClient } from '../../services/apiClient'
-import BaseButton from '../common/BaseSecondaryButton.vue'
-import IconCloseButton from '../common/IconCloseButton.vue'
+import SecondaryButton from '../common/AppButtonSecondary.vue'
+import AppIconButtonClose from '../common/AppIconButtonClose.vue'
 import AppSuccess from '../common/AppSuccess.vue'
 
 export default defineComponent({
   name: 'ContactPanel',
-  components: { BaseButton, IconCloseButton },
+  components: { SecondaryButton, AppIconButtonClose },
   emits: ['close', 'show-popup'],
 
   setup(_, { emit }) {

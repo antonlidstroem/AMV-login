@@ -10,13 +10,13 @@
       <AppSpinner />
     </div>
 
-    <StepIndicator :total-steps="2" :active-step="1" />
+    <AppStepIndicator :total-steps="2" :active-step="1" />
 
     <a href="#" @click.prevent="emit('change-view','login')" class="text-decoration-none fw-medium mb-4">{{ t('cancel') }}</a>
 
     <div class="d-flex justify-content-between align-items-center mt-3 mb-5">
-      <BackLink :label="t('back')" @click="emit('change-view','login')" />
-      <BankIdLink :label="t('aboutMobileBankID')" />
+      <AppBackLink :label="t('back')" @click="emit('change-view','login')" />
+      <AppBankIdLink :label="t('aboutMobileBankID')" />
     </div>
 
     <div class="divider mb-3"><h4>{{ t('orBankId') }}</h4></div>
@@ -33,11 +33,11 @@
 <script setup lang="ts">
 import { useI18n } from '../../../i18n/useI18n'
 import bankIdLogo from '../../../assets/bankid-logo-white.png'
-import BackLink from '../../common/BackLink.vue'
-import BankIdLink from '../../common/BankIdLink.vue'
+import AppBackLink from '../../common/AppBackLink.vue'
+import AppBankIdLink from '../../common/AppBankIdLink.vue'
 import AppLogo from '../../common/AppLogo.vue'
 import AppSpinner from '../../common/AppSpinner.vue'
-import StepIndicator from '../../common/StepIndicator.vue'
+import AppStepIndicator from '../../common/AppStepIndicator.vue'
 
 const { t } = useI18n()
 const isDev = import.meta.env.DEV

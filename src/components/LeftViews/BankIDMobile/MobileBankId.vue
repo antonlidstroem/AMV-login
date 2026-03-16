@@ -20,12 +20,12 @@
       </div>
     </div>
 
-    <StepIndicator :total-steps="3" :active-step="1" />
+    <AppStepIndicator :total-steps="3" :active-step="1" />
 
     <!-- Link row -->
     <div class="d-flex justify-content-between align-items-center mt-3">
-      <BackLink :label="t('back')" @click="goToBankIdDevice" />
-      <BankIdLink :label="t('aboutMobileBankID')" />
+      <AppBackLink :label="t('back')" @click="goToBankIdDevice" />
+      <AppBankIdLink :label="t('aboutMobileBankID')" />
     </div>
 
     <!-- Divider -->
@@ -56,10 +56,10 @@
 import { ref } from 'vue'
 import { useI18n } from '../../../i18n/useI18n'
 import bankIdLogo from '../../../assets/bankid-logo-white.png'
-import BackLink from '../../common/BackLink.vue'
-import BankIdLink from '../../common/BankIdLink.vue'
+import AppBackLink from '../../common/AppBackLink.vue'
+import AppBankIdLink from '../../common/AppBankIdLink.vue'
 import AppLogo from '../../common/AppLogo.vue'
-import StepIndicator from '../../common/StepIndicator.vue'
+import AppStepIndicator from '../../common/AppStepIndicator.vue'
 
 const { t } = useI18n()
 const isQrLoaded = ref(true)

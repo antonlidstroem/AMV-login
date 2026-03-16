@@ -265,7 +265,7 @@ label {
 .btn-custom:hover  { filter: brightness(1.1); }
 .btn-custom:active { transform: scale(0.98); }
 
-/* Secondary / overlay button (RPage top-controls) */
+/* Secondary / overlay button (AuthLayoutRight top-controls) */
 .btn-secondary-custom {
   /* FIX: was `rgbargba(0,0,0,0.4)` — invalid CSS (two function names merged).
      Corrected to rgba. */

@@ -6,7 +6,7 @@
     <p class="mb-4">{{ t('ResetPasswordEmailNotDeliveredHelp') }}</p>
 
     <button class="btn-custom mb-4" @click="send">{{ t('resendEmail') }}</button>
-    <BackLink :label="t('back')" @click="emit('change-view', 'login')" />
+    <AppBackLink :label="t('back')" @click="emit('change-view', 'login')" />
 
   </div>
 </template>
@@ -14,7 +14,7 @@
 <script setup lang="ts">
 import { markRaw } from 'vue' // 1. Importera markRaw
 import { useI18n } from '../../../i18n/useI18n'
-import BackLink from '../../common/BackLink.vue'
+import AppBackLink from '../../common/AppBackLink.vue'
 import AppSuccess from '../../common/AppSuccess.vue' // 2. Importera AppSuccess
 
 defineProps<{ email: string }>()

@@ -10,20 +10,20 @@
         class="d-none d-md-flex flex-fill"
         :currentView="currentView"
         @change-view="handleViewChange"
-        @show-password-demands="showDemandsInRPage = !showDemandsInRPage"
+        @show-password-demands="showDemandsInAuthLayoutRight = !showDemandsInAuthLayoutRight"
         @trigger-error="handleLoginError"
         @show-popup="handleShowPopup"
       />
 
       <div class="col-12 col-md-6 d-flex p-0">
-        <RPage
+        <AuthLayoutRight
           class="flex-fill d-flex flex-column"
           :currentView="currentView"
-          :externalShowDemands="showDemandsInRPage"
+          :externalShowDemands="showDemandsInAuthLayoutRight"
           :force-open-contact="contactTrigger"
           @change-view="handleViewChange"
           @contact-opened="contactTrigger = false"
-          @close-demands="showDemandsInRPage = false"
+          @close-demands="showDemandsInAuthLayoutRight = false"
           @show-popup="handleShowPopup"
         >
           <template #mobile-left>
@@ -34,18 +34,18 @@
                 :currentView="currentView"
                 @change-view="handleViewChange"
                 @trigger-error="handleLoginError"
-                @show-password-demands="showDemandsInRPage = !showDemandsInRPage"
+                @show-password-demands="showDemandsInAuthLayoutRight = !showDemandsInAuthLayoutRight"
                 @show-popup="handleShowPopup"
               />
             </div>
           </template>
-        </RPage>
+        </AuthLayoutRight>
       </div>
     </div>
 
     <LoginView v-else @logout="handleLogout" />
 
-    <ErrPopup
+    <AppPopupError
       v-model:visible="errorState.visible"
       :icon="errorState.icon"
       :message="errorState.message"
@@ -53,7 +53,7 @@
       @action="errorState.action"
     />
 
-    <GenericPopup
+    <AppPopupGeneric
       v-model:visible="popupState.visible"
       :title="popupState.title"
       :loading="popupState.loading"
@@ -71,7 +71,7 @@
           <i v-else-if="popupState.icon" :class="popupState.icon" key="icon"></i>
         </transition>
       </template>
-    </GenericPopup>
+    </AppPopupGeneric>
 
   </div>
 </template>
@@ -79,24 +79,25 @@
 <script lang="ts">
 import { defineComponent, ref, reactive } from 'vue'
 import AuthLayoutLeft from './components/AuthLayoutLeft.vue'
-import RPage from './components/RPage.vue'
+import AuthLayoutRight from './components/AuthLayoutRight.vue'
 import LoginView from './views/LoginView.vue'
-import ErrPopup from './components/common/Err-Popup.vue'
-import GenericPopup from './components/common/GenericPopup.vue'
+import AppPopupError from './components/common/AppPopupError.vue'
+import AppPopupGeneric from './components/common/AppPopupGeneric.vue'
 import AppSpinner from './components/common/AppSpinner.vue'
 import AppSuccess from './components/common/AppSuccess.vue'
 import type { ViewType } from './types/views'
 import { useAuthStore, type AuthUser } from './stores/auth'
 
 
+
 export default defineComponent({
   name: 'App',
-  components: { AuthLayoutLeft, RPage, LoginView, ErrPopup, GenericPopup, AppSpinner, AppSuccess },
+  components: { AuthLayoutLeft, AuthLayoutRight, LoginView, AppPopupError, AppPopupGeneric, AppSpinner, AppSuccess },
 
   setup() {
     const auth = useAuthStore()
     const currentView = ref<ViewType>('login')
-    const showDemandsInRPage = ref(false)
+    const showDemandsInAuthLayoutRight = ref(false)
     const contactTrigger = ref(false)
 
     const popupState = reactive({
@@ -166,7 +167,7 @@ export default defineComponent({
     return {
       auth,
       currentView,
-      showDemandsInRPage,
+      showDemandsInAuthLayoutRight,
       contactTrigger,
       popupState,
       errorState,

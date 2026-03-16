@@ -7,14 +7,14 @@
     <p class="mb-2">{{ t('email') }}:</p>
     <input v-model="email" class="form-control mb-3 form-size" :class="{ 'error-border': error }" placeholder="example@mail.com" type="email" autocomplete="email" />
     <button class="btn-custom mb-4" @click="sendEmail" type="button">{{ t('sendReset') }}</button>
-    <BackLink :label="t('back')" @click="goToLogin" />
+    <AppBackLink :label="t('back')" @click="goToLogin" />
   </div>
 </template>
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useI18n } from '../../../i18n/useI18n'
 import AMVLogo from '../../../assets/logo-horizontal.svg'
-import BackLink from '../../common/BackLink.vue'
+import AppBackLink from '../../common/AppBackLink.vue'
 const { t } = useI18n()
 const email = ref('')
 const error = ref(false)

@@ -2,7 +2,7 @@
 import { ref, reactive } from 'vue'
 import { useI18n } from '../../../i18n/useI18n'
 import { apiClient } from '../../../services/apiClient'
-import BackLink from '../../common/BackLink.vue'
+import AppBackLink from '../../common/AppBackLink.vue'
 import AppLogo from '../../common/AppLogo.vue'
 
 const emit = defineEmits(['change-view', 'show-popup'])
@@ -71,6 +71,6 @@ const onPaste = (e: ClipboardEvent) => {
              type="tel" class="text-center code-input" :class="{ 'error-border': error }"
              @input="onInput(i)" @paste.prevent="onPaste" />
     </div>
-    <BackLink :label="t('back')" @click="emit('change-view', 'login')" />
+    <AppBackLink :label="t('back')" @click="emit('change-view', 'login')" />
   </div>
 </template>
