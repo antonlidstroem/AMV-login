@@ -13,7 +13,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useI18n } from '../../../i18n/useI18n'
-import AMVLogo from '../../../assets/logo_horizontal.svg'
+import AMVLogo from '../../../assets/logo-horizontal.svg'
 import BackLink from '../../common/BackLink.vue'
 const { t } = useI18n()
 const email = ref('')
@@ -24,7 +24,7 @@ const isValidEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)
 const sendEmail = () => {
   if (!isValidEmail(email.value)) { error.value = true; return }
   error.value = false
-  // Fix: forward the email so LPage can store it and NoEmailReceived can use it
+  // Fix: forward the email so AuthLayoutLeft can store it and NoEmailReceived can use it
   emit('change-view', 'resetpasswordemail', email.value)
 }
 const goToLogin = () => emit('change-view', 'login')

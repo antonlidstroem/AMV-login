@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-lpage d-flex flex-column align-items-center justify-content-center h-100 rounded-4">
+  <div class="bg-AuthLayoutLeft d-flex flex-column align-items-center justify-content-center h-100 rounded-4">
     <div class="w-100 px-1">
       <div v-if="currentView === 'twofactor'" class="d-flex flex-column gap-3 w-100">
         <TwoFactor @change-view="handleChangeView" @show-popup="emit('show-popup', $event)" />
@@ -63,7 +63,7 @@ const VIEW_MAP: Record<string, any> = {
 const emailForNoEmailReceived = ref('')
 
 const handleChangeView = (view: ViewType, payload?: any) => {
-  // Om det är en sträng (e-post), spara den internt i LPage
+  // Om det är en sträng (e-post), spara den internt i AuthLayoutLeft
   if (typeof payload === 'string') {
     emailForNoEmailReceived.value = payload
   }

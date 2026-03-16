@@ -6,7 +6,7 @@
       class="main-container d-flex flex-column flex-md-row shadow rounded-5 w-100 p-0"
       style="max-width:1120px; width:100%;"
     >
-      <LPage
+      <AuthLayoutLeft
         class="d-none d-md-flex flex-fill"
         :currentView="currentView"
         @change-view="handleViewChange"
@@ -28,7 +28,7 @@
         >
           <template #mobile-left>
             <div class="d-flex d-md-none w-100 justify-content-center align-items-start py-3 px-2">
-              <LPage
+              <AuthLayoutLeft
                 class="w-100"
                 style="max-width: 460px; width: 100%;"
                 :currentView="currentView"
@@ -78,7 +78,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, reactive } from 'vue'
-import LPage from './components/LPage.vue'
+import AuthLayoutLeft from './components/AuthLayoutLeft.vue'
 import RPage from './components/RPage.vue'
 import LoginView from './views/LoginView.vue'
 import ErrPopup from './components/common/Err-Popup.vue'
@@ -91,7 +91,7 @@ import { useAuthStore, type AuthUser } from './stores/auth'
 
 export default defineComponent({
   name: 'App',
-  components: { LPage, RPage, LoginView, ErrPopup, GenericPopup, AppSpinner, AppSuccess },
+  components: { AuthLayoutLeft, RPage, LoginView, ErrPopup, GenericPopup, AppSpinner, AppSuccess },
 
   setup() {
     const auth = useAuthStore()

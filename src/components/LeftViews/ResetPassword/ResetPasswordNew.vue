@@ -25,7 +25,7 @@
 // 1. Importera markRaw från vue
 import { defineComponent, ref, computed, markRaw } from 'vue'
 import { useI18n } from '../../../i18n/useI18n'
-import AMVLogo from '../../../assets/logo_horizontal.svg'
+import AMVLogo from '../../../assets/logo-horizontal.svg'
 import PasswordCheck from '../../RightViews/PasswordDemands/PasswordCheck.vue'
 import AppSuccess from '../../common/AppSuccess.vue'
 import { passwordRules } from '../../RightViews/PasswordDemands/passwordRules'

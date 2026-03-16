@@ -79,7 +79,7 @@ import type { Lang } from '../i18n/useI18n'
 import ContactModal from './RightViews/ContactModal.vue'
 import HelpModal from './RightViews/HelpModal.vue'
 import PasswordDemands from './RightViews/PasswordDemands/PasswordDemands.vue'
-import bgImage from '../assets/RPageCard.jpg'
+import bgImage from '../assets/auth-background.jpg'
 
 const props = defineProps<{
   currentView: string,

@@ -32,7 +32,7 @@
 
 <script setup lang="ts">
 import { useI18n } from '../../../i18n/useI18n'
-import bankIdLogo from '../../../assets/BankID_logo_white.png'
+import bankIdLogo from '../../../assets/bankid-logo-white.png'
 import BackLink from '../../common/BackLink.vue'
 import BankIdLink from '../../common/BankIdLink.vue'
 import AppLogo from '../../common/AppLogo.vue'

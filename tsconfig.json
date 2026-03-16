@@ -4,7 +4,7 @@
   "exclude": ["node_modules"],
 
   "compilerOptions": {
-    // ... andra inställningar
+
     "types": ["vite/client"]
   }
 

@@ -94,7 +94,7 @@
 import { defineComponent, ref } from 'vue'
 import { apiClient } from '../../services/apiClient'
 import { useI18n } from '../../i18n/useI18n'
-import bankIdLogo from '../../assets/BankID_logo_white.png'
+import bankIdLogo from '../../assets/bankid-logo-white.png'
 import AppLogo from '../common/AppLogo.vue' // Dubbelkolla att sökvägen stämmer
 
 export default defineComponent({

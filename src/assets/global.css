@@ -4,7 +4,7 @@
    - Fixed rgbargba typo on .btn-secondary-custom
    - .logo-top margin-bottom: 60px → 28px (too tall on 846px panel)
    - .bankid-link added (was used but never defined)
-   - .bg-lpage gets horizontal padding on desktop
+   - .bg-AuthLayoutLeft gets horizontal padding on desktop
    - Mobile .bg-views: border-radius removed (full-width cards)
    - Removed duplicate .code-input and .btn-secondary-custom blocks
    - .divider fixed (no longer needs <br> inside)
@@ -137,9 +137,9 @@ label {
 }
 
 /* ================================================================
-   LEFT PANEL  (bg-lpage)
+   LEFT PANEL  (bg-AuthLayoutLeft)
    ================================================================ */
-.bg-lpage {
+.bg-AuthLayoutLeft {
   background: var(--background-gradient);
   /* FIX: horizontal padding so white form cards don't sit flush against
      the left-panel edge on desktop */
@@ -148,8 +148,8 @@ label {
 }
 
 @media (max-width: 768px) {
-  /* On mobile the LPage floats over the background image — transparent */
-  .bg-lpage {
+  /* On mobile the AuthLayoutLeft floats over the background image — transparent */
+  .bg-AuthLayoutLeft {
     background: transparent !important;
     padding: 0;
     overflow-y: visible;

@@ -3,7 +3,7 @@ import { createPinia } from 'pinia'
 import App from './App.vue'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'flag-icons/css/flag-icons.min.css'
-import './assets/styles.css'
+import './assets/global.css'
 import { router } from './router'
 
 async function prepareApp() {
