@@ -11,14 +11,14 @@
 
     
     <div v-if="!selectedTopic" class="d-flex flex-column gap-2 flex-grow-1 overflow-auto px-4">
-      <BaseButton v-for="topic in topics" :key="topic.id" :label="topic.label" class="w-100" @action="selectTopic(topic)" />
+      <SecondaryButton v-for="topic in topics" :key="topic.id" :label="topic.label" class="w-100" @action="selectTopic(topic)" />
     </div>
     <div v-else class="flex-column flex-grow-1 overflow-auto px-4">
       <p class="text-white">{{ selectedTopic.content }}</p>
     </div>
     <div class="d-flex justify-content-center align-items-center gap-3 mt-4">
-      <BaseButton v-if="selectedTopic" :label="t('goBack')" icon="bi bi-arrow-left" class="mt-auto px-4 btn-modal" @action="backToTopics" />
-      <BaseButton :label="t('closeWindow')" icon="bi bi-x-circle-fill" class="btn-modal" @action="close" />
+      <SecondaryButton v-if="selectedTopic" :label="t('goBack')" icon="bi bi-arrow-left" class="mt-auto px-4 btn-modal" @action="backToTopics" />
+      <SecondaryButton :label="t('closeWindow')" icon="bi bi-x-circle-fill" class="btn-modal" @action="close" />
     </div>
   </div>
 </template>
