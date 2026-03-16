@@ -35,7 +35,7 @@
       <hr class="flex-grow-1">
     </div>
 
-    <button @click="$emit('change-view', 'authbankidlocal')" class="btn-custom d-flex align-items-center justify-content-start gap-2 mb-3" type="button">
+    <button @click="$emit('change-view', 'auth-bankid-local')" class="btn-custom d-flex align-items-center justify-content-start gap-2 mb-3" type="button">
       <img :src="bankIdLogo" class="bankid-icon" alt="BankID" />
       {{ t('bankIDThisDevice') }}
     </button>
@@ -70,22 +70,16 @@ const emit = defineEmits<{
   (e: 'trigger-error'): void
 }>()
 
-/**
- * Bug fix: previously `isQrLoaded` was set to false and never reset,
- * leaving the spinner permanently visible after the error was dismissed.
- * Now we reset it after a short delay so the QR area recovers gracefully.
- */
+
 const simulateQrError = () => {
   isQrLoaded.value = false
   emit('trigger-error')
 
-  // Reset the QR view after the error popup has been acknowledged
-  // (give it 3 s — enough time for the user to see the popup)
   setTimeout(() => {
     isQrLoaded.value = true
   }, 3000)
 }
 
-const goToAuthBankIdLocal = () => emit('change-view', 'authbankidlocal')
-const simulatePending = () => emit('change-view', 'authbankidqrpending')
+const goToAuthBankIdLocal = () => emit('change-view', 'auth-bankid-local')
+const simulatePending = () => emit('change-view', 'auth-bankid-qr-pending')
 </script>

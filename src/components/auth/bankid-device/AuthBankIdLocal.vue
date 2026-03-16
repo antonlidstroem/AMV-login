@@ -26,7 +26,7 @@
       {{ t('mobileBankID') }}
     </button>
 
-    <button v-if="isDev" @click="emit('change-view','authbankidlocalsuccess')" class="btn-temp">Simulera lyckad inloggning</button>
+    <button v-if="isDev" @click="emit('change-view','auth-bankid-local-success')" class="btn-temp">Simulera lyckad inloggning</button>
   </div>
 </template>
 

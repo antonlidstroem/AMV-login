@@ -1,12 +1,12 @@
 <template>
   <div class="bg-AuthLayoutLeft d-flex flex-column align-items-center justify-content-center h-100 rounded-4">
     <div class="w-100 px-1">
-      <div v-if="currentView === 'auth2faverify'" class="d-flex flex-column gap-3 w-100">
+      <div v-if="currentView === 'auth-2fa-verify'" class="d-flex flex-column gap-3 w-100">
         <Auth2FAVerify @change-view="handleChangeView" @show-popup="emit('show-popup', $event)" />
         <Auth2FARetry @show-popup="emit('show-popup', $event)" />
       </div>
 
-      <div v-else-if="currentView === 'authpasswordresetsent'">
+      <div v-else-if="currentView === 'auth-password-reset-sent'">
         <div class="reset-password-wrapper d-flex flex-column">
           <AuthPasswordResetSent :email="emailForAuthPasswordResetRetry" @change-view="handleChangeView" />
           <AuthPasswordResetRetry :email="emailForAuthPasswordResetRetry" @change-view="handleChangeView" @show-popup="emit('show-popup', $event)" />
@@ -49,18 +49,19 @@ const emit = defineEmits(['change-view', 'show-password-demands', 'trigger-error
 
 const VIEW_MAP: Record<string, any> = {
   login: AuthLoginForm,
-  forgotpassword: AuthPasswordResetRequest,
-  authBankIdQr: AuthBankIdQr,
-  authbankidqrpending: AuthBankIdQrPending,
-  authbankidqrsuccess: AuthBankIdQrSuccess,
-  authbankidlocal: AuthBankIdLocal,
-  authbankidlocalsuccess: AuthBankIdLocalSuccess,
-  auth2faverify: Auth2FAVerify, 
-  newpassword: AuthPasswordResetForm,
-  authpasswordresetsent: AuthPasswordResetSent, 
-  auth2faretry: Auth2FARetry, 
-  authpasswordresetretry: AuthPasswordResetRetry 
+  'forgot-password': AuthPasswordResetRequest,
+  'auth-bankid-qr': AuthBankIdQr,
+  'auth-bankid-qr-pending': AuthBankIdQrPending,
+  'auth-bankid-qr-success': AuthBankIdQrSuccess,
+  'auth-bankid-local': AuthBankIdLocal,
+  'auth-bankid-local-success': AuthBankIdLocalSuccess,
+  'auth-2fa-verify': Auth2FAVerify, 
+  'new-password': AuthPasswordResetForm,
+  'auth-password-reset-sent': AuthPasswordResetSent, 
+  'auth-2fa-retry': Auth2FARetry, 
+  'auth-password-reset-retry': AuthPasswordResetRetry 
 }
+
 
 const emailForAuthPasswordResetRetry = ref('')
 

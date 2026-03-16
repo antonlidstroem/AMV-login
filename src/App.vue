@@ -34,7 +34,7 @@
             v-else-if="popupState.component" 
             :is="popupState.component" 
             color="white" 
-            :key="popupState.component.__name || 'comp'"
+            key="dynamic-content"
           />
           
           <i v-else-if="popupState.icon" :class="popupState.icon" key="icon"></i>
@@ -46,7 +46,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, Component as VueComponent } from 'vue'
+// FIX: Använd 'type' för Component-importen för att tillfredsställa verbatimModuleSyntax
+import { defineComponent, reactive, type Component as VueComponent } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from './modules/stores/auth'
 
@@ -119,7 +120,6 @@ export default defineComponent({
       popupState.buttons = config.buttons ?? []
       popupState.visible = config.visible !== undefined ? config.visible : true
 
-      // Stäng automatiskt om duration finns (t.ex. vid "Klart!")
       if (config.duration) {
         setTimeout(() => { 
           popupState.visible = false 
@@ -182,7 +182,7 @@ export default defineComponent({
 
 /* Bas-styling för att säkerställa att wrapper tar hela höjden */
 .page-wrapper {
-  background-color: #f8f9fa; /* Eller din önskade bakgrundsfärg */
+  background-color: #f8f9fa;
   overflow-x: hidden;
 }
 </style>

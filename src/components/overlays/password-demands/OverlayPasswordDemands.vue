@@ -38,11 +38,12 @@ export default defineComponent({
   name: 'PasswordDemands',
   emits: ['close'],
   components: { AppIconButtonClose, SecondaryButton },
-  setup() {
-    const { t, state } = useI18n()
-    const getRuleLabel = (key: RuleTranslationKey, value?: number | string): string => {
-      const lang = state.currentLang
-      const cur = passwordRuleTranslations[lang]
+  
+ setup() {
+  const { t, locale } = useI18n() // Byt state mot locale
+  const getRuleLabel = (key: RuleTranslationKey, value?: number | string): string => {
+    const lang = locale.value as 'sv' | 'en' // Använd locale.value
+    const cur = passwordRuleTranslations[lang]
       let text = cur ? cur[key] : (passwordRuleTranslations['sv']![key] || key)
       if (value !== undefined && text.includes('{n}')) text = text.replace('{n}', value.toString())
       return text
