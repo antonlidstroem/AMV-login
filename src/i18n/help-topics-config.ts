@@ -1,4 +1,4 @@
-import type { HelpTranslationKey } from './helpTranslations'
+import type { HelpTranslationKey } from './help-translations'
 export interface HelpTopicDefinition { id: string; labelKey: HelpTranslationKey; contentKey: HelpTranslationKey }
 export const helpTopics: HelpTopicDefinition[] = [
   { id: 'forgotPassword', labelKey: 'forgotPassword', contentKey: 'forgotPasswordHelp' },

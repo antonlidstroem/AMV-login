@@ -98,7 +98,7 @@ import bankIdLogo from '../../assets/bankid-logo-white.png'
 import AppLogo from '../common/AppLogo.vue' // Dubbelkolla att sökvägen stämmer
 
 export default defineComponent({
-  name: 'LoginForm',
+  name: 'AuthLoginForm',
   
   // Registrera den nya komponenten här
   components: { 

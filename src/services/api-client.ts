@@ -21,7 +21,7 @@ export const apiClient = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password })
     });
-    return handleResponse(res); // Returnerar user-objektet till LoginForm
+    return handleResponse(res); // Returnerar user-objektet till AuthLoginForm
   },
 
   async verifyCode(code: string) {

@@ -35,7 +35,7 @@ const { t } = useI18n()
 const isDev = import.meta.env.DEV
 
 const sentMessage = computed(() =>
-  props.email ? t('resetEmailSentMessage', { email: props.email }) : t('ResetPasswordEmailSent')
+  props.email ? t('resetEmailSentMessage', { email: props.email }) : t('resetPasswordEmailSent')
 )
 </script>
 

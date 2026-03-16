@@ -4,7 +4,7 @@
 
     <h2>{{ t('loginWithBankID') }}</h2>
 
-    <p>{{ t('SecurityCodeApproved') }}</p>
+    <p>{{ t('securityCodeApproved') }}</p>
 
     <div class="d-flex justify-content-center align-items-center mb-5" style="height: 118px;">
     <AppSuccess />

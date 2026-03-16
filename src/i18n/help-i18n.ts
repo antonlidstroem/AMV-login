@@ -1,5 +1,5 @@
 import { useI18n } from './useI18n'
-import { helpTranslations } from './helpTranslations'
+import { helpTranslations } from './help-translations'
 
 export function useHelpI18n() {
   const { state } = useI18n()

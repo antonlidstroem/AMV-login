@@ -29,7 +29,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import type { ViewType } from '../types/views'
-import LoginForm from './LeftViews/LoginForm.vue'
+import AuthLoginForm from './LeftViews/AuthLoginForm.vue'
 import AuthPasswordResetRequest from './LeftViews/ResetPassword/AuthPasswordResetRequest.vue'
 import AuthPasswordResetSent from './LeftViews/ResetPassword/AuthPasswordResetSent.vue'
 import AuthPasswordResetForm from './LeftViews/ResetPassword/AuthPasswordResetForm.vue'
@@ -46,7 +46,7 @@ const props = defineProps<{ currentView: ViewType }>()
 const emit = defineEmits(['change-view', 'show-password-demands', 'trigger-error', 'show-popup'])
 
 const VIEW_MAP: Record<string, any> = {
-  login: LoginForm,
+  login: AuthLoginForm,
   forgot: AuthPasswordResetRequest,
   mobilebankid: MobileBankId,
   authbankidqrpending: AuthBankIdQrPending,
