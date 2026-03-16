@@ -24,7 +24,7 @@
 
     <!-- Link row -->
     <div class="d-flex justify-content-between align-items-center mt-3">
-      <AppBackLink :label="t('back')" @click="goToBankIdDevice" />
+      <AppBackLink :label="t('back')" @click="goToAuthBankIdLocal" />
       <AppBankIdLink :label="t('aboutMobileBankID')" />
     </div>
 
@@ -35,7 +35,7 @@
       <hr class="flex-grow-1">
     </div>
 
-    <button @click="$emit('change-view', 'bankiddevice')" class="btn-custom d-flex align-items-center justify-content-start gap-2 mb-3" type="button">
+    <button @click="$emit('change-view', 'authbankidlocal')" class="btn-custom d-flex align-items-center justify-content-start gap-2 mb-3" type="button">
       <img :src="bankIdLogo" class="bankid-icon" alt="BankID" />
       {{ t('bankIDThisDevice') }}
     </button>
@@ -86,6 +86,6 @@ const simulateQrError = () => {
   }, 3000)
 }
 
-const goToBankIdDevice = () => emit('change-view', 'bankiddevice')
+const goToAuthBankIdLocal = () => emit('change-view', 'authbankidlocal')
 const simulatePending = () => emit('change-view', 'mobilebankidpending')
 </script>

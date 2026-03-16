@@ -65,7 +65,7 @@
         </button>
 
         <button
-          @click.prevent="changeView('bankiddevice')"
+          @click.prevent="changeView('authbankidlocal')"
           class="btn-custom d-flex align-items-center justify-content-start gap-2"
           type="button"
         >

@@ -18,7 +18,7 @@
     
     <div class="divider my-3"><hr class="flex-grow-1"><span class="px-2 small">{{ t('or') }}</span><hr class="flex-grow-1"></div>
    
-    <button @click="goToBankIdDevice" class="btn-custom d-flex align-items-center justify-content-start gap-2 mb-3" type="button">
+    <button @click="goToAuthBankIdLocal" class="btn-custom d-flex align-items-center justify-content-start gap-2 mb-3" type="button">
       <img :src="bankIdLogo" class="bankid-icon" alt="BankID" />{{ t('bankIDThisDevice') }}
     </button>
     
@@ -42,6 +42,6 @@ const { t } = useI18n()
 const isDev = import.meta.env.DEV
 const emit = defineEmits<{ (e: 'change-view', view: string): void; (e: 'trigger-error'): void }>()
 const goToLogin = () => emit('change-view', 'login')
-const goToBankIdDevice = () => emit('change-view', 'bankiddevice')
+const goToAuthBankIdLocal = () => emit('change-view', 'authbankidlocal')
 const simulateSuccess = () => emit('change-view', 'mobilebankidapproved')
 </script>
