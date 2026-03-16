@@ -1,4 +1,4 @@
-import type { RuleTranslationKey } from '../../../i18n/password-rules-translations';
+import type { RuleTranslationKey } from '../../../modules/i18n/password-rules-translations';
 
 export const passwordConfig = {
   minLength: 6,

@@ -28,7 +28,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import type { ViewType } from '../types/views'
+import type { ViewType } from '../modules/types/views'
 import AuthLoginForm from './LeftViews/AuthLoginForm.vue'
 import AuthPasswordResetRequest from './LeftViews/ResetPassword/AuthPasswordResetRequest.vue'
 import AuthPasswordResetSent from './LeftViews/ResetPassword/AuthPasswordResetSent.vue'
@@ -45,6 +45,8 @@ import AuthBankIdQrSuccess from './LeftViews/BankIDMobile/AuthBankIdQrSuccess.vu
 const props = defineProps<{ currentView: ViewType }>()
 const emit = defineEmits(['change-view', 'show-password-demands', 'trigger-error', 'show-popup'])
 
+// src/components/AuthLayoutLeft.vue
+
 const VIEW_MAP: Record<string, any> = {
   login: AuthLoginForm,
   forgot: AuthPasswordResetRequest,
@@ -53,11 +55,11 @@ const VIEW_MAP: Record<string, any> = {
   authbankidqrsuccess: AuthBankIdQrSuccess,
   authbankidlocal: AuthBankIdLocal,
   authbankidlocalsuccess: AuthBankIdLocalSuccess,
-  auth2FAVerify: Auth2FAVerify,
+  auth2faverify: Auth2FAVerify, // Fixat: gemener
   newpassword: AuthPasswordResetForm,
-  authPasswordResetSent: AuthPasswordResetSent,
-  auth2FARetry: Auth2FARetry,
-  authPasswordResetRetry: AuthPasswordResetRetry
+  authpasswordresetsent: AuthPasswordResetSent, // Fixat: gemener
+  auth2faretry: Auth2FARetry, // Fixat: gemener
+  authpasswordresetretry: AuthPasswordResetRetry // Fixat: gemener
 }
 
 const emailForAuthPasswordResetRetry = ref('')

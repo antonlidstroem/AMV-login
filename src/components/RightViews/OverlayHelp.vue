@@ -24,10 +24,10 @@
 </template>
 <script lang="ts">
 import { defineComponent, ref, computed } from 'vue'
-import { useI18n } from '../../i18n/useI18n'
-import { useHelpI18n } from '../../i18n/help-i18n'
-import { helpTopics } from '../../i18n/help-topics-config'
-import type { HelpTopicDefinition } from '../../i18n/help-topics-config'
+import { useI18n } from '../../modules/i18n/useI18n'
+import { useHelpI18n } from '../../modules/i18n/help-i18n'
+import { helpTopics } from '../../modules/i18n/help-topics-config'
+import type { HelpTopicDefinition } from '../../modules/i18n/help-topics-config'
 import AppIconButtonClose from '../common/AppIconButtonClose.vue'
 import SecondaryButton from '../common/AppButtonSecondary.vue'
 

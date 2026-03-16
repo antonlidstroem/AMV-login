@@ -27,11 +27,11 @@
 
 <script setup lang="ts">
 import { onMounted } from 'vue' // Importera onMounted
-import { useI18n } from '../../../i18n/useI18n'
+import { useI18n } from '../../../modules/i18n/useI18n'
 import AppLogo from '../../common/AppLogo.vue'
 import AppSuccess from '../../common/AppSuccess.vue'
 import AppStepIndicator from '../../common/AppStepIndicator.vue'
-import type { AuthUser } from '../../../stores/auth'
+import type { AuthUser } from '../../../modules/stores/auth'
 
 const { t } = useI18n()
 const emit = defineEmits<{ 

@@ -46,7 +46,7 @@
 <script lang="ts">
 import { defineComponent, reactive } from 'vue'
 import { useRouter } from 'vue-router'
-import { useAuthStore } from './stores/auth'
+import { useAuthStore } from './modules/stores/auth'
 
 // Komponenter för popups
 import AppPopupError from './components/common/AppPopupError.vue'

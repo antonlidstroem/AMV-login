@@ -12,7 +12,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useI18n } from '../../../i18n/useI18n'
+import { useI18n } from '../../../modules/i18n/useI18n'
 import AMVLogo from '../../../assets/logo-horizontal.svg'
 import AppBackLink from '../../common/AppBackLink.vue'
 const { t } = useI18n()

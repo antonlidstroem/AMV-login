@@ -47,7 +47,7 @@
       <button type="submit" class="btn-custom border border-white mt-2">{{ t('sendMessage') }}</button>
       
       <div class="text-center mt-auto pt-3">
-        <BaseButton :label="t('closeWindow')" icon="bi bi-x-circle-fill" class="btn-modal mx-auto" @action="close" />
+        <SecondaryButton :label="t('closeWindow')" icon="bi bi-x-circle-fill" class="btn-modal mx-auto" @action="close" />
       </div>
     </form>
   </div>
@@ -57,8 +57,8 @@
 
 <script lang="ts">
 import { defineComponent, ref, markRaw } from 'vue'
-import { useI18n } from '../../i18n/useI18n'
-import { apiClient } from '../../services/api-client'
+import { useI18n } from '../../modules/i18n/useI18n'
+import { apiClient } from '../../modules/services/api-client'
 import SecondaryButton from '../common/AppButtonSecondary.vue'
 import AppIconButtonClose from '../common/AppIconButtonClose.vue'
 import AppSuccess from '../common/AppSuccess.vue'

@@ -4,11 +4,11 @@ import App from './App.vue'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'flag-icons/css/flag-icons.min.css'
 import './assets/global.css'
-import { router } from './router'
+import { router } from './modules/router'
 
 async function prepareApp() {
   if (import.meta.env.DEV) {
-    const { worker } = await import('./mock/browser')
+    const { worker } = await import('./modules/mock/browser')
     
     // Notera måsvingarna runt hela objektet här:
     return worker.start({
