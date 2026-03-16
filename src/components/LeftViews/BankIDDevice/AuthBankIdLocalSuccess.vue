@@ -6,16 +6,11 @@
 
     <p>{{ t('SecurityCodeApproved') }}</p>
 
- 
-      <div class="d-flex justify-content-center align-items-center mb-5" style="height: 118px;">
-      <AppSuccess />
-      </div>
+    <div class="d-flex justify-content-center align-items-center mb-5" style="height: 118px;">
+    <AppSuccess />
+    </div>
 
-      <AppStepIndicator :total-steps="2" :active-step="2" />
-
-<button v-if="isDev" @click="emit('change-view', 'dashboard-view')" class="btn-temp" type="button">
-      Simulera lyckad inloggning (Dev)
-    </button>
+    <AppStepIndicator :total-steps="2" :active-step="2" />
 
   </div>
 </template>

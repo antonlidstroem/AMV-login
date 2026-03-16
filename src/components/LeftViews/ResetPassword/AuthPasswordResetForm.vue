@@ -32,7 +32,7 @@ import { passwordRules } from '../../RightViews/PasswordDemands/password-rules'
 import { apiClient } from '../../../services/api-client'
 
 export default defineComponent({
-  name: 'ResetPasswordNew',
+  name: 'AuthPasswordResetForm',
   components: { AuthPasswordCheck },
   emits: ['change-view', 'show-password-demands', 'show-popup'],
   

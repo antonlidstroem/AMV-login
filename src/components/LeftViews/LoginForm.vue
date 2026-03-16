@@ -128,7 +128,7 @@ export default defineComponent({
         emit('show-popup', { visible: false })
 
         // 2. Skicka med response.user som payload!
-        emit('change-view', 'twofactor', response.user) 
+        emit('change-view', 'auth2faverify', response.user) 
         
       } catch (err) {
         emit('show-popup', { visible: false })

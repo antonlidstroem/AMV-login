@@ -1,49 +1,16 @@
 <template>
   <div class="page-wrapper min-vh-100 d-md-flex justify-content-md-center align-items-md-center">
-
-    <div
-      v-if="!auth.isLoggedIn"
-      class="main-container d-flex flex-column flex-md-row shadow rounded-5 w-100 p-0"
-      style="max-width:1120px; width:100%;"
+    
+    <router-view 
+      v-slot="{ Component }"
+      @show-popup="handleShowPopup"
+      @trigger-error="handleLoginError"
+      @logout="handleLogout"
     >
-      <AuthLayoutLeft
-        class="d-none d-md-flex flex-fill"
-        :currentView="currentView"
-        @change-view="handleViewChange"
-        @show-password-demands="showDemandsInAuthLayoutRight = !showDemandsInAuthLayoutRight"
-        @trigger-error="handleLoginError"
-        @show-popup="handleShowPopup"
-      />
-
-      <div class="col-12 col-md-6 d-flex p-0">
-        <AuthLayoutRight
-          class="flex-fill d-flex flex-column"
-          :currentView="currentView"
-          :externalShowDemands="showDemandsInAuthLayoutRight"
-          :force-open-contact="contactTrigger"
-          @change-view="handleViewChange"
-          @contact-opened="contactTrigger = false"
-          @close-demands="showDemandsInAuthLayoutRight = false"
-          @show-popup="handleShowPopup"
-        >
-          <template #mobile-left>
-            <div class="d-flex d-md-none w-100 justify-content-center align-items-start py-3 px-2">
-              <AuthLayoutLeft
-                class="w-100"
-                style="max-width: 460px; width: 100%;"
-                :currentView="currentView"
-                @change-view="handleViewChange"
-                @trigger-error="handleLoginError"
-                @show-password-demands="showDemandsInAuthLayoutRight = !showDemandsInAuthLayoutRight"
-                @show-popup="handleShowPopup"
-              />
-            </div>
-          </template>
-        </AuthLayoutRight>
-      </div>
-    </div>
-
-    <DashboardView v-else @logout="handleLogout" />
+      <transition name="fade" mode="out-in">
+        <component :is="Component" />
+      </transition>
+    </router-view>
 
     <AppPopupError
       v-model:visible="errorState.visible"
@@ -66,7 +33,7 @@
             v-else-if="popupState.component" 
             :is="popupState.component" 
             color="white" 
-            :key="popupState.component ? popupState.component.__name || popupState.component.name : 'none'"
+            :key="popupState.component.__name || 'comp'"
           />
           <i v-else-if="popupState.icon" :class="popupState.icon" key="icon"></i>
         </transition>
@@ -77,39 +44,40 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive } from 'vue'
-import AuthLayoutLeft from './components/AuthLayoutLeft.vue'
-import AuthLayoutRight from './components/AuthLayoutRight.vue'
-import DashboardView from './views/DashboardView.vue'
+import { defineComponent, reactive } from 'vue'
+import { useRouter } from 'vue-router'
+import { useAuthStore } from './stores/auth'
+
+// Komponenter för popups
 import AppPopupError from './components/common/AppPopupError.vue'
 import AppPopupGeneric from './components/common/AppPopupGeneric.vue'
 import AppSpinner from './components/common/AppSpinner.vue'
 import AppSuccess from './components/common/AppSuccess.vue'
-import type { ViewType } from './types/views'
-import { useAuthStore, type AuthUser } from './stores/auth'
-
-
-
 
 export default defineComponent({
   name: 'App',
-  components: { AuthLayoutLeft, AuthLayoutRight, DashboardView, AppPopupError, AppPopupGeneric, AppSpinner, AppSuccess },
+  components: { 
+    AppPopupError, 
+    AppPopupGeneric, 
+    AppSpinner, 
+    AppSuccess 
+  },
 
   setup() {
     const auth = useAuthStore()
-    const currentView = ref<ViewType>('login')
-    const showDemandsInAuthLayoutRight = ref(false)
-    const contactTrigger = ref(false)
+    const router = useRouter()
 
+    // Globalt state för vanliga popups (t.ex. "Skickar...")
     const popupState = reactive({
       visible: false,
       title: '',
       loading: false,
-      component: null as any, 
+      component: null as any,
       icon: '',
       buttons: [] as any[]
     })
 
+    // Globalt state för felmeddelanden (t.ex. BankID-strul)
     const errorState = reactive({
       visible: false,
       icon: '',
@@ -118,33 +86,17 @@ export default defineComponent({
       action: () => {}
     })
 
-    const handleViewChange = (view: ViewType, payload?: AuthUser) => {
-      // Om vi får med en användare i eventet (t.ex. från Login-steget), 
-      // spara den som 'pending' i storen.
-      if (payload) {
-        console.log("Saving pending user:", payload);
-        auth.setPendingUser(payload)
-      }
-
-      // Om vyn vi byter till är 'home' (eller efter lyckad verifiering),
-      // aktivera den riktiga inloggningen i storen.
-      if (view === 'authenticated-view') { 
-        auth.confirmLogin()
-        console.log("Login confirmed. Status:", auth.isLoggedIn);
-      }
-
-      currentView.value = view
-    }
-
+    // Hanterar logga ut och skickar användaren till start
     const handleLogout = () => {
       auth.logout()
-      currentView.value = 'login'
+      router.push('/')
     }
 
+    // Öppnar den generiska popupen (anropas via emit från vyer)
     const handleShowPopup = (config: any) => {
       popupState.title = config.title ?? ''
       popupState.loading = config.loading ?? false
-      popupState.component = config.component ?? null 
+      popupState.component = config.component ?? null
       popupState.icon = config.icon ?? ''
       popupState.buttons = config.buttons ?? []
       popupState.visible = config.visible !== undefined ? config.visible : true
@@ -154,31 +106,42 @@ export default defineComponent({
       }
     }
 
-    const handleLoginError = () => {
+    // Visar felmeddelandet (t.ex. om BankID misslyckas)
+    const handleLoginError = (payload?: any) => {
       errorState.icon = 'bi bi-shield-exclamation'
       errorState.message = 'Inloggningen misslyckades. Kontrollera att du har BankID-appen öppen.'
       errorState.buttonLabel = 'Kontakta support'
       errorState.visible = true
       errorState.action = () => {
         errorState.visible = false
-        contactTrigger.value = true
+        // Om vi vill trigga något i vyn (t.ex. öppna kontakt-overlay)
+        if (payload?.triggerContact) {
+            // Här kan vi lägga logik om det behövs
+        }
       }
     }
 
     return {
       auth,
-      currentView,
-      showDemandsInAuthLayoutRight,
-      contactTrigger,
       popupState,
       errorState,
-      handleViewChange,
       handleLogout,
       handleShowPopup,
-      handleLoginError,
-      AppSpinner
-      
+      handleLoginError
     }
   }
 })
 </script>
+
+<style>
+/* Enkel transition för sidbyten */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>

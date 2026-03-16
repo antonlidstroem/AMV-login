@@ -18,14 +18,14 @@ import AppBackLink from '../../common/AppBackLink.vue'
 const { t } = useI18n()
 const email = ref('')
 const error = ref(false)
-type ViewType = 'login' | 'resetpasswordemail' | 'noemailreceived'
+type ViewType = 'login' | 'authpasswordresetsent' | 'authpasswordresetretry'
 const emit = defineEmits<{ (e: 'change-view', view: ViewType, email?: string): void }>()
 const isValidEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)
 const sendEmail = () => {
   if (!isValidEmail(email.value)) { error.value = true; return }
   error.value = false
-  // Fix: forward the email so AuthLayoutLeft can store it and NoEmailReceived can use it
-  emit('change-view', 'resetpasswordemail', email.value)
+  // Fix: forward the email so AuthLayoutLeft can store it and AuthPasswordResetRetry can use it
+  emit('change-view', 'authpasswordresetsent', email.value)
 }
 const goToLogin = () => emit('change-view', 'login')
 </script>
