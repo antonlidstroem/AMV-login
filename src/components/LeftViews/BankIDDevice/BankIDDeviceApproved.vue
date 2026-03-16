@@ -13,7 +13,7 @@
 
       <AppStepIndicator :total-steps="2" :active-step="2" />
 
-<button v-if="isDev" @click="emit('change-view', 'loginview')" class="btn-temp" type="button">
+<button v-if="isDev" @click="emit('change-view', 'dashboard-view')" class="btn-temp" type="button">
       Simulera lyckad inloggning (Dev)
     </button>
 

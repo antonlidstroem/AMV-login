@@ -43,7 +43,7 @@
       </div>
     </div>
 
-    <LoginView v-else @logout="handleLogout" />
+    <DashboardView v-else @logout="handleLogout" />
 
     <AppPopupError
       v-model:visible="errorState.visible"
@@ -80,7 +80,7 @@
 import { defineComponent, ref, reactive } from 'vue'
 import AuthLayoutLeft from './components/AuthLayoutLeft.vue'
 import AuthLayoutRight from './components/AuthLayoutRight.vue'
-import LoginView from './views/LoginView.vue'
+import DashboardView from './views/DashboardView.vue'
 import AppPopupError from './components/common/AppPopupError.vue'
 import AppPopupGeneric from './components/common/AppPopupGeneric.vue'
 import AppSpinner from './components/common/AppSpinner.vue'
@@ -90,9 +90,10 @@ import { useAuthStore, type AuthUser } from './stores/auth'
 
 
 
+
 export default defineComponent({
   name: 'App',
-  components: { AuthLayoutLeft, AuthLayoutRight, LoginView, AppPopupError, AppPopupGeneric, AppSpinner, AppSuccess },
+  components: { AuthLayoutLeft, AuthLayoutRight, DashboardView, AppPopupError, AppPopupGeneric, AppSpinner, AppSuccess },
 
   setup() {
     const auth = useAuthStore()

@@ -24,7 +24,7 @@ const verify = async () => {
     await apiClient.verifyCode(code)
     emit('show-popup', { visible: false })
       
-    // Ändra från 'loginview' till 'authenticated-view' 
+    // Ändra från 'DashboardView' till 'authenticated-view' 
     // så att App.vue vet att det är dags att logga in på riktigt
     emit('change-view', 'authenticated-view') 
     
