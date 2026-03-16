@@ -13,6 +13,9 @@ export const useAuthStore = defineStore('auth', {
     user: null as AuthUser | null,
     pendingUser: null as AuthUser | null 
   }),
+
+
+
   actions: {
     setPendingUser(user: AuthUser) {
       this.pendingUser = user
