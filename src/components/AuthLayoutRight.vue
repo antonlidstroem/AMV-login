@@ -46,20 +46,20 @@
 
     <div class="scrollable-content">
       <div class="content-padding">
-        <ContactModal 
+        <OverlayContact 
           v-if="showContact" 
           @close="showContact = false" 
           @show-popup="emit('show-popup', $event)" 
         />
         
-        <HelpModal 
+        <OverlayHelp 
           v-if="showHelp" 
           @close="showHelp = false" 
         />
         
-        <PasswordDemands 
-          v-if="showPasswordDemands" 
-          @close="handleClosePasswordDemands" 
+        <OverlayPasswordDemands 
+          v-if="showOverlayPasswordDemands" 
+          @close="handleCloseOverlayPasswordDemands" 
           @show-popup="emit('show-popup', $event)" 
         />
 
@@ -76,9 +76,9 @@
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import { useI18n } from '../i18n/useI18n'
 import type { Lang } from '../i18n/useI18n'
-import ContactModal from './RightViews/ContactModal.vue'
-import HelpModal from './RightViews/HelpModal.vue'
-import PasswordDemands from './RightViews/PasswordDemands/PasswordDemands.vue'
+import OverlayContact from './RightViews/OverlayContact.vue'
+import OverlayHelp from './RightViews/OverlayHelp.vue'
+import OverlayPasswordDemands from './RightViews/PasswordDemands/OverlayPasswordDemands.vue'
 import bgImage from '../assets/auth-background.jpg'
 
 const props = defineProps<{
@@ -97,7 +97,7 @@ const showContact = ref(false)
 const showHelp = ref(false)
 const showLanguageMenu = ref(false)
 const showActionMenu = ref(false)
-const showPasswordDemands = ref(false)
+const showOverlayPasswordDemands = ref(false)
 
 const backgroundStyle = computed(() => ({
   backgroundImage: `url(${bgImage})`,
@@ -107,26 +107,26 @@ const backgroundStyle = computed(() => ({
 }))
 
 watch(() => props.externalShowDemands, (newVal) => {
-  showPasswordDemands.value = !!newVal
+  showOverlayPasswordDemands.value = !!newVal
   if (newVal) { showContact.value = false; showHelp.value = false; }
 })
 
 watch(() => props.forceOpenContact, (newVal) => {
   if (newVal) {
-    showContact.value = true; showHelp.value = false; showPasswordDemands.value = false;
+    showContact.value = true; showHelp.value = false; showOverlayPasswordDemands.value = false;
     emit('contact-opened')
   }
 })
 
 const toggleContact = () => {
   showContact.value = !showContact.value
-  if (showContact.value) { showHelp.value = false; showPasswordDemands.value = false; emit('close-demands'); }
+  if (showContact.value) { showHelp.value = false; showOverlayPasswordDemands.value = false; emit('close-demands'); }
   showLanguageMenu.value = false
 }
 
 const toggleHelp = () => {
   showHelp.value = !showHelp.value
-  if (showHelp.value) { showContact.value = false; showPasswordDemands.value = false; emit('close-demands'); }
+  if (showHelp.value) { showContact.value = false; showOverlayPasswordDemands.value = false; emit('close-demands'); }
   showLanguageMenu.value = false
 }
 
@@ -137,7 +137,7 @@ const selectLanguage = (langCode: string) => {
 
 const handleMobileContact = () => { showActionMenu.value = false; toggleContact(); }
 const handleMobileHelp = () => { showActionMenu.value = false; toggleHelp(); }
-const handleClosePasswordDemands = () => { showPasswordDemands.value = false; emit('close-demands'); }
+const handleCloseOverlayPasswordDemands = () => { showOverlayPasswordDemands.value = false; emit('close-demands'); }
 
 const handleGlobalClick = (e: MouseEvent) => {
   const target = e.target as HTMLElement
@@ -148,7 +148,7 @@ const handleGlobalClick = (e: MouseEvent) => {
 onMounted(() => document.addEventListener('click', handleGlobalClick, true))
 onUnmounted(() => document.removeEventListener('click', handleGlobalClick, true))
 
-const shouldHideMobileContent = computed(() => showContact.value || showHelp.value || showPasswordDemands.value)
+const shouldHideMobileContent = computed(() => showContact.value || showHelp.value || showOverlayPasswordDemands.value)
 </script>
 
 <style scoped>

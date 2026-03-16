@@ -17,7 +17,7 @@ import { useI18n } from '../../../i18n/useI18n'
 import { passwordRuleTranslations } from '../../../i18n/passwordRulesI18n'
 import type { RuleTranslationKey } from '../../../i18n/passwordRulesI18n'
 export default defineComponent({
-  name: 'PasswordCheck',
+  name: 'AuthPasswordCheck',
   props: { password: { type: String, required: true } },
   setup() {
     const { t, state } = useI18n()

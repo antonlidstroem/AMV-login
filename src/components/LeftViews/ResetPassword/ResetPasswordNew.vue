@@ -5,7 +5,7 @@
     
     <div v-if="errorMsg" class="error-banner mb-3">{{ errorMsg }}</div>
 
-    <PasswordCheck v-if="shouldShowValidation" :password="p1" />
+    <AuthPasswordCheck v-if="shouldShowValidation" :password="p1" />
 
     <label class="mb-2">{{ t('newPassword') }}</label>
     <input type="password" v-model="p1" class="form-control mb-2" :class="inputClass" autocomplete="new-password" />
@@ -26,14 +26,14 @@
 import { defineComponent, ref, computed, markRaw } from 'vue'
 import { useI18n } from '../../../i18n/useI18n'
 import AMVLogo from '../../../assets/logo-horizontal.svg'
-import PasswordCheck from '../../RightViews/PasswordDemands/PasswordCheck.vue'
+import AuthPasswordCheck from '../../RightViews/PasswordDemands/AuthPasswordCheck.vue'
 import AppSuccess from '../../common/AppSuccess.vue'
 import { passwordRules } from '../../RightViews/PasswordDemands/passwordRules'
 import { apiClient } from '../../../services/apiClient'
 
 export default defineComponent({
   name: 'ResetPasswordNew',
-  components: { PasswordCheck },
+  components: { AuthPasswordCheck },
   emits: ['change-view', 'show-password-demands', 'show-popup'],
   
   setup(_, { emit }) {
