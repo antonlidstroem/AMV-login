@@ -1,53 +1,52 @@
-// En liten hjälpfunktion för att hantera responsen centralt
-async function handleResponse(res: Response) {
-  if (!res.ok) {
-    // Försök hämta felmeddelande från backend, annars fallback
-    const errorData = await res.json().catch(() => ({}));
-    throw {
-      status: res.status,
-      message: errorData.message || 'Ett oväntat fel uppstod'
-    };
-  }
-  // Om det är 204 No Content (vanligt vid vissa POSTs), returnera inget
-  if (res.status === 204) return null;
-  
-  return res.json();
+import axios from 'axios'
+
+// --- 1. Definiera typerna för dina svar ---
+export interface AuthUser {
+  id: string;
+  username: string;
+  // Lägg till fler fält om din backend skickar mer (t.ex. email, roll)
 }
 
-export const apiClient = {
-  async login(username: string, password: string) {
-    const res = await fetch('/api/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password })
-    });
-    return handleResponse(res); // Returnerar user-objektet till AuthLoginForm
-  },
+export interface LoginResponse {
+  user: AuthUser;
+  token?: string;
+}
 
-  async verifyCode(code: string) {
-    const res = await fetch('/api/verify-code', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ code })
-    });
-    return handleResponse(res);
-  },
+// --- 2. Skapa instansen ---
+const api = axios.create({
+  baseURL: '/api', 
+  headers: { 'Content-Type': 'application/json' }
+})
 
-  async resetPassword(password: string) {
-    const res = await fetch('/api/reset-password', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ password })
-    });
-    return handleResponse(res);
+// --- 3. Interceptor (Unwrapper) ---
+api.interceptors.response.use(
+  (response) => {
+    if (response.status === 204) return null
+    return response.data // Här skalar vi av Axios-skalet
   },
-
-  async sendContactMessage(payload: { name: string; email: string; message: string }) {
-    const res = await fetch('/api/contact', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-    return handleResponse(res);
+  (error) => {
+    const message = error.response?.data?.message || 'Ett oväntat fel uppstod'
+    return Promise.reject({ 
+      status: error.response?.status, 
+      message 
+    })
   }
-};
+)
+
+// --- 4. Exportera klienten med typer ---
+export const apiClient = {
+  // Vi använder "as unknown as Promise<...>" för att tvinga TS att förstå 
+  // att interceptorn har ändrat returtypen från AxiosResponse till ren data.
+  
+  login: (username: string, password: string) => 
+    api.post('/login', { username, password }) as unknown as Promise<LoginResponse>,
+
+  verifyCode: (code: string) => 
+    api.post('/verify-code', { code }) as unknown as Promise<{ success: boolean }>,
+
+  resetPassword: (password: string) => 
+    api.post('/reset-password', { password }) as unknown as Promise<{ success: boolean }>,
+
+  sendContactMessage: (payload: { name: string; email: string; message: string }) => 
+    api.post('/contact', payload) as unknown as Promise<{ message: string }>
+}

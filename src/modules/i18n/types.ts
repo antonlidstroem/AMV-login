@@ -80,4 +80,6 @@ export interface BaseTranslations {
   writeMessage: string;
   yourMessage: string;
   wait: string;
+
+  [key: string]: string | any;
 }

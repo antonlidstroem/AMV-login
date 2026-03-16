@@ -24,7 +24,7 @@
 <script lang="ts">
 // 1. Importera markRaw från vue
 import { defineComponent, ref, computed, markRaw } from 'vue'
-import { useI18n } from '../../../modules/i18n/useI18n'
+import { useI18n } from 'vue-i18n'
 import AMVLogo from '../../../assets/logo-horizontal.svg'
 import AuthPasswordCheck from '../../overlays/password-demands/AuthPasswordCheck.vue'
 import AppSuccess from '../../common/AppSuccess.vue'

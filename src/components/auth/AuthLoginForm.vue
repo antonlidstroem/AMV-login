@@ -93,7 +93,7 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import { apiClient } from '../../modules/services/api-client'
-import { useI18n } from '../../modules/i18n/useI18n'
+import { useI18n } from 'vue-i18n'
 import bankIdLogo from '../../assets/bankid-logo-white.png'
 import AppLogo from '../common/AppLogo.vue' 
 

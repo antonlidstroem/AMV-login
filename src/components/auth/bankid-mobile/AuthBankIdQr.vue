@@ -54,7 +54,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useI18n } from '../../../modules/i18n/useI18n'
+import { useI18n } from 'vue-i18n'
 import bankIdLogo from '../../../assets/bankid-logo-white.png'
 import AppBackLink from '../../common/AppBackLink.vue'
 import AppBankIdLink from '../../common/AppBankIdLink.vue'

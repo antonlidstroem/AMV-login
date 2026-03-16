@@ -1,11 +1,14 @@
-import { useI18n } from './useI18n'
+import { useI18n } from 'vue-i18n' // Ändra från '../i18n/useI18n'
 import { helpTranslations } from './help-translations'
 
 export function useHelpI18n() {
-  const { state } = useI18n()
+  const { locale } = useI18n() // Använd 'locale' istället för 'state'
+  
   function tHelp(key: keyof typeof helpTranslations['sv']): string {
-    const lang = state.currentLang as keyof typeof helpTranslations
+    // locale.value innehåller 'sv' eller 'en'
+    const lang = locale.value as keyof typeof helpTranslations
     return helpTranslations[lang]?.[key] ?? key
   }
+  
   return { tHelp }
 }

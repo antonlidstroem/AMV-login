@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import App from './App.vue'
+import { i18n } from './modules/i18n/index'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'flag-icons/css/flag-icons.min.css'
 import './assets/global.css'
@@ -28,6 +29,7 @@ prepareApp()
   .finally(() => {          // ← replaces .then()
     const app = createApp(App)
     app.use(createPinia())
+    app.use(i18n)
     app.use(router)
     app.mount('#app')
   })
