@@ -1,7 +1,7 @@
 <template>
   <div class="bg-views p-4 rounded-4 mb-3">
     <img :src="AMVLogo" class="logo-top" />
-    <h4 class="mb-4">{{ t('EnterNewPassword') }}</h4>
+    <h4 class="mb-4">{{ t('enterNewPassword') }}</h4>
     
     <div v-if="errorMsg" class="error-banner mb-3">{{ errorMsg }}</div>
 

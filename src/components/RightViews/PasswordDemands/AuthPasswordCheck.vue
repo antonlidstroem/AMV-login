@@ -14,8 +14,8 @@
 import { defineComponent } from 'vue'
 import { passwordRules } from './password-rules'
 import { useI18n } from '../../../i18n/useI18n'
-import { passwordRuleTranslations } from '../../../i18n/passwordRulesI18n'
-import type { RuleTranslationKey } from '../../../i18n/passwordRulesI18n'
+import { passwordRuleTranslations } from '../../../i18n/password-rules-translations'
+import type { RuleTranslationKey } from '../../../i18n/password-rules-translations'
 export default defineComponent({
   name: 'AuthPasswordCheck',
   props: { password: { type: String, required: true } },

@@ -30,8 +30,8 @@
 import { defineComponent } from 'vue'
 import { passwordHeaderKey, passwordRules, freeTextKey, passwordConfig } from './password-rules'
 import { useI18n } from '../../../i18n/useI18n'
-import { passwordRuleTranslations } from '../../../i18n/passwordRulesI18n'
-import type { RuleTranslationKey } from '../../../i18n/passwordRulesI18n'
+import { passwordRuleTranslations } from '../../../i18n/password-rules-translations'
+import type { RuleTranslationKey } from '../../../i18n/password-rules-translations'
 import AppIconButtonClose from '../../common/AppIconButtonClose.vue'
 import SecondaryButton from '../../common/AppButtonSecondary.vue'
 export default defineComponent({

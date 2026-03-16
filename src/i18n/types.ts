@@ -20,7 +20,7 @@ export interface BaseTranslations {
   errorChangingPassword: string;
   errorTitle: string;
   enterEmail: string;
-  EnterNewPassword: string;
+  enterNewPassword: string;
   enterPassword: string;
   enterPinCode: string;
   enterSecurityCode: string;
@@ -54,13 +54,13 @@ export interface BaseTranslations {
   passwordsNotMatching: string;
   resendEmail: string;
   resetEmailSentMessage: string;
-  ResetPasswordEmailNotDelivered: string;
-  ResetPasswordEmailNotDeliveredHelp: string;
-  ResetPasswordEmailSent: string;
+  resetPasswordEmailNotDelivered: string;
+  resetPasswordEmailNotDeliveredHelp: string;
+  resetPasswordEmailSent: string;
   resetPassword: string;
   resetPasswordDescription: string;
   scanQRCode: string;
-  SecurityCodeApproved: string;
+  securityCodeApproved: string;
   send: string;
   sendingMessage: string;
   sendMessage: string;
