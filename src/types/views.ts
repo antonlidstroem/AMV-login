@@ -5,7 +5,7 @@ export type ViewType =
   | 'mobilebankidpending'
   | 'mobilebankidapproved'
   | 'authbankidlocal'
-  | 'bankiddeviceapproved'
+  | 'authbankidlocalsuccess'
   | 'twofactor'
   | 'newpassword'
   | 'resetpasswordemail'

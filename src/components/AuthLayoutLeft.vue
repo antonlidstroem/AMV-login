@@ -36,7 +36,7 @@ import ResetPasswordNew from './LeftViews/ResetPassword/ResetPasswordNew.vue'
 import NoEmailReceived from './LeftViews/ResetPassword/NoEmailReceived.vue'
 import MobileBankId from './LeftViews/BankIDMobile/MobileBankId.vue'
 import AuthBankIdLocal from './LeftViews/BankIDDevice/AuthBankIdLocal.vue'
-import BankIdDeviceApproved from './LeftViews/BankIDDevice/BankIDDeviceApproved.vue'
+import AuthBankIdLocalSuccess from './LeftViews/BankIDDevice/AuthBankIdLocalSuccess.vue'
 import TwoFactor from './LeftViews/TwoFactorAuth/TwoFactor.vue'
 import NoCodeReceived from './LeftViews/TwoFactorAuth/NoCodeReceived.vue'
 import MobileBankIdPending from './LeftViews/BankIDMobile/MobileBankIdPending.vue'
@@ -52,7 +52,7 @@ const VIEW_MAP: Record<string, any> = {
   mobilebankidpending: MobileBankIdPending,
   mobilebankidapproved: MobileBankIdApproved,
   AuthBankIdLocal: AuthBankIdLocal,
-  bankiddeviceapproved: BankIdDeviceApproved,
+  AuthBankIdLocalSuccess: AuthBankIdLocalSuccess,
   twofactor: TwoFactor,
   newpassword: ResetPasswordNew,
   resetpasswordemail: ResetPasswordEmail,
