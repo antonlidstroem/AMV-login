@@ -20,12 +20,12 @@
       </div>
     </div>
 
-    <StepIndicator :total-steps="3" :active-step="1" />
+    <AppStepIndicator :total-steps="3" :active-step="1" />
 
     <!-- Link row -->
     <div class="d-flex justify-content-between align-items-center mt-3">
-      <BackLink :label="t('back')" @click="goToBankIdDevice" />
-      <BankIdLink :label="t('aboutMobileBankID')" />
+      <AppBackLink :label="t('back')" @click="goToAuthBankIdLocal" />
+      <AppBankIdLink :label="t('aboutMobileBankID')" />
     </div>
 
     <!-- Divider -->
@@ -35,7 +35,7 @@
       <hr class="flex-grow-1">
     </div>
 
-    <button @click="$emit('change-view', 'bankiddevice')" class="btn-custom d-flex align-items-center justify-content-start gap-2 mb-3" type="button">
+    <button @click="$emit('change-view', 'authbankidlocal')" class="btn-custom d-flex align-items-center justify-content-start gap-2 mb-3" type="button">
       <img :src="bankIdLogo" class="bankid-icon" alt="BankID" />
       {{ t('bankIDThisDevice') }}
     </button>
@@ -55,11 +55,11 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useI18n } from '../../../i18n/useI18n'
-import bankIdLogo from '../../../assets/BankID_logo_white.png'
-import BackLink from '../../common/BackLink.vue'
-import BankIdLink from '../../common/BankIdLink.vue'
+import bankIdLogo from '../../../assets/bankid-logo-white.png'
+import AppBackLink from '../../common/AppBackLink.vue'
+import AppBankIdLink from '../../common/AppBankIdLink.vue'
 import AppLogo from '../../common/AppLogo.vue'
-import StepIndicator from '../../common/StepIndicator.vue'
+import AppStepIndicator from '../../common/AppStepIndicator.vue'
 
 const { t } = useI18n()
 const isQrLoaded = ref(true)
@@ -86,6 +86,6 @@ const simulateQrError = () => {
   }, 3000)
 }
 
-const goToBankIdDevice = () => emit('change-view', 'bankiddevice')
-const simulatePending = () => emit('change-view', 'mobilebankidpending')
+const goToAuthBankIdLocal = () => emit('change-view', 'authbankidlocal')
+const simulatePending = () => emit('change-view', 'authbankidqrpending')
 </script>

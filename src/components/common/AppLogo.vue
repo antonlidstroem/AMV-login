@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import AMVLogo from '../../assets/logo_horizontal.svg'
+import AMVLogo from '../../assets/logo-horizontal.svg'
 
 export default defineComponent({
   name: 'AppLogo',

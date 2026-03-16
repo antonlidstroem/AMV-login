@@ -9,16 +9,16 @@
       <AppSpinner />
     </div>
 
-    <StepIndicator :total-steps="3" :active-step="2" />
+    <AppStepIndicator :total-steps="3" :active-step="2" />
     
     <div class="d-flex justify-content-between align-items-center mt-3">
-      <BackLink :label="t('back')" @click="goToLogin" />
-      <BankIdLink :label="t('aboutMobileBankID')" />
+      <AppBackLink :label="t('back')" @click="goToLogin" />
+      <AppBankIdLink :label="t('aboutMobileBankID')" />
     </div>
     
     <div class="divider my-3"><hr class="flex-grow-1"><span class="px-2 small">{{ t('or') }}</span><hr class="flex-grow-1"></div>
    
-    <button @click="goToBankIdDevice" class="btn-custom d-flex align-items-center justify-content-start gap-2 mb-3" type="button">
+    <button @click="goToAuthBankIdLocal" class="btn-custom d-flex align-items-center justify-content-start gap-2 mb-3" type="button">
       <img :src="bankIdLogo" class="bankid-icon" alt="BankID" />{{ t('bankIDThisDevice') }}
     </button>
     
@@ -31,17 +31,17 @@
 
 <script setup lang="ts">
 import { useI18n } from '../../../i18n/useI18n'
-import bankIdLogo from '../../../assets/BankID_logo_white.png'
-import BackLink from '../../common/BackLink.vue'
-import BankIdLink from '../../common/BankIdLink.vue'
+import bankIdLogo from '../../../assets/bankid-logo-white.png'
+import AppBackLink from '../../common/AppBackLink.vue'
+import AppBankIdLink from '../../common/AppBankIdLink.vue'
 import AppLogo from '../../common/AppLogo.vue'
 import AppSpinner from '../../common/AppSpinner.vue'
-import StepIndicator from '../../common/StepIndicator.vue'
+import AppStepIndicator from '../../common/AppStepIndicator.vue'
 
 const { t } = useI18n()
 const isDev = import.meta.env.DEV
 const emit = defineEmits<{ (e: 'change-view', view: string): void; (e: 'trigger-error'): void }>()
 const goToLogin = () => emit('change-view', 'login')
-const goToBankIdDevice = () => emit('change-view', 'bankiddevice')
-const simulateSuccess = () => emit('change-view', 'mobilebankidapproved')
+const goToAuthBankIdLocal = () => emit('change-view', 'authbankidlocal')
+const simulateSuccess = () => emit('change-view', 'authbankidqrsuccess')
 </script>

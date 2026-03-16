@@ -5,7 +5,7 @@
     
     <div v-if="errorMsg" class="error-banner mb-3">{{ errorMsg }}</div>
 
-    <PasswordCheck v-if="shouldShowValidation" :password="p1" />
+    <AuthPasswordCheck v-if="shouldShowValidation" :password="p1" />
 
     <label class="mb-2">{{ t('newPassword') }}</label>
     <input type="password" v-model="p1" class="form-control mb-2" :class="inputClass" autocomplete="new-password" />
@@ -25,15 +25,15 @@
 // 1. Importera markRaw från vue
 import { defineComponent, ref, computed, markRaw } from 'vue'
 import { useI18n } from '../../../i18n/useI18n'
-import AMVLogo from '../../../assets/logo_horizontal.svg'
-import PasswordCheck from '../../RightViews/PasswordDemands/PasswordCheck.vue'
+import AMVLogo from '../../../assets/logo-horizontal.svg'
+import AuthPasswordCheck from '../../RightViews/PasswordDemands/AuthPasswordCheck.vue'
 import AppSuccess from '../../common/AppSuccess.vue'
-import { passwordRules } from '../../RightViews/PasswordDemands/passwordRules'
-import { apiClient } from '../../../services/apiClient'
+import { passwordRules } from '../../RightViews/PasswordDemands/password-rules'
+import { apiClient } from '../../../services/api-client'
 
 export default defineComponent({
   name: 'ResetPasswordNew',
-  components: { PasswordCheck },
+  components: { AuthPasswordCheck },
   emits: ['change-view', 'show-password-demands', 'show-popup'],
   
   setup(_, { emit }) {
@@ -63,7 +63,7 @@ export default defineComponent({
       })
 
       try {
-        // 2. Anropa din MSW-mock via apiClient
+        // 2. Anropa din MSW-mock via api-client
         // Här väntar vi i 1.5 sekunder (pga delay i din handler)
         await apiClient.resetPassword(p1.value)
 

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
 import { useI18n } from '../../../i18n/useI18n'
-import { apiClient } from '../../../services/apiClient'
-import BackLink from '../../common/BackLink.vue'
+import { apiClient } from '../../../services/api-client'
+import AppBackLink from '../../common/AppBackLink.vue'
 import AppLogo from '../../common/AppLogo.vue'
 
 const emit = defineEmits(['change-view', 'show-popup'])
@@ -24,7 +24,7 @@ const verify = async () => {
     await apiClient.verifyCode(code)
     emit('show-popup', { visible: false })
       
-    // Ändra från 'loginview' till 'authenticated-view' 
+    // Ändra från 'DashboardView' till 'authenticated-view' 
     // så att App.vue vet att det är dags att logga in på riktigt
     emit('change-view', 'authenticated-view') 
     
@@ -71,6 +71,6 @@ const onPaste = (e: ClipboardEvent) => {
              type="tel" class="text-center code-input" :class="{ 'error-border': error }"
              @input="onInput(i)" @paste.prevent="onPaste" />
     </div>
-    <BackLink :label="t('back')" @click="emit('change-view', 'login')" />
+    <AppBackLink :label="t('back')" @click="emit('change-view', 'login')" />
   </div>
 </template>

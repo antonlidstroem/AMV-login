@@ -4,7 +4,7 @@
   
 <div class="position-relative mb-3">
       <h2 class="text-white text-center m-0">{{ t('contact') }}</h2>
-      <IconCloseButton @close="close" style="position: absolute; right: -10px; top: -10px; margin: 0 !important;" />
+      <AppIconButtonClose @close="close" style="position: absolute; right: -10px; top: -10px; margin: 0 !important;" />
     </div>
 
     <h2 class="text-white text-center mt-4 mb-4 py-2">{{ panelTitle }}</h2>
@@ -28,13 +28,13 @@ import { useI18n } from '../../i18n/useI18n'
 import { useHelpI18n } from '../../i18n/help-i18n'
 import { helpTopics } from '../../i18n/helpTopics'
 import type { HelpTopicDefinition } from '../../i18n/helpTopics'
-import IconCloseButton from '../common/IconCloseButton.vue'
-import BaseButton from '../common/BaseSecondaryButton.vue'
+import AppIconButtonClose from '../common/AppIconButtonClose.vue'
+import SecondaryButton from '../common/AppButtonSecondary.vue'
 
 interface HelpTopic { id: string; label: string; content: string }
 export default defineComponent({
   name: 'HelpPanel',
-  components: { IconCloseButton, BaseButton },
+  components: { AppIconButtonClose, SecondaryButton },
   emits: ['close'],
   setup(_, { emit }) {
     const { t } = useI18n()

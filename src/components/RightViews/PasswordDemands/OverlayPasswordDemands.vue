@@ -2,7 +2,7 @@
     <div class="contact-panel position-relative rounded-4 text-white p-5 border border-white"
       style="background-color: rgba(100,100,100,0.80); width: 90%; max-width: 900px; margin: 0 auto; display: flex; flex-direction: column;">
 
-    <IconCloseButton @close="$emit('close')" />
+    <AppIconButtonClose @close="$emit('close')" />
     
     <h2 class="text-white text-start mt-4 mb-4 py-2">{{ t('passwordRequirements') }}</h2>
     
@@ -28,16 +28,16 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { passwordHeaderKey, passwordRules, freeTextKey, passwordConfig } from './passwordRules'
+import { passwordHeaderKey, passwordRules, freeTextKey, passwordConfig } from './password-rules'
 import { useI18n } from '../../../i18n/useI18n'
 import { passwordRuleTranslations } from '../../../i18n/passwordRulesI18n'
 import type { RuleTranslationKey } from '../../../i18n/passwordRulesI18n'
-import IconCloseButton from '../../common/IconCloseButton.vue'
-import BaseButton from '../../common/BaseSecondaryButton.vue'
+import AppIconButtonClose from '../../common/AppIconButtonClose.vue'
+import SecondaryButton from '../../common/AppButtonSecondary.vue'
 export default defineComponent({
   name: 'PasswordDemands',
   emits: ['close'],
-  components: { IconCloseButton, BaseButton },
+  components: { AppIconButtonClose, SecondaryButton },
   setup() {
     const { t, state } = useI18n()
     const getRuleLabel = (key: RuleTranslationKey, value?: number | string): string => {
