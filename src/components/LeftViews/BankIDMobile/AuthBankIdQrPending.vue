@@ -43,5 +43,5 @@ const isDev = import.meta.env.DEV
 const emit = defineEmits<{ (e: 'change-view', view: string): void; (e: 'trigger-error'): void }>()
 const goToLogin = () => emit('change-view', 'login')
 const goToAuthBankIdLocal = () => emit('change-view', 'authbankidlocal')
-const simulateSuccess = () => emit('change-view', 'mobilebankidapproved')
+const simulateSuccess = () => emit('change-view', 'authbankidqrsuccess')
 </script>

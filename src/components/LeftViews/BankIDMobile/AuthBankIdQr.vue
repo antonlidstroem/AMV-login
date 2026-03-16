@@ -87,5 +87,5 @@ const simulateQrError = () => {
 }
 
 const goToAuthBankIdLocal = () => emit('change-view', 'authbankidlocal')
-const simulatePending = () => emit('change-view', 'mobilebankidpending')
+const simulatePending = () => emit('change-view', 'authbankidqrpending')
 </script>
