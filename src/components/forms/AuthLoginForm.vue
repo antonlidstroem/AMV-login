@@ -56,7 +56,7 @@
 
       <div class="d-flex flex-column gap-2 mb-2">
         <button
-          @click.prevent="changeView('mobilebankid')"
+          @click.prevent="changeView('authbankidqr')"
           class="btn-custom d-flex align-items-center justify-content-start gap-2"
           type="button"
         >
@@ -95,7 +95,7 @@ import { defineComponent, ref } from 'vue'
 import { apiClient } from '../../modules/services/api-client'
 import { useI18n } from '../../modules/i18n/useI18n'
 import bankIdLogo from '../../assets/bankid-logo-white.png'
-import AppLogo from '../common/AppLogo.vue' // Dubbelkolla att sökvägen stämmer
+import AppLogo from '../common/AppLogo.vue' 
 
 export default defineComponent({
   name: 'AuthLoginForm',

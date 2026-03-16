@@ -1,7 +1,7 @@
 export type ViewType =
   | 'login'
   | 'forgot'
-  | 'mobilebankid'
+  | 'authbankidqr'
   | 'authbankidqrpending'
   | 'authbankidqrsuccess'
   | 'authbankidlocal'

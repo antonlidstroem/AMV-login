@@ -21,7 +21,7 @@
 
     <div class="divider mb-3"><h4>{{ t('orBankId') }}</h4></div>
     
-    <button @click="emit('change-view','mobilebankid')" class="btn-custom d-flex align-items-center justify-content-start gap-2 mb-3">
+    <button @click="emit('change-view','authbankidqr')" class="btn-custom d-flex align-items-center justify-content-start gap-2 mb-3">
       <img :src="bankIdLogo" width="25" height="24" alt="BankID" />
       {{ t('mobileBankID') }}
     </button>
