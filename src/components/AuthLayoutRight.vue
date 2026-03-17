@@ -105,7 +105,7 @@ const backgroundStyle = computed(() => ({
   backgroundImage: `url(${bgImage})`,
   backgroundSize: 'cover',
   backgroundPosition: 'center',
-  backgroundAttachment: 'fixed'
+  backgroundRepeat: 'no-repeat'
 }))
 
 // Funktioner
