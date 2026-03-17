@@ -21,7 +21,7 @@
     </ul>
    
     <div class="text-center mt-auto">
-      <BaseButton :label="t('closeWindow')" icon="bi bi-x-circle-fill" class="btn-modal mx-auto" @action="$emit('close')" />
+      <SecondaryButton :label="t('closeWindow')" icon="bi bi-x-circle-fill" class="btn-modal mx-auto" @action="$emit('close')" />
     </div>
   </div>
 </template>

@@ -91,6 +91,26 @@ export const useAuthStore = defineStore('auth', {
       } finally {
         this.isLoading = false
       }
+    },
+
+    async requestPasswordReset(email: string) {
+      this.isLoading = true;
+      this.error = null;
+      try {
+        // Detta anrop fångas upp av MSW
+        await axios.post('/api/password-reset-request', { email });
+        return true;
+      } catch (err) {
+        this.error = 'Kunde inte skicka återställningsmejl';
+        throw err;
+      } finally {
+        this.isLoading = false;
+      }
+    },
+
+    authenticateBankId: async () => {
+      const response = await axios.post('/api/bankid/authenticate');
+      return response.data;
     }
   }
 })

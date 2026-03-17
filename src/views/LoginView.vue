@@ -54,15 +54,24 @@ const currentView = ref<ViewType>('login')
 const showDemands = ref(false)
 const contactTrigger = ref(false)
 
-const handleViewChange = (view: ViewType, payload?: AuthUser) => {
-  if (payload) auth.setPendingUser(payload)
+const handleViewChange = (view: ViewType, payload?: any) => {
+  // 1. Om vi får en användare (BankID/Login), spara i store
+  if (payload && typeof payload === 'object' && 'username' in payload) {
+    auth.setPendingUser(payload)
+  }
   
+  // 2. Om vi ska logga in helt (från 2FA eller BankID Success)
   if (view === 'authenticated-view') {
     auth.confirmLogin()
-    router.push('/dashboard') // <--- VIKTIGT: Här byter vi sida i routern
-  } else {
-    currentView.value = view
+    router.push('/dashboard')
+    return
   }
+
+  // 3. Annars byter vi bara vy
+  currentView.value = view
+  
+  // Bonus: Stäng lösenordskraven om vi byter vy
+  showDemands.value = false 
 }
 
 const handleLoginError = () => {

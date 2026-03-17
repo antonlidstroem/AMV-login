@@ -14,23 +14,42 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useAuthStore } from '../../../modules/stores/auth'
 import AMVLogo from '../../../assets/logo-horizontal.svg'
 import AppBackLink from '../../common/AppBackLink.vue'
 
 const { t } = useI18n()
+const authStore = useAuthStore()
 const email = ref('')
 const error = ref(false)
 
-type ViewType = 'login' | 'auth-password-reset-sent' | 'auth-password-reset-retry'
+const emit = defineEmits(['change-view', 'show-popup'])
 
-const emit = defineEmits<{ (e: 'change-view', view: ViewType, email?: string): void }>()
 const isValidEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)
 
-const sendEmail = () => {
-  if (!isValidEmail(email.value)) { error.value = true; return }
-  error.value = false
-  // Fix: forward the email so AuthLayoutLeft can store it and AuthPasswordResetRetry can use it
-  emit('change-view', 'auth-password-reset-sent', email.value)
+const sendEmail = async () => {
+  if (!isValidEmail(email.value)) { 
+    error.value = true; 
+    return; 
+  }
+  
+  error.value = false;
+  
+  // 1. Visa laddnings-popup
+  emit('show-popup', { title: t('wait'), loading: true });
+
+  try {
+    // 2. Anropa storen (och därmed MSW)
+    await authStore.requestPasswordReset(email.value);
+    
+    // 3. Om det lyckas: Stäng popup och byt vy
+    emit('show-popup', { visible: false });
+    emit('change-view', 'auth-password-reset-sent', email.value);
+  } catch (err: any) {
+  emit('show-popup', { visible: false });
+  error.value = true; 
 }
+}
+
 const goToLogin = () => emit('change-view', 'login')
 </script>

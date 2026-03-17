@@ -41,7 +41,7 @@
         <span>{{ t('forgotPasswordQuestion') }}</span>
         <a
           href="#"
-          @click.prevent="changeView('forgot')"
+          @click.prevent="changeView('forgot-password')"
           class="ms-1 fw-bold text-decoration-none text-primary"
         >
           {{ t('clickHere') }}

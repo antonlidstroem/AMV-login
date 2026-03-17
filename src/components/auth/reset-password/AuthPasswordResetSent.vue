@@ -12,7 +12,7 @@
     <button 
       v-if="isDev" 
       class="btn-temp" 
-      @click="emit('change-view', 'newpassword')"
+      @click="emit('change-view', 'new-password')"
     >
       Simulera lösenordsåterställning
     </button>

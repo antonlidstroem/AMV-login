@@ -146,7 +146,7 @@ const handleMobileHelp = () => {
 
 const handleCloseOverlayPasswordDemands = () => {
   showOverlayPasswordDemands.value = false
-  emit('close-demands')
+  emit('close-demands') 
 }
 
 // Stäng menyer när man klickar utanför
@@ -155,6 +155,15 @@ const handleGlobalClick = (e: MouseEvent) => {
   if (!target.closest('.language-selector')) showLanguageMenu.value = false
   if (!target.closest('.action-dropdown')) showActionMenu.value = false
 }
+
+watch(() => props.externalShowDemands, (newVal) => {
+  if (newVal) {
+    showOverlayPasswordDemands.value = true
+    // Stäng andra öppna overlays om de råkar vara öppna
+    showContact.value = false
+    showHelp.value = false
+  }
+})
 
 onMounted(() => document.addEventListener('click', handleGlobalClick, true))
 onUnmounted(() => document.removeEventListener('click', handleGlobalClick, true))
