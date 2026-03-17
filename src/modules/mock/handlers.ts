@@ -48,13 +48,16 @@ export const handlers = [
 
   // 5. BANKID
   http.post('/api/bankid/authenticate', async () => {
-    // Simulera tiden det tar för användaren att signera i BankID-appen
-    await delay(2500); 
+    await delay(2500) // Din spinner-tid
     
+    // VIKTIGT: Objektet måste ha en 'user'-nyckel för att matcha Storen!
     return HttpResponse.json({
       success: true,
-      user: { username: 'bankid_user', name: 'Sven Svensson' }
-    });
+      user: { 
+        username: 'sven_svensson', 
+        name: 'Sven Svensson' 
+      }
+    })
   }),
 
   

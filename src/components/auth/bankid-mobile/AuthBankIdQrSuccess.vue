@@ -33,19 +33,26 @@ import AppSuccess from '../../common/AppSuccess.vue'
 import AppStepIndicator from '../../common/AppStepIndicator.vue'
 import { useAuthStore } from '../../../modules/stores/auth'
 
+
 const { t } = useI18n()
 const authStore = useAuthStore()
 const emit = defineEmits(['change-view'])
 
 onMounted(() => {
-  console.log("Succé-vyn laddad. Väntar 1.5s...");
+  console.log("Succé-vyn laddad. User i store just nu:", authStore.user);
   
   setTimeout(() => {
-    console.log("Timer klar! Försöker gå till authenticated-view med user:", authStore.user);
-    
-    // Kontrollera att namnet 'authenticated-view' stämmer överens med 
-    // vad din App.vue eller föräldrakomponent förväntar sig!
-    emit('change-view', 'authenticated-view', authStore.user)
+    if (authStore.user) {
+      console.log("Timer klar! Skickar användare till förälder:", authStore.user);
+      
+      // 1. Berätta för storen att vi är helt klara
+      authStore.completeLogin()
+      
+      // 2. Trigga vy-ombyte
+      emit('change-view', 'authenticated-view', authStore.user)
+    } else {
+      console.error("Kritiskt fel: Användaren saknas i Storen!");
+    }
   }, 1500)
 })
 </script>
