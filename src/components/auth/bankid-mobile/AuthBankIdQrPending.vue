@@ -30,7 +30,7 @@
 </template>
 
 <script setup lang="ts">
-import { useI18n } from '../../../modules/i18n/useI18n'
+import { useI18n } from 'vue-i18n'
 import bankIdLogo from '../../../assets/bankid-logo-white.png'
 import AppBackLink from '../../common/AppBackLink.vue'
 import AppBankIdLink from '../../common/AppBankIdLink.vue'
@@ -42,6 +42,6 @@ const { t } = useI18n()
 const isDev = import.meta.env.DEV
 const emit = defineEmits<{ (e: 'change-view', view: string): void; (e: 'trigger-error'): void }>()
 const goToLogin = () => emit('change-view', 'login')
-const goToAuthBankIdLocal = () => emit('change-view', 'authbankidlocal')
-const simulateSuccess = () => emit('change-view', 'authbankidqrsuccess')
+const goToAuthBankIdLocal = () => emit('change-view', 'auth-bankid-local')
+const simulateSuccess = () => emit('change-view', 'auth-bankid-qr-success')
 </script>

@@ -13,7 +13,7 @@
 
 <script setup lang="ts">
 import { markRaw } from 'vue' // 1. Importera markRaw
-import { useI18n } from '../../../modules/i18n/useI18n'
+import { useI18n } from 'vue-i18n'
 import AppBackLink from '../../common/AppBackLink.vue'
 import AppSuccess from '../../common/AppSuccess.vue' // 2. Importera AppSuccess
 
@@ -24,7 +24,7 @@ const { t } = useI18n()
 const send = () => {
   // 1. Visa spinner först
   emit('show-popup', {
-    title: "skcikar", // t.ex. "Skickar..."
+    title: "skickar", 
     loading: true
   })
 

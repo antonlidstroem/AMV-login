@@ -13,17 +13,18 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { passwordRules } from './password-rules'
-import { useI18n } from '../../../modules/i18n/useI18n'
+import { useI18n } from 'vue-i18n'
 import { passwordRuleTranslations } from '../../../modules/i18n/password-rules-translations'
 import type { RuleTranslationKey } from '../../../modules/i18n/password-rules-translations'
 export default defineComponent({
   name: 'AuthPasswordCheck',
   props: { password: { type: String, required: true } },
-  setup() {
-    const { t, state } = useI18n()
-    const getRuleLabel = (key: RuleTranslationKey, value?: number | string): string => {
-      const lang = state.currentLang
-      const cur = passwordRuleTranslations[lang]
+  
+setup() {
+  const { t, locale } = useI18n() // Byt state mot locale
+  const getRuleLabel = (key: RuleTranslationKey, value?: number | string): string => {
+    const lang = locale.value as 'sv' | 'en' // Använd locale.value
+    const cur = passwordRuleTranslations[lang]
       let text = cur ? cur[key] : (passwordRuleTranslations['sv']![key] || key)
       if (value !== undefined && text.includes('{n}')) text = text.replace('{n}', value.toString())
       return text

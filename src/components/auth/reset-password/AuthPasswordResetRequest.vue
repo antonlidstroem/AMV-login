@@ -10,22 +10,27 @@
     <AppBackLink :label="t('back')" @click="goToLogin" />
   </div>
 </template>
+
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useI18n } from '../../../modules/i18n/useI18n'
+import { useI18n } from 'vue-i18n'
 import AMVLogo from '../../../assets/logo-horizontal.svg'
 import AppBackLink from '../../common/AppBackLink.vue'
+
 const { t } = useI18n()
 const email = ref('')
 const error = ref(false)
-type ViewType = 'login' | 'authpasswordresetsent' | 'authpasswordresetretry'
+
+type ViewType = 'login' | 'auth-password-reset-sent' | 'auth-password-reset-retry'
+
 const emit = defineEmits<{ (e: 'change-view', view: ViewType, email?: string): void }>()
 const isValidEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)
+
 const sendEmail = () => {
   if (!isValidEmail(email.value)) { error.value = true; return }
   error.value = false
   // Fix: forward the email so AuthLayoutLeft can store it and AuthPasswordResetRetry can use it
-  emit('change-view', 'authpasswordresetsent', email.value)
+  emit('change-view', 'auth-password-reset-sent', email.value)
 }
 const goToLogin = () => emit('change-view', 'login')
 </script>

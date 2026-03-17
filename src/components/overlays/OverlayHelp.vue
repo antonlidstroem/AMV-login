@@ -22,9 +22,10 @@
     </div>
   </div>
 </template>
+
 <script lang="ts">
-import { defineComponent, ref, computed } from 'vue'
-import { useI18n } from '../../modules/i18n/useI18n'
+import { defineComponent, ref, computed } from 'vue' // Vue-kärnan
+import { useI18n } from 'vue-i18n'                // Officiella i18n
 import { useHelpI18n } from '../../modules/i18n/help-i18n'
 import { helpTopics } from '../../modules/i18n/help-topics-config'
 import type { HelpTopicDefinition } from '../../modules/i18n/help-topics-config'
@@ -32,26 +33,57 @@ import AppIconButtonClose from '../common/AppIconButtonClose.vue'
 import SecondaryButton from '../common/AppButtonSecondary.vue'
 
 interface HelpTopic { id: string; label: string; content: string }
+
 export default defineComponent({
   name: 'HelpPanel',
   components: { AppIconButtonClose, SecondaryButton },
   emits: ['close'],
   setup(_, { emit }) {
+    // 1. Hämta t från officiella vue-i18n
     const { t } = useI18n()
+    
+    // 2. Din egna hjälp-översättare (se till att uppdatera help-i18n.ts också!)
     const { tHelp } = useHelpI18n()
+    
     const selectedTopicId = ref<string | null>(null)
-    const topics = computed<HelpTopic[]>(() => helpTopics.map((topic: HelpTopicDefinition) => ({ id: topic.id, label: tHelp(topic.labelKey), content: tHelp(topic.contentKey) })))
+
+    const topics = computed<HelpTopic[]>(() => 
+      helpTopics.map((topic: HelpTopicDefinition) => ({ 
+        id: topic.id, 
+        label: tHelp(topic.labelKey), 
+        content: tHelp(topic.contentKey) 
+      }))
+    )
+
     const selectedTopic = computed<HelpTopic | null>(() => {
       if (!selectedTopicId.value) return null
       const topicDef = helpTopics.find(t => t.id === selectedTopicId.value)
       if (!topicDef) return null
-      return { id: topicDef.id, label: tHelp(topicDef.labelKey), content: tHelp(topicDef.contentKey) }
+      return { 
+        id: topicDef.id, 
+        label: tHelp(topicDef.labelKey), 
+        content: tHelp(topicDef.contentKey) 
+      }
     })
-    const panelTitle = computed(() => selectedTopic.value ? selectedTopic.value.label : t('helpTitle'))
+
+    const panelTitle = computed(() => 
+      selectedTopic.value ? selectedTopic.value.label : t('helpTitle')
+    )
+
     const selectTopic = (topic: HelpTopic) => { selectedTopicId.value = topic.id }
     const backToTopics = () => { selectedTopicId.value = null }
     const close = () => emit('close')
-    return { t, topics, selectedTopic, selectedTopicId, panelTitle, close, selectTopic, backToTopics }
+
+    return { 
+      t, 
+      topics, 
+      selectedTopic, 
+      selectedTopicId, 
+      panelTitle, 
+      close, 
+      selectTopic, 
+      backToTopics 
+    }
   }
 })
 </script>

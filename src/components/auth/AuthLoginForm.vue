@@ -56,7 +56,7 @@
 
       <div class="d-flex flex-column gap-2 mb-2">
         <button
-          @click.prevent="changeView('authbankidqr')"
+          @click.prevent="changeView('auth-bankid-qr')"
           class="btn-custom d-flex align-items-center justify-content-start gap-2"
           type="button"
         >
@@ -65,7 +65,7 @@
         </button>
 
         <button
-          @click.prevent="changeView('authbankidlocal')"
+          @click.prevent="changeView('auth-bankid-local')"
           class="btn-custom d-flex align-items-center justify-content-start gap-2"
           type="button"
         >
@@ -93,7 +93,7 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import { apiClient } from '../../modules/services/api-client'
-import { useI18n } from '../../modules/i18n/useI18n'
+import { useI18n } from 'vue-i18n'
 import bankIdLogo from '../../assets/bankid-logo-white.png'
 import AppLogo from '../common/AppLogo.vue' 
 
@@ -128,7 +128,7 @@ export default defineComponent({
         emit('show-popup', { visible: false })
 
         // 2. Skicka med response.user som payload!
-        emit('change-view', 'auth2faverify', response.user) 
+        emit('change-view', 'auth-2fa-verify', response.user) 
         
       } catch (err) {
         emit('show-popup', { visible: false })

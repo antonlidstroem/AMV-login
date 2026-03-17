@@ -1,6 +1,7 @@
 // src/i18n/translations.ts
 import type { BaseTranslations } from './types'
-import type { Lang } from './useI18n'
+
+
 
 const sv: BaseTranslations = {
   aboutBankID: 'Om BankID',
@@ -83,7 +84,15 @@ const sv: BaseTranslations = {
   wrongCodeTryAgain: 'Fel kod, försök igen',
   writeMessage: 'Skriv ditt meddelande här',
   yourMessage: 'Skriv ditt meddelande här...',
-  wait: 'Vänta...'
+  wait: 'Vänta...',
+
+  popups: {
+    sending: 'Skickar...',
+    error: 'Ett fel uppstod',
+    bankIdManual: 'Inloggningen misslyckades. Kontrollera att du har BankID-appen öppen.',
+    contactSupport: 'Kontakta support'
+  }
+
 }
 
 const en: BaseTranslations = {
@@ -167,14 +176,23 @@ const en: BaseTranslations = {
   wrongCodeTryAgain: 'Incorrect code, please try again',
   writeMessage: 'Write your message here',
   yourMessage: 'Write your message here...',
-  wait: 'Please wait...'
+  wait: 'Please wait...',
+
+ popups: {
+    sending: 'Sending...',
+    error: 'An error occurred',
+    bankIdManual: 'Login failed. Please check that your BankID app is open.',
+    contactSupport: 'Contact support'
+  }
 }
 
 
 
-export const translations: Record<string, BaseTranslations> = { sv, en}
 
-export const languageNames: Record<Lang, string> = {
+export const translations = { sv, en }
+
+
+export const languageNames = {
   sv: 'Svenska',
   en: 'English',
 }

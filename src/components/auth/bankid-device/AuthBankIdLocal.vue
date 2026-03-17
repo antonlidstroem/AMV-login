@@ -26,12 +26,12 @@
       {{ t('mobileBankID') }}
     </button>
 
-    <button v-if="isDev" @click="emit('change-view','authbankidlocalsuccess')" class="btn-temp">Simulera lyckad inloggning</button>
+    <button v-if="isDev" @click="emit('change-view','auth-bankid-local-success')" class="btn-temp">Simulera lyckad inloggning</button>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useI18n } from '../../../modules/i18n/useI18n'
+import { useI18n } from 'vue-i18n'
 import bankIdLogo from '../../../assets/bankid-logo-white.png'
 import AppBackLink from '../../common/AppBackLink.vue'
 import AppBankIdLink from '../../common/AppBankIdLink.vue'

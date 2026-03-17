@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
-import { useI18n } from '../../../modules/i18n/useI18n'
+import { useI18n } from 'vue-i18n'
 import { apiClient } from '../../../modules/services/api-client'
 import AppBackLink from '../../common/AppBackLink.vue'
 import AppLogo from '../../common/AppLogo.vue'
