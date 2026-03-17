@@ -12,6 +12,20 @@
           </button>
         </div>
 
+        <div class="action-dropdown position-relative d-md-none flex-grow-1 ms-2">
+          <button @click="toggleActionMenu" class="btn-secondary-custom btn-transparent" type="button">
+            <i class="bi bi-list fs-1"></i>
+          </button>
+          <div class="dropdown-menu-custom" :class="{ show: showActionMenu }">
+            <button @click="handleMobileContact" type="button">
+              <i class="bi bi-at me-2"></i>{{ t('contact') }}
+            </button>
+            <button @click="handleMobileHelp" type="button">
+              <i class="bi bi-question-circle me-2"></i>{{ t('help') }}
+            </button>
+          </div>
+        </div>
+
         <div class="language-selector position-relative">
           <button @click="showLanguageMenu = !showLanguageMenu" class="btn-secondary-custom d-flex align-items-center gap-2 w-100" type="button">
             <span :class="[flagClasses[locale], 'd-inline-block']" style="width:24px;height:16px;"></span>
@@ -45,6 +59,7 @@
         <OverlayContact v-if="showContact" @close="showContact = false" @show-popup="emit('show-popup', $event)" />
         <OverlayHelp v-if="showHelp" @close="showHelp = false" />
         <OverlayPasswordDemands v-if="showOverlayPasswordDemands" @close="handleCloseOverlayPasswordDemands" @show-popup="emit('show-popup', $event)" />
+        
         <div v-show="!shouldHideMobileContent" class="mobile-left-page">
           <slot name="mobile-left"></slot>
         </div>
@@ -70,8 +85,6 @@ const props = defineProps<{
 
 const emit = defineEmits(['change-view', 'close-demands', 'contact-opened', 'show-popup'])
 
-// VIKTIGT: Vi hämtar 't' och 'locale' från det officiella biblioteket.
-// Det finns inget 'state' eller 'changeLang' här längre, det är därför det kraschade förut.
 const { t, locale } = useI18n()
 
 const flagClasses: Record<string, string> = { sv: 'fi fi-se', en: 'fi fi-gb'}
@@ -80,13 +93,11 @@ const shortLanguageNames: Record<string, string> = { sv: 'SE', en: 'GB' }
 const showContact = ref(false)
 const showHelp = ref(false)
 const showLanguageMenu = ref(false)
-const showActionMenu = ref(false)
+const showActionMenu = ref(false) // För hamburger-menyn
 const showOverlayPasswordDemands = ref(false)
 
-// HÄR ÄR LOGIKEN FÖR SPRÅKBYTET:
-// Istället för changeLang(code) sätter vi nu locale.value = code
 const selectLanguage = (langCode: string) => {
-  locale.value = langCode // Detta ändrar språket i hela appen!
+  locale.value = langCode
   showLanguageMenu.value = false
 }
 
@@ -97,23 +108,48 @@ const backgroundStyle = computed(() => ({
   backgroundAttachment: 'fixed'
 }))
 
-// --- Övrig logik för menyer ---
+// Funktioner
+const toggleActionMenu = () => {
+  showActionMenu.value = !showActionMenu.value
+  if (showActionMenu.value) showLanguageMenu.value = false
+}
+
 const toggleContact = () => {
   showContact.value = !showContact.value
-  if (showContact.value) { showHelp.value = false; showOverlayPasswordDemands.value = false; emit('close-demands'); }
+  if (showContact.value) { 
+    showHelp.value = false; 
+    showOverlayPasswordDemands.value = false; 
+    emit('close-demands'); 
+  }
   showLanguageMenu.value = false
 }
 
 const toggleHelp = () => {
   showHelp.value = !showHelp.value
-  if (showHelp.value) { showContact.value = false; showOverlayPasswordDemands.value = false; emit('close-demands'); }
+  if (showHelp.value) { 
+    showContact.value = false; 
+    showOverlayPasswordDemands.value = false; 
+    emit('close-demands'); 
+  }
   showLanguageMenu.value = false
 }
 
-const handleMobileContact = () => { showActionMenu.value = false; toggleContact(); }
-const handleMobileHelp = () => { showActionMenu.value = false; toggleHelp(); }
-const handleCloseOverlayPasswordDemands = () => { showOverlayPasswordDemands.value = false; emit('close-demands'); }
+const handleMobileContact = () => {
+  showActionMenu.value = false
+  toggleContact()
+}
 
+const handleMobileHelp = () => {
+  showActionMenu.value = false
+  toggleHelp()
+}
+
+const handleCloseOverlayPasswordDemands = () => {
+  showOverlayPasswordDemands.value = false
+  emit('close-demands')
+}
+
+// Stäng menyer när man klickar utanför
 const handleGlobalClick = (e: MouseEvent) => {
   const target = e.target as HTMLElement
   if (!target.closest('.language-selector')) showLanguageMenu.value = false
@@ -133,25 +169,22 @@ const shouldHideMobileContent = computed(() => showContact.value || showHelp.val
   flex-direction: column;
   height: 100%;
   width: 100%;
-  overflow: hidden; /* Förhindrar att själva containern skrollar */
+  overflow: hidden;
   position: relative;
 }
 
-/* Toppfälten sitter fast */
 .fixed-top-bar {
   flex: 0 0 auto;
   z-index: 100;
   background: transparent;
 }
 
-/* Innehållet tar upp resten av platsen och skrollar internt */
 .scrollable-content {
   flex: 1 1 auto;
   overflow-y: auto;
   overflow-x: hidden;
   display: flex;
   flex-direction: column;
-  /* Detta gör att innehållet klipper precis vid toppfältets slut */
 }
 
 .content-padding {
@@ -160,6 +193,46 @@ const shouldHideMobileContent = computed(() => showContact.value || showHelp.val
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+/* Stil för dropdown-menyn (Samma som förut) */
+.dropdown-menu-custom {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  display: none;
+  flex-direction: column;
+  min-width: 150px;
+  margin-top: 5px;
+  overflow: hidden;
+}
+
+.dropdown-menu-custom.show {
+  display: flex;
+}
+
+.dropdown-menu-custom button {
+  background: transparent;
+  border: none;
+  padding: 10px 15px;
+  text-align: left;
+  color: #333;
+  display: flex;
+  align-items: center;
+}
+
+.dropdown-menu-custom button:hover {
+  background: #f5f5f5;
+}
+
+.btn-transparent {
+  background: transparent !important;
+  border: none !important;
+  color: white !important;
+  padding: 0 !important;
 }
 
 @media (max-width: 768px) {
