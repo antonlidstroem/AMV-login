@@ -2,13 +2,11 @@
   <div class="bg-views p-4 rounded-4 mb-3">
     <AppLogo/>
 
-    <div v-if="error" class="error-banner">{{ t('wrongUserNamePassword') }}</div>
+    <div v-if="error" class="error-banner mb-3">{{ t('wrongUserNamePassword') }}</div>
 
-
-    <form @submit.prevent="login" class="d-flex flex-column gap-2 text-dark">
+    <form @submit.prevent="handleLogin" class="d-flex flex-column gap-2 text-dark">
       <h1 class="mb-3">{{ t('login') }}</h1>
 
-      <!-- Username -->
       <label class="form-label mb-1">{{ t('username') }}</label>
       <div class="position-relative mb-2">
         <i class="bi bi-person-fill input-icon"></i>
@@ -17,10 +15,10 @@
           class="form-size form-control ps-5"
           :class="{ 'error-border': error }"
           autocomplete="username"
+          :disabled="isLoading"
         />
       </div>
 
-      <!-- Password -->
       <label class="form-label mb-1">{{ t('password') }}</label>
       <div class="position-relative mb-2">
         <i class="bi bi-lock-fill input-icon"></i>
@@ -30,14 +28,15 @@
           class="form-size form-control ps-5"
           :class="{ 'error-border': error }"
           autocomplete="current-password"
+          :disabled="isLoading"
         />
       </div>
 
-      <button type="submit" class="btn-custom w-100 mb-2" :disabled="loading">
-        {{ loading ? t('wait') : t('login') }}
+      <button type="submit" class="btn-custom w-100 mb-2" :disabled="isLoading">
+        <span v-if="isLoading" class="spinner-border spinner-border-sm me-2"></span>
+        {{ isLoading ? t('wait') : t('login') }}
       </button>
 
-      <!-- Forgot password link -->
       <div class="d-flex justify-content-end mb-1">
         <span>{{ t('forgotPasswordQuestion') }}</span>
         <a
@@ -49,7 +48,6 @@
         </a>
       </div>
 
-
       <div class="divider my-3">
         <h2>{{ t('orBankId') }}</h2>
       </div>
@@ -59,6 +57,7 @@
           @click.prevent="changeView('auth-bankid-qr')"
           class="btn-custom d-flex align-items-center justify-content-start gap-2"
           type="button"
+          :disabled="isLoading"
         >
           <img :src="bankIdLogo" alt="BankID" class="bankid-icon" />
           {{ t('mobileBankID') }}
@@ -68,13 +67,13 @@
           @click.prevent="changeView('auth-bankid-local')"
           class="btn-custom d-flex align-items-center justify-content-start gap-2"
           type="button"
+          :disabled="isLoading"
         >
           <img :src="bankIdLogo" alt="BankID" class="bankid-icon" />
           {{ t('bankIDThisDevice') }}
         </button>
       </div>
 
-      <!-- About BankId -->
       <div class="d-flex justify-content-end mt-2">
         <a
           href="https://www.bankid.com/privat/om-bankid"
@@ -90,68 +89,41 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
-import { apiClient } from '../../modules/services/api-client'
+<script setup lang="ts">
+import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useAuthStore } from '../../modules/stores/auth'
+import { storeToRefs } from 'pinia'
 import bankIdLogo from '../../assets/bankid-logo-white.png'
-import AppLogo from '../common/AppLogo.vue' 
+import AppLogo from '../common/AppLogo.vue'
 
-export default defineComponent({
-  name: 'AuthLoginForm',
-  
-  // Registrera den nya komponenten här
-  components: { 
-    AppLogo 
-  },
+const emit = defineEmits(['change-view', 'show-popup'])
+const { t } = useI18n()
 
-  emits: ['change-view', 'show-popup'],
+// Store-koppling
+const authStore = useAuthStore()
+const { isLoading, error } = storeToRefs(authStore)
 
-  setup(_, { emit }) {
-    const username = ref('')
-    const password = ref('')
-    const error = ref(false)
-    const loading = ref(false)
-    const { t } = useI18n()
+const username = ref('')
+const password = ref('')
 
-    const login = async () => {
-      if (loading.value) return
-      error.value = false
-      loading.value = true
+const handleLogin = async () => {
+  // Om du vill visa din gamla popup också:
+  emit('show-popup', { title: t('loginIn'), loading: true })
 
-      emit('show-popup', { title: t('loginIn'), loading: true })
-
-      try {
-        // 1. Spara ner svaret från API:et
-        const response = await apiClient.login(username.value, password.value)
-        
-        emit('show-popup', { visible: false })
-
-        // 2. Skicka med response.user som payload!
-        emit('change-view', 'auth-2fa-verify', response.user) 
-        
-      } catch (err) {
-        emit('show-popup', { visible: false })
-        error.value = true
-      } finally {
-        loading.value = false
-      }
-    }
-
-    const changeView = (view: string) => {
-      emit('change-view', view)
-    }
-
-    return {
-      username,
-      password,
-      error,
-      loading,
-      t,
-      bankIdLogo,
-      login,
-      changeView,
-    }
+  try {
+    const user = await authStore.login({ 
+      username: username.value, 
+      password: password.value 
+    })
+    
+    emit('show-popup', { visible: false })
+    emit('change-view', 'auth-2fa-verify', user) 
+  } catch (err) {
+    emit('show-popup', { visible: false })
+    // Felet visas nu via store.error i templaten
   }
-})
+}
+
+const changeView = (view: string) => emit('change-view', view)
 </script>
