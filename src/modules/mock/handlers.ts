@@ -59,6 +59,15 @@ export const handlers = [
       }
     })
   }),
+  
+  // 6. RESEND CODE
+  http.post('/api/resend-code', async () => {
+    await delay(1000) // Simulera nätverksfördröjning
+    
+    console.log('%c [MSW] Systemet har genererat och skickat en ny kod till användaren!', 'color: #f39c12; font-weight: bold;')
+    
+    return HttpResponse.json({ success: true })
+  }),
 
   
 ]

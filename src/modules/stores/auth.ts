@@ -76,6 +76,21 @@ export const useAuthStore = defineStore('auth', {
     },
     completeLogin() {
       this.isLoggedIn = true
+    },
+
+    async resendCode() {
+      this.isLoading = true
+      this.error = null
+      try {
+        // Detta anrop kommer att fångas upp av MSW
+        await axios.post('/api/resend-code')
+        return true
+      } catch (err) {
+        this.error = 'Kunde inte skicka ny kod'
+        throw err
+      } finally {
+        this.isLoading = false
+      }
     }
   }
 })
