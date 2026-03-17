@@ -22,10 +22,6 @@
       <img :src="bankIdLogo" class="bankid-icon" alt="BankID" />{{ t('bankIDThisDevice') }}
     </button>
     
-    <div v-if="isDev" class="d-flex flex-column gap-2 mt-2">
-      <button @click="simulateSuccess" class="btn-temp" type="button">Simulera lyckad inloggning</button>
-      <button @click="$emit('trigger-error')" class="btn-temp" type="button">Simulera misslyckad inloggning</button>
-    </div>
   </div>
 </template>
 
@@ -37,11 +33,24 @@ import AppBankIdLink from '../../common/AppBankIdLink.vue'
 import AppLogo from '../../common/AppLogo.vue'
 import AppSpinner from '../../common/AppSpinner.vue'
 import AppStepIndicator from '../../common/AppStepIndicator.vue'
+import { onMounted } from 'vue'
+import { useAuthStore } from '../../../modules/stores/auth'
+
+const authStore = useAuthStore()
 
 const { t } = useI18n()
 const isDev = import.meta.env.DEV
-const emit = defineEmits<{ (e: 'change-view', view: string): void; (e: 'trigger-error'): void }>()
+const emit = defineEmits(['change-view', 'trigger-error'])
+
 const goToLogin = () => emit('change-view', 'login')
 const goToAuthBankIdLocal = () => emit('change-view', 'auth-bankid-local')
-const simulateSuccess = () => emit('change-view', 'auth-bankid-qr-success')
+
+onMounted(async () => {
+  try {
+    await authStore.loginWithBankId()
+    emit('change-view', 'auth-bankid-qr-success')
+  } catch (err) {
+    emit('trigger-error')
+  }
+})
 </script>

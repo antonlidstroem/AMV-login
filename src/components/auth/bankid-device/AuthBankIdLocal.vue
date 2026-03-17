@@ -26,7 +26,7 @@
       {{ t('mobileBankID') }}
     </button>
 
-    <button v-if="isDev" @click="emit('change-view','auth-bankid-local-success')" class="btn-temp">Simulera lyckad inloggning</button>
+    
   </div>
 </template>
 
@@ -38,8 +38,22 @@ import AppBankIdLink from '../../common/AppBankIdLink.vue'
 import AppLogo from '../../common/AppLogo.vue'
 import AppSpinner from '../../common/AppSpinner.vue'
 import AppStepIndicator from '../../common/AppStepIndicator.vue'
+import { onMounted } from 'vue' 
+import { useAuthStore } from '../../../modules/stores/auth'
 
 const { t } = useI18n()
-const isDev = import.meta.env.DEV
 const emit = defineEmits(['change-view'])
+
+const authStore = useAuthStore()
+
+// Starta verifieringen direkt
+onMounted(async () => {
+  try {
+    await authStore.loginWithBankId()
+    // När API:et svarar (efter delay), gå till succé-vyn
+    emit('change-view', 'auth-bankid-local-success')
+  } catch (err) {
+    emit('change-view', 'login') 
+  }
+})
 </script>

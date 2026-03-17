@@ -45,4 +45,17 @@ export const handlers = [
     console.log('[MSW] Kontaktmeddelande:', payload);
     return HttpResponse.json({ success: true })
   }),
+
+  // 5. BANKID
+  http.post('/api/bankid/authenticate', async () => {
+    // Simulera tiden det tar för användaren att signera i BankID-appen
+    await delay(2500); 
+    
+    return HttpResponse.json({
+      success: true,
+      user: { username: 'bankid_user', name: 'Sven Svensson' }
+    });
+  }),
+
+  
 ]

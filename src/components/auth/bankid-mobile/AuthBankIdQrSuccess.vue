@@ -26,24 +26,26 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue' // Importera onMounted
+import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import AppLogo from '../../common/AppLogo.vue'
 import AppSuccess from '../../common/AppSuccess.vue'
 import AppStepIndicator from '../../common/AppStepIndicator.vue'
-import type { AuthUser } from '../../../modules/stores/auth'
+import { useAuthStore } from '../../../modules/stores/auth'
 
 const { t } = useI18n()
-const emit = defineEmits<{ 
-  (e: 'change-view', view: string, payload?: AuthUser): void 
-}>()
+const authStore = useAuthStore()
+const emit = defineEmits(['change-view'])
 
 onMounted(() => {
+  console.log("Succé-vyn laddad. Väntar 1.5s...");
+  
   setTimeout(() => {
-    const bankIdUser = { username: 'BankID-användare', name: 'Sven Svensson' }
+    console.log("Timer klar! Försöker gå till authenticated-view med user:", authStore.user);
     
-    // Skicka både användaren och triggern i samma anrop
-    emit('change-view', 'authenticated-view', bankIdUser)
-  }, 2000)
+    // Kontrollera att namnet 'authenticated-view' stämmer överens med 
+    // vad din App.vue eller föräldrakomponent förväntar sig!
+    emit('change-view', 'authenticated-view', authStore.user)
+  }, 1500)
 })
 </script>

@@ -51,6 +51,28 @@ export const useAuthStore = defineStore('auth', {
       this.user = null
       this.pendingUser = null
       this.error = null
+    },
+
+
+    async loginWithBankId() {
+      this.isLoading = true;
+      this.error = null;
+      try {
+        const response = await axios.post('/api/bankid/authenticate');
+        
+        // VIKTIGT: Vi måste sätta båda dessa för att appen ska fatta att vi är "inne"
+        this.user = response.data.user;
+        this.isLoggedIn = true; // <--- LÄGG TILL DENNA RAD!
+        
+        return response.data.user;
+      } catch (err) {
+        this.error = "BankID-inloggning misslyckades";
+        this.isLoggedIn = false;
+        throw err;
+      } finally {
+        this.isLoading = false;
+      }
     }
+  
   }
 })

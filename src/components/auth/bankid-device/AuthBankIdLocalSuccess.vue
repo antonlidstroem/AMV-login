@@ -21,19 +21,16 @@ import { useI18n } from 'vue-i18n'
 import AppLogo from '../../common/AppLogo.vue'
 import AppSuccess from '../../common/AppSuccess.vue'
 import AppStepIndicator from '../../common/AppStepIndicator.vue'
-import type { AuthUser } from '../../../modules/stores/auth'
+import { useAuthStore } from '../../../modules/stores/auth' 
 
 const { t } = useI18n()
 const isDev = import.meta.env.DEV
-const emit = defineEmits<{ 
-  (e: 'change-view', view: string, payload?: AuthUser): void 
-}>()
-
-onMounted(() => {
+const authStore = useAuthStore()
+const emit = defineEmits(['change-view'])
+  
+  onMounted(() => {
   setTimeout(() => {
-    const bankIdUser = { username: 'BankID-användare', name: 'Sven Svensson' }
-
-    emit('change-view', 'authenticated-view', bankIdUser)
-  }, 2000)
+    emit('change-view', 'authenticated-view', authStore.user)
+  }, 1500)
 })
 </script>
