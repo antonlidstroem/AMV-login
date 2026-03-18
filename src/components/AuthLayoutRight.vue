@@ -1,5 +1,5 @@
 <template>
-  <div class="right-page-container" :style="backgroundStyle">
+  <div class="right-page" :style="backgroundStyle">
     <div class="fixed-top-bar">
       <div class="top-controls d-flex justify-content-center align-items-center gap-2 p-3 w-100">
         
@@ -164,6 +164,8 @@ watch(() => props.externalShowDemands, (newVal) => {
     showHelp.value = false
   }
 })
+
+
 
 onMounted(() => document.addEventListener('click', handleGlobalClick, true))
 onUnmounted(() => document.removeEventListener('click', handleGlobalClick, true))

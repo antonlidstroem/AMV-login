@@ -12,7 +12,7 @@
     <AppStepIndicator :total-steps="3" :active-step="2" />
     
     <div class="d-flex justify-content-between align-items-center mt-3">
-      <AppBackLink :label="t('back')" @click="goToLogin" />
+      <AppBackLink :label="t('back')" @click="handleGoBack" />
       <AppBankIdLink :label="t('aboutMobileBankID')" />
     </div>
     
@@ -33,24 +33,23 @@ import AppBankIdLink from '../../common/AppBankIdLink.vue'
 import AppLogo from '../../common/AppLogo.vue'
 import AppSpinner from '../../common/AppSpinner.vue'
 import AppStepIndicator from '../../common/AppStepIndicator.vue'
-import { onMounted } from 'vue'
 import { useAuthStore } from '../../../modules/stores/auth'
+
+
 
 const authStore = useAuthStore()
 
 const { t } = useI18n()
-const isDev = import.meta.env.DEV
+
 const emit = defineEmits(['change-view', 'trigger-error'])
 
 const goToLogin = () => emit('change-view', 'login')
 const goToAuthBankIdLocal = () => emit('change-view', 'auth-bankid-local')
 
-onMounted(async () => {
-  try {
-    await authStore.loginWithBankId()
-    emit('change-view', 'auth-bankid-qr-success')
-  } catch (err) {
-    emit('trigger-error')
-  }
-})
+const handleGoBack = () => {
+  authStore.stopPolling(); // VIKTIGT: Döda loopen!
+  emit('change-view', 'login');
+}
+
+
 </script>

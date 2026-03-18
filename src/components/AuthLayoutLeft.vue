@@ -41,7 +41,10 @@ import Auth2FAVerify from './auth/2fa/Auth2FAVerify.vue'
 import Auth2FARetry from './auth/2fa/Auth2FARetry.vue'
 import AuthBankIdQrPending from './auth/bankid-mobile/AuthBankIdQrPending.vue'
 import AuthBankIdQrSuccess from './auth/bankid-mobile/AuthBankIdQrSuccess.vue'
+import { watch } from 'vue'
+import { useAuthStore } from '../modules/stores/auth'
 
+const authStore = useAuthStore()
 const props = defineProps<{ currentView: ViewType }>()
 const emit = defineEmits(['change-view', 'show-password-demands', 'trigger-error', 'show-popup'])
 
@@ -72,6 +75,15 @@ const handleChangeView = (view: ViewType, payload?: any) => {
   
   emit('change-view', view, payload)
 }
+
+// Denna kod i din AuthLayoutLeft.vue är nu hjärtat i flödet:
+watch(() => authStore.bankIdStatus, (newStatus) => {
+  if (newStatus === 'USER_SIGN') {
+    emit('change-view', 'auth-bankid-qr-pending')
+  } else if (newStatus === 'COMPLETE') {
+    emit('change-view', 'auth-bankid-qr-success')
+  }
+})
 
 const currentComponent = computed(() => VIEW_MAP[props.currentView] ?? null)
 </script>

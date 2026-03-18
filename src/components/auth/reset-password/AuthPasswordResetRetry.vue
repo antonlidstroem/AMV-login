@@ -12,31 +12,43 @@
 </template>
 
 <script setup lang="ts">
-import { markRaw } from 'vue' // 1. Importera markRaw
+import { markRaw } from 'vue' 
 import { useI18n } from 'vue-i18n'
 import AppBackLink from '../../common/AppBackLink.vue'
-import AppSuccess from '../../common/AppSuccess.vue' // 2. Importera AppSuccess
+import AppSuccess from '../../common/AppSuccess.vue' 
+import { useAuthStore } from '../../../modules/stores/auth'
 
-defineProps<{ email: string }>()
+const props = defineProps<{ email: string }>()
 const emit = defineEmits(['change-view', 'show-popup'])
 const { t } = useI18n()
+const authStore = useAuthStore()
 
-const send = () => {
-  // 1. Visa spinner först
+const send = async () => {
+  // 3. Visa spinner
   emit('show-popup', {
-    title: "skickar", 
+    title: t('sending'), 
     loading: true
   })
 
-  // 2. Vänta lite (simulera nätverk) och byt sen till bocken
-  setTimeout(() => {
+  try {
+    // 4. Anropa den riktiga (mockade) endpointen
+    await authStore.resendPasswordResetEmail(props.email);
+
+    // 5. Visa succé-bocken när anropet är klart
     emit('show-popup', {
       title: t('newEmailSent'),
-      loading: false, // Stäng av spinnern
-      component: markRaw(AppSuccess), // In med bocken!
-      buttons: [{ label: t('okClose'), action: () => emit('show-popup', { visible: false }) }]
+      loading: false,
+      component: markRaw(AppSuccess),
+      buttons: [{ 
+        label: t('okClose'), 
+        action: () => emit('show-popup', { visible: false }) 
+      }]
     })
-  }, 800) // 0.8 sekunder räcker för att det ska kännas äkta
+  } catch (err) {
+    // Hantera eventuella fel
+    emit('show-popup', { visible: false });
+    alert("Kunde inte skicka mejlet, försök igen senare.");
+  }
 }
 </script>
 

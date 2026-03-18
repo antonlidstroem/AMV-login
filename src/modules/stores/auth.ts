@@ -3,12 +3,16 @@ import axios from 'axios'
 
 // 1. Hämta URL:en från Vite. Om den inte finns (t.ex. i lokala tester) 
 // använder vi en tom sträng vilket innebär "relative path".
-const API_BASE_URL = import.meta.env.VITE_API_URL || '';
+const API_BASE_URL = '';
 
 export interface AuthUser {
   username: string
   name?: string
+  bankIdStatus: 'IDLE' | 'OUTSTANDING' | 'USER_SIGN' | 'COMPLETE'
 }
+
+
+export type BankIdStatus = 'IDLE' | 'OUTSTANDING' | 'USER_SIGN' | 'COMPLETE';
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -16,7 +20,9 @@ export const useAuthStore = defineStore('auth', {
     user: null as AuthUser | null,
     pendingUser: null as AuthUser | null,
     isLoading: false, 
-    error: null as string | null
+    error: null as string | null,
+    bankIdStatus: 'IDLE' as BankIdStatus,
+    isPolling: false
   }),
 
   actions: {
@@ -111,6 +117,60 @@ export const useAuthStore = defineStore('auth', {
     authenticateBankId: async () => {
       const response = await axios.post('/api/bankid/authenticate');
       return response.data;
+    },
+
+  
+    stopPolling() {
+      this.isPolling = false;
+      this.bankIdStatus = 'IDLE';
+    },
+
+   async pollBankIdStatus() {
+      if (this.isPolling) return; 
+      
+      this.isPolling = true;
+      this.bankIdStatus = 'OUTSTANDING';
+
+      while (this.isPolling) {
+        try {
+          const response = await axios.post(`${API_BASE_URL}/api/bankid/collect`);
+          const data = response.data;
+
+          // Om någon anropat stopPolling under tiden vi väntade på svar
+          if (!this.isPolling) break;
+
+          if (data.status !== this.bankIdStatus) {
+            this.bankIdStatus = data.status;
+          }
+
+          if (data.status === 'COMPLETE') {
+            this.user = data.user;
+            this.isPolling = false;
+          } else {
+            // Vänta 2 sekunder innan nästa check
+            await new Promise(resolve => setTimeout(resolve, 2000));
+          }
+        } catch (err) {
+          this.isPolling = false;
+          this.bankIdStatus = 'IDLE';
+          break;
+        }
+      }
+    },
+
+    async resendPasswordResetEmail(email: string) {
+      this.isLoading = true;
+      try {
+        // Vi använder en relativ sökväg så att MSW fångar upp det direkt
+        await axios.post('/api/password-reset-resend', { email });
+        return true;
+      } catch (err) {
+        this.error = 'Kunde inte skicka om mejlet';
+        throw err;
+      } finally {
+        this.isLoading = false;
+      }
     }
+
   }
 })

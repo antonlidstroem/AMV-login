@@ -1,102 +1,131 @@
+// src/mocks/handlers.ts
 import { http, HttpResponse, delay } from 'msw'
 import { users } from './users'
 
+let bankIdStep = 0; 
+
+// Hjälpfunktion för snygga loggar
+const mswLog = (icon: string, title: string, message: any = '', color: string = '#3498db') => {
+  console.log(
+    `%c${icon} [MSW] ${title.toUpperCase()}%c ${message}`,
+    `color: ${color}; font-weight: bold;`,
+    'color: inherit; font-weight: normal;'
+  );
+};
+
 export const handlers = [
-  // 1. LOGIN
+  // --- 1. LOGIN ---
   http.post('/api/login', async ({ request }) => {
     const { username, password } = await request.json() as any
-    console.log(`%c[MSW] Försöker logga in användare: ${username}`, 'color: #3498db; font-weight: bold;');
-    
-    await delay(1500)
-    
-    const user = users.find(u => u.username === username && u.password === password)
-    
+    mswLog('🚀', 'Inloggning', username);
+    await delay(1000);
+    const user = users.find(u => u.username === username && u.password === password);
     if (user) {
-      console.log('%c[MSW] Login lyckades!', 'color: #27ae60; font-weight: bold;');
-      return HttpResponse.json({ success: true, user })
+      mswLog('✅', 'Login lyckades', user.username, '#27ae60');
+      return HttpResponse.json({ success: true, user });
     }
-    
-    console.warn('%c[MSW] Login misslyckades: Felaktiga uppgifter', 'color: #c0392b; font-weight: bold;');
-    return new HttpResponse(null, { status: 401 })
+    return new HttpResponse(null, { status: 401 });
   }),
 
-  // 2. VERIFY CODE (2FA)
-  http.post('/api/verify-code', async ({ request }) => {
-    const { code } = await request.json() as any
-    console.log(`%c[MSW] Verifierar 2FA-kod: ${code}`, 'color: #3498db');
+  // --- 2. PASSWORD RESET REQUEST (Denna anropas av AuthPasswordResetRequest.vue) ---
+  http.post('/api/password-reset-request', async ({ request }) => {
+    const { email } = await request.json() as { email: string };
+    mswLog('📧', 'Reset-begäran', `Skapar länk för: ${email}`);
     
-    await delay(800)
+    await delay(1200);
+    // Loggar ut länken i konsolen så du kan klicka på den för att testa i dev
+    console.log(`%c[MSW] ✉️ MEJL SKICKAT TILL: ${email}\nLänk: http://localhost:5173/reset-password?token=mock-token`, 'background: #3498db; color: white; padding: 5px; border-radius: 4px;');
     
-    if (code === '1234') {
-      console.log('%c[MSW] Kod korrekt!', 'color: #27ae60');
-      return HttpResponse.json({ success: true })
-    }
-    
-    console.error(`%c[MSW] Felaktig kod: ${code}. Tips: använd 1234`, 'color: #c0392b');
-    return new HttpResponse(null, { status: 400 })
+    return HttpResponse.json({ success: true });
   }),
 
-  // 3. RESET PASSWORD
+  // --- 3. RESET PASSWORD (Denna anropas av AuthPasswordResetForm.vue via api-client) ---
   http.post('/api/reset-password', async ({ request }) => {
     const { password } = await request.json() as any
-    console.log('%c[MSW] Begäran om nytt lösenord mottagen', 'color: #3498db');
+    mswLog('🔄', 'Lösenordsbyte', 'Spara nytt lösenord...');
     
-    await delay(1500)
-
+    await delay(1500);
+    
+    // Scenario: Om man väljer detta specifika lösenord så simulerar vi ett serverfel
     if (password === 'DenyChange123!') {
-      console.error('%c[MSW] Simulerar serverfel (Lösenordet nekat)', 'color: #c0392b');
+      mswLog('❌', 'Byte nekat', 'Simulerat fel', '#c0392b');
       return new HttpResponse(
-        JSON.stringify({ message: 'Servern nekar ändringen (Simulerat fel)' }), 
+        JSON.stringify({ message: 'Lösenordet uppfyller inte säkerhetskraven (Simulerat)' }), 
         { status: 400 }
-      )
+      );
     }
     
-    console.log('%c[MSW] Lösenordet har ändrats i databasen', 'color: #27ae60');
-    return HttpResponse.json({ success: true })
+    mswLog('✅', 'Byte klart', 'Databasen uppdaterad', '#27ae60');
+    return HttpResponse.json({ success: true });
   }),
 
-  // 4. CONTACT
-  http.post('/api/contact', async ({ request }) => {
-    const payload = await request.json() as any
-    await delay(1200)
-    console.log('%c[MSW] Kontaktmeddelande mottaget:', 'background: #222; color: #bada55', payload);
-    return HttpResponse.json({ success: true })
+  // --- 4. 2FA & RETRY ---
+  http.post('/api/verify-code', async ({ request }) => {
+    const { code } = await request.json() as any
+    mswLog('🔐', '2FA', `Kod: ${code}`);
+    await delay(800);
+    if (code === '1234') return HttpResponse.json({ success: true });
+    return new HttpResponse(null, { status: 400 });
   }),
 
-  // 5. BANKID
+  http.post('/api/resend-code', async () => {
+    await delay(1000);
+    mswLog('📲', 'SMS', 'Ny kod skickad');
+    return HttpResponse.json({ success: true });
+  }),
+
+  // --- 5. BANKID: AUTHENTICATE ---
   http.post('/api/bankid/authenticate', async () => {
-    console.log('%c[MSW] BankID-session startad. Väntar på scanning...', 'color: #9b59b6; font-style: italic;');
-    
-    await delay(3000);
-
-    // --- SCENARIO 1: Succé (Kommentera bort för att testa fel) ---
-    /*
-    console.log('%c[MSW] BankID: Användaren har scannat QR-koden!', 'color: #27ae60; font-weight: bold;');
+    bankIdStep = 0; 
+    mswLog('📱', 'BankID', 'Startar session...', '#9b59b6');
+    await delay(1500);
     return HttpResponse.json({ 
       success: true, 
       user: { username: 'sven_svensson', name: 'Sven Svensson' } 
     });
-    */
-
-    // --- SCENARIO 2: Fel ---
-    console.error('%c[MSW] BankID: Sessionen avbröts eller timeout', 'color: #c0392b; font-weight: bold;');
-    return new HttpResponse(null, { status: 403 }); 
-  }),
-  
-  // 6. RESEND CODE
-  http.post('/api/resend-code', async () => {
-    await delay(1000)
-    console.log('%c[MSW] Ny SMS-kod genererad och skickad!', 'color: #f39c12; font-weight: bold;')
-    return HttpResponse.json({ success: true })
   }),
 
-  // 7. PASSWORD RESET REQUEST (EMAIL)
-  http.post('/api/password-reset-request', async ({ request }) => {
+  // --- 6. BANKID: COLLECT (POLLING) ---
+  http.post('/api/bankid/collect', async () => {
+    await delay(1000);
+    bankIdStep++;
+    console.groupCollapsed(`%c🔍 [MSW] BankID Poll (Försök ${bankIdStep})`, 'color: #95a5a6;');
+
+    if (bankIdStep < 2) {
+      mswLog('⏳', 'Status', 'OUTSTANDING', '#7f8c8d');
+      console.groupEnd();
+      return HttpResponse.json({ status: 'OUTSTANDING' });
+    } else if (bankIdStep === 2) {
+      mswLog('📱', 'Status', 'USER_SIGN', '#e67e22');
+      console.log('%c[MSW] Simulering: Användaren har nu skannat QR-koden.', 'color: #e67e22;');
+      console.groupEnd();
+      return HttpResponse.json({ status: 'USER_SIGN' });
+    } else {
+      mswLog('🎉', 'Status', 'COMPLETE', '#2ecc71');
+      console.groupEnd();
+      bankIdStep = 0; 
+      return HttpResponse.json({ 
+        status: 'COMPLETE', 
+        user: { username: 'sven_svensson', name: 'Sven Svensson' } 
+      });
+    }
+  }),
+
+  // --- 7. KONTAKT ---
+  http.post('/api/contact', async () => {
+    await delay(1000);
+    mswLog('📩', 'Kontakt', 'Mottaget');
+    return HttpResponse.json({ success: true });
+  }),
+
+  // --- 8. RESEND PASSWORD RESET EMAIL (Anropas av AuthPasswordResetRetry.vue) ---
+  http.post('/api/password-reset-resend', async ({ request }) => {
     const { email } = await request.json() as { email: string };
-    await delay(1200);
+    mswLog('📧', 'Resend Reset', `Skickar NY länk till: ${email}`, '#f39c12');
     
-    console.log(`%c[MSW] Genererar återställningslänk för: ${email}`, 'color: #3498db');
-    console.log(`%c[MSW] MEJL SKICKAT: http://localhost:5173/reset-password?token=mock-token-123`, 'background: #3498db; color: white; padding: 2px 5px;');
+    await delay(1500); // Lite längre delay för att spinnern ska synas ordentligt
+    
+    console.log(`%c[MSW] ✉️ NYTT MEJL SKICKAT TILL: ${email}\nLänk: http://localhost:5173/reset-password?token=new-mock-token`, 'background: #f39c12; color: white; padding: 5px; border-radius: 4px;');
     
     return HttpResponse.json({ success: true });
   }),

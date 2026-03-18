@@ -24,7 +24,7 @@
     <AppStepIndicator :total-steps="3" :active-step="1" />
 
     <div class="d-flex justify-content-between align-items-center mt-3">
-      <AppBackLink :label="t('back')" @click="emit('change-view', 'login')" />
+      <AppBackLink :label="t('back')" @click="handleGoBack" />
       <AppBankIdLink :label="t('aboutMobileBankID')" />
     </div>
 
@@ -59,26 +59,27 @@
   // Vi ser till att vi har både 'change-view' och din viktiga 'trigger-error'
   const emit = defineEmits(['change-view', 'trigger-error'])
 
+
+ const handleGoBack = () => {
+    authStore.stopPolling(); // Stoppar loopen i storen
+    emit('change-view', 'login'); // Byter vy
+  }
+
   /**
    * AUTOMATISKT FLÖDE
    */
   onMounted(async () => {
     try {
-      // 1. Starta väntan på scanning via store/MSW
-      const user = await authStore.loginWithBankId()
+      // 1. Starta sessionen (Detta anropar /authenticate och nollställer MSW-stegen)
+      await authStore.loginWithBankId(); 
       
-      // 2. Om succé -> Gå vidare
-      emit('change-view', 'auth-bankid-qr-success', user)
-      
+      // 2. Börja polla efter statusändringar
+      authStore.pollBankIdStatus();
     } catch (err) {
-      // 3. OM DET BLIR FEL (Här är din återställda funktion!)
-      isQrLoaded.value = false
-      
-      // Vi skickar payloaden som din App.vue/LoginView förväntar sig
-      // för att trigga den specifika BankID-feltexten
-      emit('trigger-error', { triggerContact: true })
+      emit('trigger-error');
     }
-  })
+  });
+
 
   const goToAuthBankIdLocal = () => emit('change-view', 'auth-bankid-local')
 </script>
