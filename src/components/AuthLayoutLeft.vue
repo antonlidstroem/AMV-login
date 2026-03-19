@@ -23,7 +23,6 @@
         @change-view="handleChangeView"
         @show-password-demands="emit('show-password-demands')"
         @trigger-error="emit('trigger-error')"
-        @show-popup="emit('show-popup', $event)"
       />
     </div>
   </div>

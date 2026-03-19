@@ -18,26 +18,28 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '../../../modules/stores/auth'
+import { usePopupStore } from '../../../modules/stores/popup'
+
+
+const popup = usePopupStore()
 
 const { t } = useI18n()
 const authStore = useAuthStore()
-const emit = defineEmits(['show-popup'])
+
 
 const handleResend = async () => {
   try {
     await authStore.resendCode()
 
     // Success feedback is kept as a popup
-    emit('show-popup', {
-      title: t('newCodeSent'),
-      icon: 'bi bi-check-circle fs-1',
-      buttons: [{ 
-        label: t('okClose'), 
-        action: () => emit('show-popup', { visible: false }) 
-      }]
+    popup.show({
+      title: 'Ny kod har skickats!',
+      icon: 'bi bi-check-circle',
+      buttons: [{ label: 'Stäng', action: () => popup.hide() }]
     })
+
   } catch (err) {
-    // Error is handled globally by the store's error state
+    console.error(err)
   }
 }
 </script>

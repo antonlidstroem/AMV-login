@@ -6,7 +6,6 @@
       @change-view="handleViewChange"
       @show-password-demands="showDemands = !showDemands"
       @trigger-error="handleLoginError"
-      @show-popup="$emit('show-popup', $event)"
     />
 
     <div class="col-12 col-md-6 d-flex p-0">
@@ -18,7 +17,7 @@
         @change-view="handleViewChange"
         @contact-opened="contactTrigger = false"
         @close-demands="showDemands = false"
-        @show-popup="$emit('show-popup', $event)"
+
       >
         <template #mobile-left>
           <div class="d-flex d-md-none w-100 justify-content-center align-items-start py-3 px-2">
@@ -29,7 +28,7 @@
               @change-view="handleViewChange"
               @trigger-error="handleLoginError"
               @show-password-demands="showDemands = !showDemands"
-              @show-popup="$emit('show-popup', $event)"
+
             />
           </div>
         </template>
@@ -46,7 +45,7 @@ import AuthLayoutRight from '../components/AuthLayoutRight.vue'
 import { useAuthStore, type AuthUser } from '../modules/stores/auth'
 import type { ViewType } from '../modules/types/views'
 
-const emit = defineEmits(['show-popup', 'trigger-error'])
+const emit = defineEmits(['trigger-error'])
 const auth = useAuthStore()
 const router = useRouter()
 
