@@ -11,7 +11,7 @@
              type="tel" class="text-center code-input" :class="{ 'error-border': auth.error }"
              @input="onInput(i)" @paste.prevent="onPaste" :disabled="auth.isLoading" />
     </div>
-    <AppBackLink :label="t('back')" @click="emit('change-view', 'login')" />
+    <AppBackLink :label="t('back')" @click="ui.setView('login')" />
   </div>
 </template>
 
@@ -19,12 +19,13 @@
 import { ref, reactive } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '../../../modules/stores/auth'
+import { useUIStore } from '../../../modules/stores/ui'
 import AppBackLink from '../../common/AppBackLink.vue'
 import AppLogo from '../../common/AppLogo.vue'
 
-const emit = defineEmits(['change-view'])
 const { t } = useI18n()
 const auth = useAuthStore()
+const ui = useUIStore()
 
 const digits = reactive(['', '', '', ''])
 const inputRefs = ref<HTMLInputElement[]>([])
@@ -35,7 +36,7 @@ const verify = async () => {
 
   try {
     await auth.verify2FA(code) 
-    emit('change-view', 'authenticated-view') 
+    ui.setView('authenticated-view') 
   } catch (err) {
     digits.fill('') 
     inputRefs.value[0]?.focus()
@@ -60,3 +61,14 @@ const onPaste = (e: ClipboardEvent) => {
   if (pasted.length === 4) verify()
 }
 </script>
+
+<style scoped>
+.code-input {
+  width: 50px;
+  height: 60px;
+  font-size: 1.5rem;
+  border: 1px solid #ced4da;
+  border-radius: 8px;
+}
+.error-border { border-color: #dc3545; }
+</style>

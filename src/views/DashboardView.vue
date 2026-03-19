@@ -9,13 +9,16 @@
 
 <script setup lang="ts">
 import { useAuthStore } from '../modules/stores/auth'
+import { useUIStore } from '../modules/stores/ui'
 import { useRouter } from 'vue-router'
 
 const auth = useAuthStore()
+const ui = useUIStore()
 const router = useRouter()
 
 const handleLogout = () => {
-  auth.logout()
-  router.push('/') // Navigate back to login
+  auth.logout()    // Sätter isLoggedIn = false
+  ui.reset()       // Sätter currentView = 'login'
+  router.push('/') // Hoppar till login-routen
 }
 </script>
