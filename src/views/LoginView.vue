@@ -55,22 +55,25 @@ const showDemands = ref(false)
 const contactTrigger = ref(false)
 
 const handleViewChange = (view: ViewType, payload?: any) => {
-  // 1. Om vi får en användare (BankID/Login), spara i store
-  if (payload && typeof payload === 'object' && 'username' in payload) {
-    auth.setPendingUser(payload)
-  }
-  
-  // 2. Om vi ska logga in helt (från 2FA eller BankID Success)
+  // 1. Om vi ska logga in helt (anropas från Success-vyerna)
   if (view === 'authenticated-view') {
-    auth.confirmLogin()
+    console.log("LoginView: Authenticated! Skickar till dashboard...");
+    
+    // Vi säkerställer att storen är bekräftad (om Success-vyn missade det)
+    auth.confirmLogin() 
+    
+    // Navigera till dashboard
     router.push('/dashboard')
     return
   }
 
-  // 3. Annars byter vi bara vy
+  // 2. Hantera e-post för password reset (om payload är sträng)
+  if (typeof payload === 'string' && payload.includes('@')) {
+    // Om du behöver spara e-posten i LoginView, gör det här
+  }
+
+  // 3. Byt vy i layouten
   currentView.value = view
-  
-  // Bonus: Stäng lösenordskraven om vi byter vy
   showDemands.value = false 
 }
 

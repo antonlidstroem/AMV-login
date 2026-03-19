@@ -32,8 +32,22 @@
 import { usePopupStore } from './modules/stores/popup'
 import AppPopupGeneric from './components/common/AppPopupGeneric.vue'
 import AppSpinner from './components/common/AppSpinner.vue'
+import { watch } from 'vue'
+import { useRouter } from 'vue-router'
+import { useAuthStore } from './modules/stores/auth'
 
+const authStore = useAuthStore()
 const popup = usePopupStore()
+const router = useRouter()
+
+
+    watch(() => authStore.isLoggedIn, (loggedIn) => {
+      if (loggedIn) {
+        router.push('/dashboard')
+      } else {
+        router.push('/')
+      }
+    }, { immediate: true }) // immediate kollar även när appen laddas första gången
 </script>
 
 <style>

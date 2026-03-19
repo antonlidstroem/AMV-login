@@ -80,7 +80,7 @@ export const handlers = [
     mswLog('📱', 'BankID', 'Startar session...', '#9b59b6');
     await delay(1500);
     return HttpResponse.json({ 
-      success: true, 
+      status: 'OUTSTANDING', // Lägg till denna!
       user: { username: 'sven_svensson', name: 'Sven Svensson' } 
     });
   }),

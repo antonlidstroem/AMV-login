@@ -1,20 +1,12 @@
-
-
 <template>
   <div class="bg-views p-4 rounded-4 mb-3">
-
     <AppLogo />
     <h2>{{ t('loginWithMobileBankID') }}</h2>
     <p class="mb-5">{{ t('scanQRCode') }}</p>
 
     <div class="qr-wrapper mb-5">
       <div v-if="isQrLoaded" class="fake-qr"></div>
-      
-      <div
-        v-else
-        class="qr-placeholder d-flex align-items-center justify-content-center border rounded-3"
-        style="height: 200px; background: rgba(0,0,0,0.1);"
-      >
+      <div v-else class="qr-placeholder d-flex align-items-center justify-content-center border rounded-3" style="height: 200px; background: rgba(0,0,0,0.1);">
         <div class="spinner-border text-light" role="status">
           <span class="visually-hidden">Loading...</span>
         </div>
@@ -41,41 +33,47 @@
   </div>
 </template>
 
-
 <script setup lang="ts">
-  import { ref, onMounted, onUnmounted } from 'vue'
-  import { useI18n } from 'vue-i18n'
-  import { useAuthStore } from '../../../modules/stores/auth'
-  import bankIdLogo from '../../../assets/bankid-logo-white.png'
-  import AppBackLink from '../../common/AppBackLink.vue'
-  import AppBankIdLink from '../../common/AppBankIdLink.vue'
-  import AppLogo from '../../common/AppLogo.vue'
-  import AppStepIndicator from '../../common/AppStepIndicator.vue'
+import { ref, onMounted, onUnmounted, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useAuthStore } from '../../../modules/stores/auth'
+import bankIdLogo from '../../../assets/bankid-logo-white.png'
+import AppBackLink from '../../common/AppBackLink.vue'
+import AppBankIdLink from '../../common/AppBankIdLink.vue'
+import AppLogo from '../../common/AppLogo.vue'
+import AppStepIndicator from '../../common/AppStepIndicator.vue'
 
-  const { t } = useI18n()
-  const authStore = useAuthStore()
-  const isQrLoaded = ref(true)
-  const emit = defineEmits(['change-view', 'trigger-error'])
+const { t } = useI18n()
+const authStore = useAuthStore()
+const isQrLoaded = ref(true)
+const emit = defineEmits(['change-view', 'trigger-error'])
 
-
- const handleGoBack = () => {
-    authStore.stopPolling(); 
-    emit('change-view', 'login'); 
+// Watch for the store to hit 'COMPLETE' and switch views automatically
+watch(() => authStore.bankIdStatus, (newStatus) => {
+  if (newStatus === 'USER_SIGN') {
+    // Användaren har skannat, byt till vänta-vyn!
+    emit('change-view', 'auth-bankid-qr-pending'); 
   }
+  if (newStatus === 'COMPLETE') {
+    emit('change-view', 'auth-bankid-qr-success');
+  }
+})
 
-  onMounted(async () => {
-    try {
-      await authStore.loginWithBankId(); 
-      authStore.pollBankIdStatus();
-    } catch (err) {
-      emit('trigger-error');
-    }
-  });
+const handleGoBack = () => {
+  authStore.stopPolling()
+  emit('change-view', 'login')
+}
 
-  onUnmounted(() => {
-  authStore.stopPolling() 
-  });
+onMounted(async () => {
+  try {
+    await authStore.loginWithBankId()
+    authStore.pollBankIdStatus() // Starts the loop in the store
+  } catch (err) {
+    emit('trigger-error')
+  }
+})
 
-
-  // const goToAuthBankIdLocal = () => emit('change-view', 'auth-bankid-local')
+// onUnmounted(() => {
+//   authStore.stopPolling()
+// })
 </script>

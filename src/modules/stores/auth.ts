@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { apiClient, type AuthUser } from '../services/api-client'
+export type { AuthUser }
 
 export type BankIdStatus = 'IDLE' | 'OUTSTANDING' | 'USER_SIGN' | 'COMPLETE';
 
@@ -15,6 +16,7 @@ export const useAuthStore = defineStore('auth', {
   }),
 
   actions: {
+    // --- LOGIN FLÖDEN ---
     async login(credentials: { username: string; password: string }) {
       this.isLoading = true
       this.error = null
@@ -35,41 +37,36 @@ export const useAuthStore = defineStore('auth', {
       this.error = null
       try {
         const data = await apiClient.authenticateBankId()
-        if (data && data.user) {
-          this.user = data.user
-          return data.user
-        }
-        throw new Error("Inget användarobjekt i svaret")
+        this.bankIdStatus = 'OUTSTANDING'
+        return data
       } catch (err: any) {
-        this.error = err.message || 'BankID-verifiering misslyckades'
+        this.error = err.message || 'BankID kunde inte startas'
         throw err 
       } finally {
         this.isLoading = false
       }
     },
 
+    // --- BANKID POLLING ---
     async pollBankIdStatus() {
       if (this.isPolling) return; 
       this.isPolling = true;
-      this.bankIdStatus = 'OUTSTANDING';
 
       while (this.isPolling) {
         try {
           const data = await apiClient.collectBankId();
-
           if (!this.isPolling) break;
 
-          if (data.status !== this.bankIdStatus) {
-            this.bankIdStatus = data.status;
-          }
+          this.bankIdStatus = data.status;
 
           if (data.status === 'COMPLETE') {
-            this.user = data.user;
-            this.isLoggedIn = true;
+            this.pendingUser = data.user;
             this.isPolling = false;
-          } else {
-            await new Promise(resolve => setTimeout(resolve, 2000));
+            // Här ska INGEN isLoggedIn = true finnas. 
+            // Det sköts av confirmLogin() senare.
+            break; 
           }
+          await new Promise(resolve => setTimeout(resolve, 2000));
         } catch (err) {
           this.stopPolling();
           break;
@@ -77,8 +74,25 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
+    // --- 2FA & KOD-HANTERING (Dessa saknades i förra svaret) ---
+    async verify2FA(code: string) {
+      this.isLoading = true;
+      this.error = null;
+      try {
+        await apiClient.verifyCode(code);
+        this.confirmLogin(); // Flytta pendingUser -> user
+        return true;
+      } catch (err: any) {
+        this.error = err.message || 'Ogiltig kod';
+        throw err;
+      } finally {
+        this.isLoading = false;
+      }
+    },
+
     async resendCode() {
       this.isLoading = true;
+      this.error = null;
       try {
         await apiClient.resendCode();
         return true;
@@ -90,8 +104,10 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
+    // --- LÖSENORDSHANTERING (Dessa saknades också) ---
     async requestPasswordReset(email: string) {
       this.isLoading = true;
+      this.error = null;
       try {
         await apiClient.requestPasswordReset(email);
         return true;
@@ -105,6 +121,7 @@ export const useAuthStore = defineStore('auth', {
 
     async resendPasswordResetEmail(email: string) {
       this.isLoading = true;
+      this.error = null;
       try {
         await apiClient.resendPasswordReset(email);
         return true;
@@ -116,27 +133,28 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
+    // --- STATE MANAGEMENT ---
+    confirmLogin() {
+      if (this.pendingUser) {
+        this.user = this.pendingUser
+        this.isLoggedIn = true
+        this.pendingUser = null
+        this.bankIdStatus = 'IDLE'
+      }
+    },
+
     stopPolling() {
       this.isPolling = false;
       this.bankIdStatus = 'IDLE';
     },
 
-    setPendingUser(user: AuthUser) { this.pendingUser = user },
-    
-    confirmLogin() {
-      if (this.pendingUser) {
-        this.isLoggedIn = true
-        this.user = this.pendingUser
-        this.pendingUser = null
-      }
-    },
-
     logout() {
-      this.isLoggedIn = false
-      this.user = null
-      this.pendingUser = null
-      this.error = null
-      this.stopPolling();
+      this.isLoggedIn = false;
+      this.user = null;
+      this.pendingUser = null;
+      this.error = null;
+      this.bankIdStatus = 'IDLE';
+      this.isPolling = false;
     }
   }
 })

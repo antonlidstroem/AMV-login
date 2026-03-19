@@ -38,7 +38,7 @@ import AppBankIdLink from '../../common/AppBankIdLink.vue'
 import AppLogo from '../../common/AppLogo.vue'
 import AppSpinner from '../../common/AppSpinner.vue'
 import AppStepIndicator from '../../common/AppStepIndicator.vue'
-import { onMounted } from 'vue' 
+import { onMounted, onUnmounted } from 'vue' 
 import { useAuthStore } from '../../../modules/stores/auth'
 
 const { t } = useI18n()
@@ -55,5 +55,8 @@ onMounted(async () => {
   } catch (err) {
     emit('change-view', 'login') 
   }
+})
+onUnmounted(() => {
+  authStore.isLoading = false // Safety reset
 })
 </script>

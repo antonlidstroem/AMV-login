@@ -24,14 +24,10 @@ const authStore = useAuthStore()
 const emit = defineEmits(['show-popup'])
 
 const handleResend = async () => {
-  // 1. Visa laddnings-popup (valfritt, eftersom vi har spinner på knappen nu också)
-  emit('show-popup', { title: t('wait'), loading: true })
-
   try {
-    // 2. Gör det faktiska anropet via storen
     await authStore.resendCode()
 
-    // 3. Om det lyckas, visa succé-popupen
+    // Success feedback is kept as a popup
     emit('show-popup', {
       title: t('newCodeSent'),
       icon: 'bi bi-check-circle fs-1',
@@ -41,8 +37,7 @@ const handleResend = async () => {
       }]
     })
   } catch (err) {
-    // 4. Vid fel, stäng popupen (eller visa felmeddelande)
-    emit('show-popup', { visible: false })
+    // Error is handled globally by the store's error state
   }
 }
 </script>
