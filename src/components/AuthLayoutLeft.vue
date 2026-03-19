@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-AuthLayoutLeft d-flex flex-column align-items-center justify-content-center h-100 rounded-4">
+  <div class="bg-views d-flex flex-column align-items-center justify-content-center h-100 rounded-4">
     <div class="w-100 px-1">
       <!-- 2FA Specialvy -->
       <div v-if="ui.currentView === 'auth-2fa-verify'" class="d-flex flex-column gap-3 w-100">

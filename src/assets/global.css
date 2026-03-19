@@ -170,7 +170,6 @@ label {
 }
 
 @media (max-width: 768px) {
-  /* Här skedde felet förut - ingen nästling tillåten */
   .right-page {
     height: 100dvh !important;
     overflow-y: auto !important;
