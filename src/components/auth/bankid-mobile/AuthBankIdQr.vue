@@ -48,17 +48,6 @@ const authStore = useAuthStore()
 const isQrLoaded = ref(true)
 const emit = defineEmits(['change-view', 'trigger-error'])
 
-// Watch for the store to hit 'COMPLETE' and switch views automatically
-watch(() => authStore.bankIdStatus, (newStatus) => {
-  if (newStatus === 'USER_SIGN') {
-    // Användaren har skannat, byt till vänta-vyn!
-    emit('change-view', 'auth-bankid-qr-pending'); 
-  }
-  if (newStatus === 'COMPLETE') {
-    emit('change-view', 'auth-bankid-qr-success');
-  }
-})
-
 const handleGoBack = () => {
   authStore.stopPolling()
   emit('change-view', 'login')
@@ -73,7 +62,5 @@ onMounted(async () => {
   }
 })
 
-// onUnmounted(() => {
-//   authStore.stopPolling()
-// })
+
 </script>

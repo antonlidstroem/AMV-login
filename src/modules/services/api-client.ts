@@ -15,14 +15,13 @@ export interface LoginResponse {
 
 // --- 2. Instance Configuration ---
 const api = axios.create({
-  // Use /api as base so MSW or your Proxy picks it up
   baseURL: '/api', 
   headers: { 'Content-Type': 'application/json' }
 })
 
 // --- 3. Interceptors ---
 api.interceptors.response.use(
-  (response) => response.data, // Unwrap data immediately
+  (response) => response.data,
   (error) => {
     const message = error.response?.data?.message || 'Ett oväntat fel uppstod'
     return Promise.reject({ 
@@ -30,14 +29,18 @@ api.interceptors.response.use(
       message 
     })
   }
-)
+); // Semikolon här, inte kommatecken
 
 // --- 4. Exported Client ---
 export const apiClient = {
-  // We expose the raw instance if we need .post() directly in the store
   instance: api,
 
-  // Typed helpers
+  // FIX: Flytta in resetPassword hit och använd rätt variabel (api)
+  async resetPassword(token: string, password: string): Promise<any> {
+    // Eftersom baseURL är /api, behöver vi bara skriva /password-reset
+    return api.post('/reset-password', { token, password });
+  },
+
   login: (credentials: { username: string; password: string }) => 
     api.post<any, LoginResponse>('/login', credentials),
 

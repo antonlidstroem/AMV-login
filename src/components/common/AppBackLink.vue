@@ -9,10 +9,13 @@
 
 <script lang="ts" setup>
   import { computed } from 'vue'
+  import { useI18n } from 'vue-i18n'
 
+  const { t } = useI18n()
   const props = defineProps<{ label?: string }>();
-  const displayLabel = computed(() => props.label ?? 'back'); // Rename this
+  const displayLabel = computed(() => props.label ?? t('back'));
   const emit = defineEmits<{ (event: 'click'): void }>()
+
 
   function emitClick() {
     emit('click')

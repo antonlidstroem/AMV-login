@@ -69,6 +69,7 @@ export interface BaseTranslations {
   scanQRCode: string;
   securityCodeApproved: string;
   send: string;
+  sending: string;
   sendingMessage: string;
   sendMessage: string;
   sendNewCode: string;

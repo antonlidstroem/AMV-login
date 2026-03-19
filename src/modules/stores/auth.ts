@@ -37,7 +37,9 @@ export const useAuthStore = defineStore('auth', {
       this.error = null
       try {
         const data = await apiClient.authenticateBankId()
-        this.bankIdStatus = 'OUTSTANDING'
+        // Uppdatera status och spara användaren för senare bekräftelse
+        this.bankIdStatus = (data.status as BankIdStatus) || 'OUTSTANDING'
+        this.pendingUser = data.user 
         return data
       } catch (err: any) {
         this.error = err.message || 'BankID kunde inte startas'
