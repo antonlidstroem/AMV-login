@@ -2,8 +2,8 @@
 
 <template>
   <div class="bg-views p-4 rounded-4 mb-3">
-    <AppLogo />
 
+    <AppLogo />
     <h2>{{ t('loginWithMobileBankID') }}</h2>
     <p class="mb-5">{{ t('scanQRCode') }}</p>
 
@@ -43,7 +43,7 @@
 
 
 <script setup lang="ts">
-  import { ref, onMounted } from 'vue'
+  import { ref, onMounted, onUnmounted } from 'vue'
   import { useI18n } from 'vue-i18n'
   import { useAuthStore } from '../../../modules/stores/auth'
   import bankIdLogo from '../../../assets/bankid-logo-white.png'
@@ -55,31 +55,27 @@
   const { t } = useI18n()
   const authStore = useAuthStore()
   const isQrLoaded = ref(true)
-
-  // Vi ser till att vi har både 'change-view' och din viktiga 'trigger-error'
   const emit = defineEmits(['change-view', 'trigger-error'])
 
 
  const handleGoBack = () => {
-    authStore.stopPolling(); // Stoppar loopen i storen
-    emit('change-view', 'login'); // Byter vy
+    authStore.stopPolling(); 
+    emit('change-view', 'login'); 
   }
 
-  /**
-   * AUTOMATISKT FLÖDE
-   */
   onMounted(async () => {
     try {
-      // 1. Starta sessionen (Detta anropar /authenticate och nollställer MSW-stegen)
       await authStore.loginWithBankId(); 
-      
-      // 2. Börja polla efter statusändringar
       authStore.pollBankIdStatus();
     } catch (err) {
       emit('trigger-error');
     }
   });
 
+  onUnmounted(() => {
+  authStore.stopPolling() 
+  });
 
-  const goToAuthBankIdLocal = () => emit('change-view', 'auth-bankid-local')
+
+  // const goToAuthBankIdLocal = () => emit('change-view', 'auth-bankid-local')
 </script>

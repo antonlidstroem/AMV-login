@@ -1,39 +1,43 @@
 import { defineStore } from 'pinia'
 import { ref, markRaw, type Component } from 'vue'
 
-interface PopupButton {
+export interface PopupButton {
   label: string
   action: () => void
-  variant?: 'primary' | 'secondary'
+  closeOnClick?: boolean
 }
 
 export const usePopupStore = defineStore('popup', () => {
   const visible = ref(false)
   const title = ref('')
-  const message = ref('')
   const loading = ref(false)
   const component = ref<Component | null>(null)
+  const icon = ref('')
   const buttons = ref<PopupButton[]>([])
 
   function show(config: {
-    title: string
-    message?: string
+    title?: string
     loading?: boolean
     component?: Component
+    icon?: string
     buttons?: PopupButton[]
+    duration?: number
   }) {
-    title.value = config.title
-    message.value = config.message || ''
-    loading.value = config.loading || false
-    // markRaw är kritiskt för att undvika att Vue gör hela komponenten reaktiv
+    title.value = config.title ?? ''
+    loading.value = config.loading ?? false
     component.value = config.component ? markRaw(config.component) : null
-    buttons.value = config.buttons || []
+    icon.value = config.icon ?? ''
+    buttons.value = config.buttons ?? []
     visible.value = true
+
+    if (config.duration) {
+      setTimeout(() => (visible.value = false), config.duration)
+    }
   }
 
   function hide() {
     visible.value = false
   }
 
-  return { visible, title, message, loading, component, buttons, show, hide }
+  return { visible, title, loading, component, icon, buttons, show, hide }
 })

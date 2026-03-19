@@ -1,155 +1,39 @@
 <template>
   <div class="page-wrapper min-vh-100 d-md-flex justify-content-md-center align-items-md-center">
     
-    <router-view 
-      v-slot="{ Component }"
-      @show-popup="handleShowPopup"
-      @trigger-error="handleLoginError"
-      @logout="handleLogout"
-    >
+    <router-view v-slot="{ Component }">
       <transition name="fade" mode="out-in">
         <component :is="Component" />
       </transition>
     </router-view>
 
-    <AppPopupError
-      v-model:visible="errorState.visible"
-      :icon="errorState.icon"
-      :message="errorState.message"
-      :buttonLabel="errorState.buttonLabel"
-      @action="errorState.action"
-    />
-
     <AppPopupGeneric
-      v-model:visible="popupState.visible"
-      :title="popupState.title"
-      :loading="popupState.loading"
-      :buttons="popupState.buttons"
+      v-model:visible="popup.visible"
+      :title="popup.title"
+      :loading="popup.loading"
+      :buttons="popup.buttons"
     >
       <template #icon>
         <transition name="popup-media" mode="out-in">
-          <AppSpinner v-if="popupState.loading" color="white" key="spinner" />
-          
+          <AppSpinner v-if="popup.loading" color="white" key="spinner" />
           <component 
-            v-else-if="popupState.component" 
-            :is="popupState.component" 
+            v-else-if="popup.component" 
+            :is="popup.component" 
             color="white" 
-            key="dynamic-content"
           />
-          
-          <i v-else-if="popupState.icon" :class="popupState.icon" key="icon"></i>
+          <i v-else-if="popup.icon" :class="popup.icon"></i>
         </transition>
       </template>
     </AppPopupGeneric>
-
   </div>
 </template>
 
-<script lang="ts">
-// FIX: Använd 'type' för Component-importen för att tillfredsställa verbatimModuleSyntax
-import { defineComponent, reactive, type Component as VueComponent } from 'vue'
-import { useRouter } from 'vue-router'
-import { useAuthStore } from './modules/stores/auth'
-
-// Komponenter för popups
-import AppPopupError from './components/common/AppPopupError.vue'
+<script setup lang="ts">
+import { usePopupStore } from './modules/stores/popup'
 import AppPopupGeneric from './components/common/AppPopupGeneric.vue'
 import AppSpinner from './components/common/AppSpinner.vue'
-import AppSuccess from './components/common/AppSuccess.vue'
 
-// Typer för bättre kodstöd
-interface PopupState {
-  visible: boolean;
-  title: string;
-  loading: boolean;
-  component: VueComponent | null;
-  icon: string;
-  buttons: any[];
-}
-
-interface ErrorState {
-  visible: boolean;
-  icon: string;
-  message: string;
-  buttonLabel: string;
-  action: () => void;
-}
-
-export default defineComponent({
-  name: 'App',
-  components: { 
-    AppPopupError, 
-    AppPopupGeneric, 
-    AppSpinner, 
-    AppSuccess 
-  },
-
-  setup() {
-    const auth = useAuthStore()
-    const router = useRouter()
-
-    // Globalt state för vanliga popups
-    const popupState = reactive<PopupState>({
-      visible: false,
-      title: '',
-      loading: false,
-      component: null,
-      icon: '',
-      buttons: []
-    })
-
-    // Globalt state för felmeddelanden
-    const errorState = reactive<ErrorState>({
-      visible: false,
-      icon: '',
-      message: '',
-      buttonLabel: '',
-      action: () => {}
-    })
-
-    const handleLogout = () => {
-      auth.logout()
-      router.push('/')
-    }
-
-    const handleShowPopup = (config: Partial<PopupState & { duration?: number }>) => {
-      popupState.title = config.title ?? ''
-      popupState.loading = config.loading ?? false
-      popupState.component = config.component ?? null
-      popupState.icon = config.icon ?? ''
-      popupState.buttons = config.buttons ?? []
-      popupState.visible = config.visible !== undefined ? config.visible : true
-
-      if (config.duration) {
-        setTimeout(() => { 
-          popupState.visible = false 
-        }, config.duration)
-      }
-    }
-
-    const handleLoginError = (payload?: any) => {
-      errorState.icon = 'bi bi-shield-exclamation'
-      errorState.message = 'Inloggningen misslyckades. Kontrollera att du har BankID-appen öppen.'
-      errorState.buttonLabel = 'Kontakta support'
-      errorState.visible = true
-      errorState.action = () => {
-        errorState.visible = false
-        if (payload?.triggerContact) {
-           // Logik för kontakt-overlay kan läggas här
-        }
-      }
-    }
-
-    return {
-      auth,
-      popupState,
-      errorState,
-      handleLogout,
-      handleShowPopup,
-      handleLoginError
-    }
-  }
-})
+const popup = usePopupStore()
 </script>
 
 <style>
