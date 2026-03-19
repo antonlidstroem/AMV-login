@@ -3,7 +3,7 @@
     @click.prevent="emitClick"
     class="d-inline-flex align-items-center gap-2 text-decoration-none fw-medium text-primary">
     <i class="bi bi-arrow-left"></i>
-    <span>{{ label }}</span>
+    <span>{{ displayLabel }}</span>
   </a>
 </template>
 
@@ -11,7 +11,7 @@
   import { computed } from 'vue'
 
   const props = defineProps<{ label?: string }>();
-  const label = computed(() => props.label ?? 'back');
+  const displayLabel = computed(() => props.label ?? 'back'); // Rename this
   const emit = defineEmits<{ (event: 'click'): void }>()
 
   function emitClick() {

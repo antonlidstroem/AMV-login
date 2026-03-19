@@ -1,10 +1,11 @@
 import axios from 'axios'
 
-// --- 1. Definiera typerna för dina svar ---
+// --- 1. Types ---
 export interface AuthUser {
   id: string;
   username: string;
-  // Lägg till fler fält om din backend skickar mer (t.ex. email, roll)
+  name?: string;
+  bankIdStatus: 'IDLE' | 'OUTSTANDING' | 'USER_SIGN' | 'COMPLETE';
 }
 
 export interface LoginResponse {
@@ -12,19 +13,16 @@ export interface LoginResponse {
   token?: string;
 }
 
-// --- 2. Skapa instansen ---
+// --- 2. Instance Configuration ---
 const api = axios.create({
-  //ÄNDRA TILL BACKENDS URL FÖR ATT KOPPLA PÅ
+  // Use /api as base so MSW or your Proxy picks it up
   baseURL: '/api', 
   headers: { 'Content-Type': 'application/json' }
 })
 
-// --- 3. Interceptor (Unwrapper) ---
+// --- 3. Interceptors ---
 api.interceptors.response.use(
-  (response) => {
-    if (response.status === 204) return null
-    return response.data 
-  },
+  (response) => response.data, // Unwrap data immediately
   (error) => {
     const message = error.response?.data?.message || 'Ett oväntat fel uppstod'
     return Promise.reject({ 
@@ -34,18 +32,30 @@ api.interceptors.response.use(
   }
 )
 
-// --- 4. Exportera klienten med typer ---
+// --- 4. Exported Client ---
 export const apiClient = {
- 
-  login: (username: string, password: string) => 
-    api.post('/login', { username, password }) as unknown as Promise<LoginResponse>,
+  // We expose the raw instance if we need .post() directly in the store
+  instance: api,
+
+  // Typed helpers
+  login: (credentials: { username: string; password: string }) => 
+    api.post<any, LoginResponse>('/login', credentials),
+
+  authenticateBankId: () => 
+    api.post<any, { user: AuthUser; status: string }>('/bankid/authenticate'),
+
+  collectBankId: () => 
+    api.post<any, { user: AuthUser; status: any }>('/bankid/collect'),
 
   verifyCode: (code: string) => 
-    api.post('/verify-code', { code }) as unknown as Promise<{ success: boolean }>,
+    api.post('/verify-code', { code }),
 
-  resetPassword: (password: string) => 
-    api.post('/reset-password', { password }) as unknown as Promise<{ success: boolean }>,
+  requestPasswordReset: (email: string) => 
+    api.post('/password-reset-request', { email }),
 
-  sendContactMessage: (payload: { name: string; email: string; message: string }) => 
-    api.post('/contact', payload) as unknown as Promise<{ message: string }>
+  resendPasswordReset: (email: string) => 
+    api.post('/password-reset-resend', { email }),
+
+  resendCode: () => 
+    api.post('/resend-code')
 }

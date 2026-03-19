@@ -96,11 +96,12 @@ import { useAuthStore } from '../../modules/stores/auth'
 import { storeToRefs } from 'pinia'
 import bankIdLogo from '../../assets/bankid-logo-white.png'
 import AppLogo from '../common/AppLogo.vue'
+import { usePopupStore } from '../../modules/stores/popup' 
+
 
 const emit = defineEmits(['change-view', 'show-popup'])
 const { t } = useI18n()
-
-// Store-koppling
+const popup = usePopupStore()
 const authStore = useAuthStore()
 const { isLoading, error } = storeToRefs(authStore)
 
@@ -108,20 +109,26 @@ const username = ref('')
 const password = ref('')
 
 const handleLogin = async () => {
-  // Om du vill visa din gamla popup också:
-  emit('show-popup', { title: t('loginIn'), loading: true })
+  // 1. Show the global loading popup
+  popup.show({ title: t('loginIn'), loading: true })
 
   try {
+    // 2. Pass the actual values from your refs
     const user = await authStore.login({ 
       username: username.value, 
       password: password.value 
     })
     
-    emit('show-popup', { visible: false })
-    emit('change-view', 'auth-2fa-verify', user) 
+    // 3. Success! Hide popup and move to 2FA
+    popup.hide() 
+    emit('change-view', 'auth-2fa-verify', user)
   } catch (err) {
-    emit('show-popup', { visible: false })
-    // Felet visas nu via store.error i templaten
+    // 4. On error, the store sets the "error" ref (via storeToRefs)
+    // and we just hide the loading popup so the user can see the red error banner
+    popup.hide()
+    
+    // Optional: Clear password on failure for security
+    password.value = '' 
   }
 }
 
