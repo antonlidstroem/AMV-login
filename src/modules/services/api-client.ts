@@ -41,6 +41,14 @@ export const apiClient = {
     return api.post('/reset-password', { token, password });
   },
 
+  async sendContactMessage(data: { name: string; email: string; message: string }): Promise<any> {
+    // Om du använder axios-instansen internt:
+    return this.instance.post('/contact/send', data);
+    
+    // Eller om du kör en enkel fetch/mock:
+    // return axios.post('/contact/send', data);
+  },
+
   login: (credentials: { username: string; password: string }) => 
     api.post<any, LoginResponse>('/login', credentials),
 

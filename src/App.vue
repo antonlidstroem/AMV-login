@@ -33,21 +33,21 @@ import { usePopupStore } from './modules/stores/popup'
 import AppPopupGeneric from './components/common/AppPopupGeneric.vue'
 import AppSpinner from './components/common/AppSpinner.vue'
 import { watch } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router' // <--- FIX: Här lade jag till useRoute
 import { useAuthStore } from './modules/stores/auth'
 
 const authStore = useAuthStore()
 const popup = usePopupStore()
 const router = useRouter()
+const route = useRoute() // Nu kommer denna rad att fungera!
 
-
-    watch(() => authStore.isLoggedIn, (loggedIn) => {
-      if (loggedIn) {
-        router.push('/dashboard')
-      } else {
-        router.push('/')
-      }
-    }, { immediate: true }) // immediate kollar även när appen laddas första gången
+watch(() => authStore.isLoggedIn, (loggedIn) => {
+  if (loggedIn && route.path !== '/dashboard') {
+    router.push('/dashboard')
+  } else if (!loggedIn && route.path !== '/') {
+    router.push('/')
+  }
+}, { immediate: true })
 </script>
 
 <style>
