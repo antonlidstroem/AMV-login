@@ -19,9 +19,8 @@
       <hr class="flex-grow-1" /><span class="px-2 small">{{ t('or') }}</span><hr class="flex-grow-1" />
     </div>
 
-
     <button
-      @click="ui.setView('auth-bankid-local')"
+      @click="handleSwitchToLocal"
       class="btn-custom d-flex align-items-center justify-content-start gap-2 mb-3"
       type="button"
     >
@@ -32,7 +31,7 @@
 </template>
 
 <script setup lang="ts">
-import { watch, onUnmounted } from 'vue'
+import { onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '../../../modules/stores/auth'
 import { useUIStore } from '../../../modules/stores/ui'
@@ -47,19 +46,26 @@ const authStore = useAuthStore()
 const ui = useUIStore()
 const { t } = useI18n()
 
-watch(() => authStore.bankIdStatus, (status) => {
-  if (status === 'COMPLETE') {
-    ui.setView('auth-bankid-qr-success')
-  }
-})
+// The status watcher is intentionally NOT here.
+// AuthLayoutLeft owns the centralised bankIdStatus watcher and handles
+// the USER_SIGN → QrPending and COMPLETE → QrSuccess transitions.
+// Having a second watcher here caused race conditions and double navigation.
 
 const handleGoBack = () => {
   authStore.stopPolling()
   ui.setView('login')
 }
 
-// Ensure polling stops if the component is destroyed for any reason
-onUnmounted(() => {
+const handleSwitchToLocal = () => {
   authStore.stopPolling()
+  ui.setView('auth-bankid-local')
+}
+
+onUnmounted(() => {
+  // Polling naturally ends when COMPLETE is reached (isPolling = false).
+  // Only call stopPolling if it's still running (user navigated back).
+  if (authStore.isPolling) {
+    authStore.stopPolling()
+  }
 })
 </script>

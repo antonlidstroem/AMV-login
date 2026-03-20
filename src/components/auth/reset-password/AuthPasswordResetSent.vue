@@ -9,7 +9,7 @@
 
     <p>{{ sentMessage }}</p>
 
-    <!-- Fixed: navigate via ui.setView() — orphan emits never reached LoginView -->
+
     <button class="btn-custom mb-3" @click="ui.setView('login')" type="button">
       {{ t('goToStart') }}
     </button>

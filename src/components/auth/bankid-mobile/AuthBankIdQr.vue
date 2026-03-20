@@ -30,9 +30,8 @@
       <hr class="flex-grow-1" />
     </div>
 
-    <!-- Fixed: use ui.setView() directly — parent never caught the emit -->
     <button
-      @click="ui.setView('auth-bankid-local')"
+      @click="handleSwitchToLocal"
       class="btn-custom d-flex align-items-center justify-content-start gap-2 mb-3"
       type="button"
     >
@@ -66,12 +65,18 @@ const handleGoBack = () => {
   ui.setView('login')
 }
 
+// Stop polling explicitly before switching device — onUnmounted must NOT stop
+// polling when we're in a USER_SIGN flow transition (bug 6).
+const handleSwitchToLocal = () => {
+  authStore.stopPolling()
+  ui.setView('auth-bankid-local')
+}
+
 onMounted(async () => {
   try {
     await authStore.loginWithBankId()
     authStore.pollBankIdStatus()
   } catch {
-    // Show error via popup instead of emitting to a parent that never listened
     popup.show({
       title: t('errorTitle'),
       icon: 'bi bi-exclamation-triangle',
@@ -80,8 +85,13 @@ onMounted(async () => {
   }
 })
 
-// Ensure polling stops if the component is destroyed for any reason
 onUnmounted(() => {
-  authStore.stopPolling()
+  // KEY FIX for bug 6: when AuthLayoutLeft's bankIdStatus watcher detects USER_SIGN
+  // it navigates to auth-bankid-qr-pending, which unmounts this component.
+  // If we call stopPolling() here, the polling loop dies before reaching COMPLETE.
+  // Only stop polling if the user navigated away from the flow (status is not USER_SIGN).
+  if (authStore.bankIdStatus !== 'USER_SIGN') {
+    authStore.stopPolling()
+  }
 })
 </script>

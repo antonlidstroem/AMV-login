@@ -9,7 +9,6 @@
     </div>
 
     <AppStepIndicator :total-steps="3" :active-step="3" />
-    <!-- Removed: duplicate hard-coded SVG with wrong circle positions -->
   </div>
 </template>
 
@@ -17,20 +16,19 @@
 import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '../../../modules/stores/auth'
-import { useUIStore } from '../../../modules/stores/ui'
 import AppLogo from '../../common/AppLogo.vue'
 import AppSuccess from '../../common/AppSuccess.vue'
 import AppStepIndicator from '../../common/AppStepIndicator.vue'
 
 const { t } = useI18n()
 const authStore = useAuthStore()
-const ui = useUIStore()
 
 onMounted(() => {
   setTimeout(() => {
     if (authStore.pendingUser || authStore.user) {
+      // Sets isLoggedIn = true → App.vue watcher navigates to /dashboard.
+      // No ui.setView call — that would create a duplicate push.
       authStore.confirmLogin()
-      ui.setView('authenticated-view')
     }
   }, 1500)
 })

@@ -16,20 +16,20 @@
 import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '../../../modules/stores/auth'
-import { useUIStore } from '../../../modules/stores/ui'
 import AppLogo from '../../common/AppLogo.vue'
 import AppSuccess from '../../common/AppSuccess.vue'
 import AppStepIndicator from '../../common/AppStepIndicator.vue'
 
 const { t } = useI18n()
 const authStore = useAuthStore()
-const ui = useUIStore()
 
 onMounted(() => {
   setTimeout(() => {
     if (authStore.pendingUser || authStore.user) {
+      // Sets isLoggedIn = true → App.vue watcher pushes to /dashboard.
+      // Do NOT call ui.setView('authenticated-view') here — that creates a
+      // duplicate router.push which Vue Router cancels, leaving a blank screen.
       authStore.confirmLogin()
-      ui.setView('authenticated-view')
     }
   }, 1500)
 })

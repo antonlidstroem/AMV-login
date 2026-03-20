@@ -15,13 +15,16 @@
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-import { passwordRules } from './password-rules'
+import { passwordRules } from './password-rules'          // ← was missing — caused blank list
 import { passwordRuleTranslations } from '../../../modules/i18n/password-rules-translations'
 import type { RuleTranslationKey } from '../../../modules/i18n/password-rules-translations'
 
 defineProps<{ password: string }>()
 
 const { t, locale } = useI18n()
+
+// This must be declared so the template's v-for="rule in rules" works
+const rules = passwordRules
 
 const getRuleLabel = (key: RuleTranslationKey, value?: number | string): string => {
   const lang = locale.value as 'sv' | 'en'

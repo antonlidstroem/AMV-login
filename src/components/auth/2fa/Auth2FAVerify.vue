@@ -38,7 +38,6 @@ const { t } = useI18n()
 const auth = useAuthStore()
 const ui = useUIStore()
 
-// Use a plain ref array so Vue tracks individual index assignments via .splice()
 const digits = ref<string[]>(['', '', '', ''])
 const inputRefs = ref<HTMLInputElement[]>([])
 
@@ -47,7 +46,10 @@ const verify = async () => {
   if (code.length < 4 || auth.isLoading) return
   try {
     await auth.verify2FA(code)
-    ui.setView('authenticated-view')
+    // confirmLogin() inside verify2FA sets isLoggedIn = true.
+    // The App.vue watcher on isLoggedIn is the single driver that pushes to /dashboard.
+    // Do NOT call ui.setView here — that causes a duplicate router.push which Vue Router
+    // cancels as a duplicated navigation, leaving the screen blank.
   } catch {
     digits.value.splice(0, 4, '', '', '', '')
     inputRefs.value[0]?.focus()
@@ -55,20 +57,12 @@ const verify = async () => {
 }
 
 const onInput = (index: number, event: Event) => {
-
   auth.clearError()
-
   const raw = (event.target as HTMLInputElement).value
   const clean = raw.replace(/\D/g, '').slice(0, 1)
   digits.value.splice(index, 1, clean)
-
-
   ;(event.target as HTMLInputElement).value = clean
-
-  if (clean && index < 3) {
-    inputRefs.value[index + 1]?.focus()
-  }
-
+  if (clean && index < 3) inputRefs.value[index + 1]?.focus()
   if (digits.value.every(d => d !== '')) verify()
 }
 

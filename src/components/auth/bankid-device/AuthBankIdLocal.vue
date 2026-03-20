@@ -11,14 +11,14 @@
     <AppStepIndicator :total-steps="2" :active-step="1" />
 
     <div class="d-flex justify-content-between align-items-center mt-3 mb-5">
-      <AppBackLink :label="t('back')" @click="ui.setView('login')" />
+      <AppBackLink :label="t('back')" @click="handleGoBack" />
       <AppBankIdLink :label="t('aboutMobileBankID')" />
     </div>
 
     <div class="divider mb-3"><h4>{{ t('orBankId') }}</h4></div>
 
     <button
-      @click="ui.setView('auth-bankid-qr')"
+      @click="handleSwitchToQr"
       class="btn-custom d-flex align-items-center justify-content-start gap-2 mb-3"
       type="button"
     >
@@ -44,17 +44,35 @@ const { t } = useI18n()
 const authStore = useAuthStore()
 const ui = useUIStore()
 
+// Guard against stale navigation: if the user navigates away before
+// loginWithBankId() resolves, the async closure must not call ui.setView.
+let isMounted = true
+
 onMounted(async () => {
   try {
     await authStore.loginWithBankId()
-    ui.setView('auth-bankid-local-success')
+    if (isMounted) ui.setView('auth-bankid-local-success')
   } catch {
-    ui.setView('login')
+    if (isMounted) ui.setView('login')
   }
 })
 
 onUnmounted(() => {
-  // Use the store action — never mutate state directly from components
+  isMounted = false
   authStore.resetLoading()
 })
+
+const handleGoBack = () => {
+  isMounted = false
+  authStore.resetLoading()
+  ui.setView('login')
+}
+
+// Stop the in-progress authenticate call from navigating to local-success
+// after the user has already switched to the QR flow.
+const handleSwitchToQr = () => {
+  isMounted = false
+  authStore.resetLoading()
+  ui.setView('auth-bankid-qr')
+}
 </script>
