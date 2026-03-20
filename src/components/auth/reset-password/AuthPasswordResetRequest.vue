@@ -1,7 +1,7 @@
 <template>
   <div class="bg-views p-4 rounded-4 mb-3">
     <div class="mb-4">
-      <!-- <AppLogo /> -->
+      <AppLogo />
     </div>
 
     

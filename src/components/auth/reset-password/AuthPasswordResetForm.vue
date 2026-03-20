@@ -1,6 +1,6 @@
 <template>
   <div class="bg-views p-4 rounded-4 mb-3">
-    <!-- <AppLogo /> -->
+    <AppLogo />
     <h4 class="mb-4">{{ t('enterNewPassword') }}</h4>
 
     <div v-if="errorMsg" class="error-banner mb-3">{{ errorMsg }}</div>

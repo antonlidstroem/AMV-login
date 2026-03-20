@@ -1,6 +1,6 @@
 <template>
   <div class="bg-views p-4 rounded-4 mb-3">
-    <!-- <AppLogo/> -->
+    <AppLogo/>
     <div v-if="error" class="error-banner mb-3">{{ t('wrongUserNamePassword') }}</div>
 
     <form @submit.prevent="handleLogin" class="d-flex flex-column gap-2 text-dark">

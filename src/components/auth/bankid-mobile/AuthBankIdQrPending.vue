@@ -1,6 +1,6 @@
 <template>
   <div class="bg-views p-4 rounded-4">
-    <!-- <AppLogo /> -->
+    <AppLogo />
     <h2>{{ t('loginWithMobileBankID') }}</h2>
     <p class="mb-5">{{ t('waitingForAuth') }}</p>
 

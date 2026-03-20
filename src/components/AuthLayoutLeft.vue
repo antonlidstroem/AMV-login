@@ -1,11 +1,8 @@
 <template>
   
+<div class="auth-left-panel d-flex flex-column align-items-center justify-content-start h-100 pt-5">
 
-
-
-  <div class="bg-views d-flex flex-column align-items-center justify-content-start h-100 rounded-4 pt-5">
-
-    <AppLogo class="mb-5" />
+    <!-- <AppLogo class="mb-5" /> -->
 
     <div class="w-100 px-1">
       <!-- 2FA special view -->

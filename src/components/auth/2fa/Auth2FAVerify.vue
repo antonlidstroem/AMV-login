@@ -1,6 +1,6 @@
 <template>
   <div class="bg-views p-4 rounded-4 mb-3">
-    <!-- <AppLogo /> -->
+    <AppLogo />
     <h4>{{ t('verifyWithCode') }}</h4>
     <p>{{ t('enterPinCode') }}</p>
 
