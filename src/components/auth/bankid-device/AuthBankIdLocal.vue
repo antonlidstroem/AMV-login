@@ -16,8 +16,12 @@
     </div>
 
     <div class="divider mb-3"><h4>{{ t('orBankId') }}</h4></div>
-    
-    <button @click="ui.setView('auth-bankid-qr')" class="btn-custom d-flex align-items-center justify-content-start gap-2 mb-3">
+
+    <button
+      @click="ui.setView('auth-bankid-qr')"
+      class="btn-custom d-flex align-items-center justify-content-start gap-2 mb-3"
+      type="button"
+    >
       <img :src="bankIdLogo" width="25" height="24" alt="BankID" />
       {{ t('mobileBankID') }}
     </button>
@@ -44,12 +48,13 @@ onMounted(async () => {
   try {
     await authStore.loginWithBankId()
     ui.setView('auth-bankid-local-success')
-  } catch (err) {
-    ui.setView('login') 
+  } catch {
+    ui.setView('login')
   }
 })
 
 onUnmounted(() => {
-  authStore.isLoading = false
+  // Use the store action — never mutate state directly from components
+  authStore.resetLoading()
 })
 </script>

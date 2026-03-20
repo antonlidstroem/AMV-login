@@ -1,13 +1,13 @@
 <template>
   <div class="bg-views d-flex flex-column align-items-center justify-content-center h-100 rounded-4">
     <div class="w-100 px-1">
-      <!-- 2FA Specialvy -->
+      <!-- 2FA special view -->
       <div v-if="ui.currentView === 'auth-2fa-verify'" class="d-flex flex-column gap-3 w-100">
         <Auth2FAVerify />
         <Auth2FARetry />
       </div>
 
-      <!-- Password Reset Sent Specialvy -->
+      <!-- Password reset sent: two stacked cards -->
       <div v-else-if="ui.currentView === 'auth-password-reset-sent'">
         <div class="reset-password-wrapper d-flex flex-column">
           <AuthPasswordResetSent :email="emailForRetry" />
@@ -15,7 +15,7 @@
         </div>
       </div>
 
-      <!-- Dynamisk komponent för alla andra vyer -->
+      <!-- All other views via dynamic component -->
       <component
         v-else-if="currentComponent"
         :is="currentComponent"
@@ -48,6 +48,7 @@ import AuthBankIdQrSuccess from './auth/bankid-mobile/AuthBankIdQrSuccess.vue'
 
 const authStore = useAuthStore()
 const ui = useUIStore()
+
 const emailForRetry = ref('')
 
 const VIEW_MAP: Record<ViewType, Component | null> = {
@@ -63,14 +64,15 @@ const VIEW_MAP: Record<ViewType, Component | null> = {
   'auth-password-reset-sent': AuthPasswordResetSent,
   'auth-2fa-retry': Auth2FARetry,
   'auth-password-reset-retry': AuthPasswordResetRetry,
-  'dashboard-view': null, 
-  'authenticated-view': null 
+  'dashboard-view': null,
+  'authenticated-view': null,
 }
 
-watch(() => authStore.bankIdStatus, (newStatus) => {
-  if (newStatus === 'USER_SIGN') {
+// Drive view transitions from BankID polling status
+watch(() => authStore.bankIdStatus, (status) => {
+  if (status === 'USER_SIGN') {
     ui.setView('auth-bankid-qr-pending')
-  } else if (newStatus === 'COMPLETE') {
+  } else if (status === 'COMPLETE') {
     const isLocal = ui.currentView.includes('local')
     ui.setView(isLocal ? 'auth-bankid-local-success' : 'auth-bankid-qr-success')
   }

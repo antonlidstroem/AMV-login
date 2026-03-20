@@ -4,16 +4,8 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup lang="ts">
 import AMVLogo from '../../assets/logo-horizontal.svg'
-
-export default defineComponent({
-  name: 'AppLogo',
-  setup() {
-    return { AMVLogo }
-  }
-})
 </script>
 
 <style scoped>
@@ -24,17 +16,16 @@ export default defineComponent({
 }
 
 .logo-top {
-  width: 260px; /* Desktop-storlek */
+  width: 260px;
   max-width: 100%;
   display: block;
   margin: 15px auto 28px auto;
-  transition: width 0.3s ease; /* Mjuk övergång vid storleksändring */
+  transition: width 0.3s ease;
 }
 
-/* Responsivitet för mobilvy */
 @media (max-width: 768px) {
   .logo-top {
-    width: 180px; /* Mindre storlek på mobil */
+    width: 180px;
     margin: 10px auto 20px auto;
   }
 }

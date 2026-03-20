@@ -1,35 +1,22 @@
 <template>
-  <div class="main-container d-flex flex-column flex-md-row shadow rounded-5 w-100 p-0" style="max-width:1120px; width:100%;">
-    <AuthLayoutLeft
-      class="d-none d-md-flex flex-fill"
-      :currentView="currentView"
-      @change-view="handleViewChange"
-      @show-password-demands="showDemands = !showDemands"
-      @trigger-error="handleLoginError"
-    />
+  <!--
+    LoginView is a thin shell. All navigation state lives in UIStore.
+    AuthLayoutLeft reads ui.currentView internally — no prop needed.
+    AuthLayoutRight manages its own overlays via UIStore — no props needed.
+  -->
+  <div
+    class="main-container d-flex flex-column flex-md-row shadow rounded-5 w-100 p-0"
+    style="max-width: 1120px; width: 100%;"
+  >
+    <!-- Left panel: auth forms (desktop only — also injected below for mobile) -->
+    <AuthLayoutLeft class="d-none d-md-flex flex-fill" />
 
+    <!-- Right panel: overlays + language switcher + mobile slot -->
     <div class="col-12 col-md-6 d-flex p-0">
-      <AuthLayoutRight
-        class="flex-fill d-flex flex-column"
-        :currentView="currentView"
-        :externalShowDemands="showDemands"
-        :force-open-contact="contactTrigger"
-        @change-view="handleViewChange"
-        @contact-opened="contactTrigger = false"
-        @close-demands="showDemands = false"
-
-      >
+      <AuthLayoutRight class="flex-fill d-flex flex-column">
         <template #mobile-left>
           <div class="d-flex d-md-none w-100 justify-content-center align-items-start py-3 px-2">
-            <AuthLayoutLeft
-              class="w-100"
-              style="max-width: 460px; width: 100%;"
-              :currentView="currentView"
-              @change-view="handleViewChange"
-              @trigger-error="handleLoginError"
-              @show-password-demands="showDemands = !showDemands"
-
-            />
+            <AuthLayoutLeft class="w-100" style="max-width: 460px; width: 100%;" />
           </div>
         </template>
       </AuthLayoutRight>
@@ -38,47 +25,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+// LoginView no longer needs local refs, handleViewChange, or auth/router imports.
+// All navigation is driven by UIStore (via ui.setView() calls inside child components).
+// The App.vue watcher on authStore.isLoggedIn handles the push to /dashboard.
 import AuthLayoutLeft from '../components/AuthLayoutLeft.vue'
 import AuthLayoutRight from '../components/AuthLayoutRight.vue'
-import { useAuthStore, type AuthUser } from '../modules/stores/auth'
-import type { ViewType } from '../modules/types/views'
-
-const emit = defineEmits(['trigger-error'])
-const auth = useAuthStore()
-const router = useRouter()
-
-const currentView = ref<ViewType>('login')
-const showDemands = ref(false)
-const contactTrigger = ref(false)
-
-const handleViewChange = (view: ViewType, payload?: any) => {
-  // 1. Om vi ska logga in helt (anropas från Success-vyerna)
-  if (view === 'authenticated-view') {
-    console.log("LoginView: Authenticated! Skickar till dashboard...");
-    
-    // Vi säkerställer att storen är bekräftad (om Success-vyn missade det)
-    auth.confirmLogin() 
-    
-    // Navigera till dashboard
-    router.push('/dashboard')
-    return
-  }
-
-  // 2. Hantera e-post för password reset (om payload är sträng)
-  if (typeof payload === 'string' && payload.includes('@')) {
-    // Om du behöver spara e-posten i LoginView, gör det här
-  }
-
-  // 3. Byt vy i layouten
-  currentView.value = view
-  showDemands.value = false 
-}
-
-const handleLoginError = () => {
-  emit('trigger-error', {
-    action: () => { contactTrigger.value = true }
-  })
-}
 </script>

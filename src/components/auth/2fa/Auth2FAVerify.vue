@@ -3,20 +3,31 @@
     <AppLogo />
     <h4>{{ t('verifyWithCode') }}</h4>
     <p>{{ t('enterPinCode') }}</p>
-    
+
     <div v-if="auth.error" class="error-banner mb-3">{{ auth.error }}</div>
 
     <div class="d-flex gap-3 mb-3 justify-content-center">
-      <input v-for="(d, i) in digits" :key="i" ref="inputRefs" v-model="digits[i]" maxlength="1" 
-             type="tel" class="text-center code-input" :class="{ 'error-border': auth.error }"
-             @input="onInput(i)" @paste.prevent="onPaste" :disabled="auth.isLoading" />
+      <input
+        v-for="(d, i) in digits"
+        :key="i"
+        ref="inputRefs"
+        :value="digits[i]"
+        maxlength="1"
+        type="tel"
+        class="text-center code-input"
+        :class="{ 'error-border': auth.error }"
+        @input="onInput(i, $event)"
+        @paste.prevent="onPaste"
+        :disabled="auth.isLoading"
+      />
     </div>
+
     <AppBackLink :label="t('back')" @click="ui.setView('login')" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '../../../modules/stores/auth'
 import { useUIStore } from '../../../modules/stores/ui'
@@ -27,37 +38,43 @@ const { t } = useI18n()
 const auth = useAuthStore()
 const ui = useUIStore()
 
-const digits = reactive(['', '', '', ''])
+// Use a plain ref array so Vue tracks individual index assignments via .splice()
+const digits = ref<string[]>(['', '', '', ''])
 const inputRefs = ref<HTMLInputElement[]>([])
 
 const verify = async () => {
-  const code = digits.join('')
+  const code = digits.value.join('')
   if (code.length < 4 || auth.isLoading) return
-
   try {
-    await auth.verify2FA(code) 
-    ui.setView('authenticated-view') 
-  } catch (err) {
-    digits.fill('') 
+    await auth.verify2FA(code)
+    ui.setView('authenticated-view')
+  } catch {
+    digits.value.splice(0, 4, '', '', '', '')
     inputRefs.value[0]?.focus()
   }
 }
 
-const onInput = (index: number) => {
-  auth.error = null 
-  const val = digits[index] ?? '' 
-  digits[index] = val.replace(/\D/g, '').slice(0, 1)
+const onInput = (index: number, event: Event) => {
+  // Clear error via action — no direct store mutation
+  auth.clearError()
 
-  if (digits[index] && index < 3) {
+  const raw = (event.target as HTMLInputElement).value
+  const clean = raw.replace(/\D/g, '').slice(0, 1)
+  digits.value.splice(index, 1, clean)
+
+  // Keep input in sync (controlled input)
+  ;(event.target as HTMLInputElement).value = clean
+
+  if (clean && index < 3) {
     inputRefs.value[index + 1]?.focus()
   }
-  
-  if (digits.every(d => d !== '')) verify()
+
+  if (digits.value.every(d => d !== '')) verify()
 }
 
 const onPaste = (e: ClipboardEvent) => {
   const pasted = (e.clipboardData?.getData('text') ?? '').replace(/\D/g, '').slice(0, 4)
-  pasted.split('').forEach((ch, i) => { digits[i] = ch })
+  pasted.split('').forEach((ch, i) => digits.value.splice(i, 1, ch))
   if (pasted.length === 4) verify()
 }
 </script>

@@ -6,7 +6,11 @@
 
     <div class="qr-wrapper mb-5">
       <div v-if="isQrLoaded" class="fake-qr"></div>
-      <div v-else class="qr-placeholder d-flex align-items-center justify-content-center border rounded-3" style="height: 200px; background: rgba(0,0,0,0.1);">
+      <div
+        v-else
+        class="qr-placeholder d-flex align-items-center justify-content-center border rounded-3"
+        style="height: 200px; background: rgba(0,0,0,0.1);"
+      >
         <div class="spinner-border text-light" role="status">
           <span class="visually-hidden">Loading...</span>
         </div>
@@ -21,12 +25,17 @@
     </div>
 
     <div class="d-flex align-items-center my-3">
-      <hr class="flex-grow-1">
+      <hr class="flex-grow-1" />
       <span class="px-2 small">{{ t('or') }}</span>
-      <hr class="flex-grow-1">
+      <hr class="flex-grow-1" />
     </div>
 
-    <button @click="emit('change-view', 'auth-bankid-local')" class="btn-custom d-flex align-items-center justify-content-start gap-2 mb-3" type="button">
+    <!-- Fixed: use ui.setView() directly — parent never caught the emit -->
+    <button
+      @click="ui.setView('auth-bankid-local')"
+      class="btn-custom d-flex align-items-center justify-content-start gap-2 mb-3"
+      type="button"
+    >
       <img :src="bankIdLogo" class="bankid-icon" alt="BankID" />
       {{ t('bankIDThisDevice') }}
     </button>
@@ -34,9 +43,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, watch } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '../../../modules/stores/auth'
+import { useUIStore } from '../../../modules/stores/ui'
+import { usePopupStore } from '../../../modules/stores/popup'
 import bankIdLogo from '../../../assets/bankid-logo-white.png'
 import AppBackLink from '../../common/AppBackLink.vue'
 import AppBankIdLink from '../../common/AppBankIdLink.vue'
@@ -45,22 +56,32 @@ import AppStepIndicator from '../../common/AppStepIndicator.vue'
 
 const { t } = useI18n()
 const authStore = useAuthStore()
+const ui = useUIStore()
+const popup = usePopupStore()
+
 const isQrLoaded = ref(true)
-const emit = defineEmits(['change-view', 'trigger-error'])
 
 const handleGoBack = () => {
   authStore.stopPolling()
-  emit('change-view', 'login')
+  ui.setView('login')
 }
 
 onMounted(async () => {
   try {
     await authStore.loginWithBankId()
-    authStore.pollBankIdStatus() // Starts the loop in the store
-  } catch (err) {
-    emit('trigger-error')
+    authStore.pollBankIdStatus()
+  } catch {
+    // Show error via popup instead of emitting to a parent that never listened
+    popup.show({
+      title: t('errorTitle'),
+      icon: 'bi bi-exclamation-triangle',
+      buttons: [{ label: t('okClose'), action: () => { popup.hide(); ui.setView('login') } }],
+    })
   }
 })
 
-
+// Ensure polling stops if the component is destroyed for any reason
+onUnmounted(() => {
+  authStore.stopPolling()
+})
 </script>

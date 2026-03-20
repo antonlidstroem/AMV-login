@@ -1,19 +1,12 @@
 <template>
-  <button type="button" class="btn btn-secondary-custom" @click="$emit('close')">
+  <button type="button" class="btn btn-secondary-custom" @click="emit('close')">
     <i class="bi bi-x-circle-fill me-2 fs-6"></i> {{ t('closeWindow') }}
   </button>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 
-export default defineComponent({
-  name: 'CloseButton',
-  emits: ['close'],
-  setup() {
-    const { t } = useI18n()
-    return { t }
-  }
-})
+const { t } = useI18n()
+const emit = defineEmits<{ (e: 'close'): void }>()
 </script>

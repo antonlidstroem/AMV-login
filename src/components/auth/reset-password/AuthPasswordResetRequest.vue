@@ -1,11 +1,12 @@
 <template>
   <div class="bg-views p-4 rounded-4 mb-3">
     <div class="mb-4">
-      <AppLogo/>
+      <AppLogo />
     </div>
 
     <div class="mb-4">
-      <AppBackLink @click="emit('change-view', 'login')" :text="t('toLoginPage')" />
+      <!-- Fixed: use :label (AppBackLink only declares 'label', not 'text') -->
+      <AppBackLink :label="t('toLoginPage')" @click="ui.setView('login')" />
     </div>
 
     <h1 class="mb-3">{{ t('forgotPassword') }}</h1>
@@ -38,32 +39,41 @@
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '../../../modules/stores/auth'
+import { useUIStore } from '../../../modules/stores/ui'
 import { usePopupStore } from '../../../modules/stores/popup'
 import AppLogo from '../../common/AppLogo.vue'
 import AppBackLink from '../../common/AppBackLink.vue'
 
 const { t } = useI18n()
 const authStore = useAuthStore()
+const ui = useUIStore()
 const popup = usePopupStore()
-const emit = defineEmits(['change-view'])
+
+// Fixed: typed emit with proper payload — parent reads email via @update-email
+const emit = defineEmits<{
+  (e: 'update-email', email: string): void
+}>()
 
 const email = ref('')
 const error = ref(false)
 
 const sendEmail = async () => {
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) { error.value = true; return }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) {
+    error.value = true
+    return
+  }
   error.value = false
   popup.show({ title: t('wait'), loading: true })
   try {
     await authStore.requestPasswordReset(email.value)
     popup.hide()
-    emit('change-view', 'auth-password-reset-sent', email.value)
-  } catch (err) {
-    popup.hide(); error.value = true
+    // Pass the email up so AuthLayoutLeft can give it to AuthPasswordResetSent
+    emit('update-email', email.value)
+    // Navigate via store — no orphan emit
+    ui.setView('auth-password-reset-sent')
+  } catch {
+    popup.hide()
+    error.value = true
   }
 }
 </script>
-
-<style scoped>
-.auth-logo-request { height: 40px; width: auto; }
-</style>
