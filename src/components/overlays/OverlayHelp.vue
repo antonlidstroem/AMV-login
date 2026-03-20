@@ -4,9 +4,11 @@
     style="background-color: rgba(100,100,100,0.80); width: 90%; max-width: 900px; margin: 0 auto; display: flex; flex-direction: column;"
   >
     <div class="position-relative mb-3">
-      <!-- Fixed: was showing t('contact') — this is the Help panel, not Contact -->
       <h2 class="text-white text-center m-0">{{ t('helpTitle') }}</h2>
-      <AppIconButtonClose @close="emit('close')" style="position: absolute; right: -10px; top: -10px; margin: 0 !important;" />
+      <AppIconButtonClose
+        @close="ui.closeOverlays()"
+        style="position: absolute; right: -10px; top: -10px; margin: 0 !important;"
+      />
     </div>
 
     <h2 class="text-white text-center mt-4 mb-4 py-2">{{ panelTitle }}</h2>
@@ -36,7 +38,7 @@
         :label="t('closeWindow')"
         icon="bi bi-x-circle-fill"
         class="btn-modal"
-        @action="emit('close')"
+        @action="ui.closeOverlays()"
       />
     </div>
   </div>
@@ -45,6 +47,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useUIStore } from '../../modules/stores/ui'
 import { useHelpI18n } from '../../modules/i18n/help-i18n'
 import { helpTopics } from '../../modules/i18n/help-topics-config'
 import type { HelpTopicDefinition } from '../../modules/i18n/help-topics-config'
@@ -53,9 +56,8 @@ import SecondaryButton from '../common/AppButtonSecondary.vue'
 
 interface HelpTopic { id: string; label: string; content: string }
 
-defineEmits<{ (e: 'close'): void }>()
-
 const { t } = useI18n()
+const ui = useUIStore()
 const { tHelp } = useHelpI18n()
 
 const selectedTopicId = ref<string | null>(null)
@@ -80,6 +82,4 @@ const panelTitle = computed(() =>
 
 const selectTopic = (topic: HelpTopic) => { selectedTopicId.value = topic.id }
 const backToTopics = () => { selectedTopicId.value = null }
-
-const emit = defineEmits<{ (e: 'close'): void }>()
 </script>

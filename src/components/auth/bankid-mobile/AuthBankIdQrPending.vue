@@ -19,7 +19,7 @@
       <hr class="flex-grow-1" /><span class="px-2 small">{{ t('or') }}</span><hr class="flex-grow-1" />
     </div>
 
-    <!-- Fixed: use ui.setView() directly — parent never caught the emit -->
+
     <button
       @click="ui.setView('auth-bankid-local')"
       class="btn-custom d-flex align-items-center justify-content-start gap-2 mb-3"

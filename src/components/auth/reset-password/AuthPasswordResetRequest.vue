@@ -49,7 +49,6 @@ const authStore = useAuthStore()
 const ui = useUIStore()
 const popup = usePopupStore()
 
-// Fixed: typed emit with proper payload — parent reads email via @update-email
 const emit = defineEmits<{
   (e: 'update-email', email: string): void
 }>()

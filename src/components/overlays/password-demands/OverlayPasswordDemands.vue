@@ -3,7 +3,7 @@
     class="contact-panel position-relative rounded-4 text-white p-5 border border-white"
     style="background-color: rgba(100,100,100,0.80); width: 90%; max-width: 900px; margin: 0 auto; display: flex; flex-direction: column;"
   >
-    <AppIconButtonClose @close="emit('close')" />
+    <AppIconButtonClose @close="ui.closeOverlays()" />
 
     <h2 class="text-white text-start mt-4 mb-4 py-2">{{ t('passwordRequirements') }}</h2>
 
@@ -26,7 +26,7 @@
         :label="t('closeWindow')"
         icon="bi bi-x-circle-fill"
         class="btn-modal mx-auto"
-        @action="emit('close')"
+        @action="ui.closeOverlays()"
       />
     </div>
   </div>
@@ -34,6 +34,7 @@
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
+import { useUIStore } from '../../../modules/stores/ui'
 import {
   passwordHeaderKey,
   passwordRules,
@@ -45,9 +46,8 @@ import type { RuleTranslationKey } from '../../../modules/i18n/password-rules-tr
 import AppIconButtonClose from '../../common/AppIconButtonClose.vue'
 import SecondaryButton from '../../common/AppButtonSecondary.vue'
 
-const emit = defineEmits<{ (e: 'close'): void }>()
-
 const { t, locale } = useI18n()
+const ui = useUIStore()
 
 const rules = passwordRules
 const headerKey = passwordHeaderKey

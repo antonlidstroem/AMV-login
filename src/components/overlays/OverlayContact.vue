@@ -13,7 +13,6 @@
 
     <span class="text-white mb-3">{{ t('contactLoginInfo') }}</span>
 
-    <!-- Contact person card -->
     <div
       class="contact-person rounded-3 p-3 mb-3 flex-shrink-0 border border-white"
       style="background-color: rgba(128,172,47,0.15);"
@@ -65,7 +64,10 @@
       <div class="d-flex flex-column gap-1">
         <label class="form-label mb-0 text-white">{{ t('yourMessage') }}</label>
         <div class="position-relative">
-          <i class="bi bi-pencil-square position-absolute text-white" style="left:12px; top:12px; font-size:1.2rem; opacity:0.6;"></i>
+          <i
+            class="bi bi-pencil-square position-absolute text-white"
+            style="left:12px; top:12px; font-size:1.2rem; opacity:0.6;"
+          ></i>
           <textarea
             v-model="message"
             rows="4"
@@ -75,7 +77,9 @@
         </div>
       </div>
 
-      <button type="submit" class="btn-custom border border-white mt-2">{{ t('sendMessage') }}</button>
+      <button type="submit" class="btn-custom border border-white mt-2">
+        {{ t('sendMessage') }}
+      </button>
 
       <div class="text-center mt-auto pt-3">
         <SecondaryButton
@@ -110,7 +114,6 @@ const message = ref('')
 const sendContact = async () => {
   popup.show({ title: t('sendingMessage'), loading: true })
   try {
-    // apiClient.sendContactMessage now posts to /contact (matches the MSW handler)
     await apiClient.sendContactMessage({
       name: name.value,
       email: email.value,

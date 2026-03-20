@@ -55,14 +55,14 @@ const verify = async () => {
 }
 
 const onInput = (index: number, event: Event) => {
-  // Clear error via action — no direct store mutation
+
   auth.clearError()
 
   const raw = (event.target as HTMLInputElement).value
   const clean = raw.replace(/\D/g, '').slice(0, 1)
   digits.value.splice(index, 1, clean)
 
-  // Keep input in sync (controlled input)
+
   ;(event.target as HTMLInputElement).value = clean
 
   if (clean && index < 3) {

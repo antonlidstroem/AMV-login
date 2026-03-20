@@ -13,7 +13,7 @@
           </button>
         </div>
 
-        <!-- Mobile hamburger — @click.stop prevents the global handler from immediately closing it -->
+        <!-- Mobile hamburger -->
         <div class="action-dropdown position-relative d-md-none flex-grow-1 ms-2" @click.stop>
           <button
             @click="showActionMenu = !showActionMenu"
@@ -32,7 +32,7 @@
           </div>
         </div>
 
-        <!-- Language selector — @click.stop prevents the global handler from immediately closing it -->
+        <!-- Language selector -->
         <div class="language-selector position-relative" @click.stop>
           <button
             @click="showLanguageMenu = !showLanguageMenu"
@@ -41,7 +41,9 @@
           >
             <span :class="[flagClasses[locale], 'd-inline-block']" style="width:24px;height:16px;"></span>
             <span class="d-none d-md-inline">{{ (languageNames as any)[locale] }}</span>
-            <span class="d-md-none">{{ shortLanguageNames[locale] }} <i class="bi bi-caret-down-fill small"></i></span>
+            <span class="d-md-none">
+              {{ shortLanguageNames[locale] }} <i class="bi bi-caret-down-fill small"></i>
+            </span>
           </button>
 
           <div class="dropdown-menu-custom w-100" :class="{ show: showLanguageMenu }">
@@ -53,7 +55,10 @@
               class="w-100"
               type="button"
             >
-              <span :class="[flagClasses[code as string], 'd-inline-block']" style="width:24px;height:16px;"></span>
+              <span
+                :class="[flagClasses[code as string], 'd-inline-block']"
+                style="width:24px;height:16px;"
+              ></span>
               <span class="d-none d-md-inline ms-2">{{ name }}</span>
               <span class="d-md-none ms-2">{{ shortLanguageNames[code as string] }}</span>
             </button>
@@ -64,9 +69,10 @@
 
     <div class="scrollable-content">
       <div class="content-padding">
-        <OverlayContact v-if="ui.showContact" @close="ui.closeOverlays()" />
-        <OverlayHelp v-if="ui.showHelp" @close="ui.closeOverlays()" />
-        <OverlayPasswordDemands v-if="ui.showDemands" @close="ui.closeOverlays()" />
+        <!-- Overlays close themselves via ui.closeOverlays() — no @close listener needed -->
+        <OverlayContact v-if="ui.showContact" />
+        <OverlayHelp v-if="ui.showHelp" />
+        <OverlayPasswordDemands v-if="ui.showDemands" />
 
         <div v-show="!ui.anyOverlayOpen" class="mobile-left-page">
           <slot name="mobile-left"></slot>
@@ -106,8 +112,6 @@ const backgroundStyle = computed(() => ({
   backgroundPosition: 'center',
 }))
 
-// Global click closes any open dropdown; @click.stop on each dropdown prevents
-// the toggle click from immediately re-closing via this handler.
 const handleGlobalClick = () => {
   showLanguageMenu.value = false
   showActionMenu.value = false

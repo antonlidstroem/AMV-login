@@ -30,7 +30,6 @@ onMounted(() => {
   setTimeout(() => {
     if (authStore.pendingUser || authStore.user) {
       authStore.confirmLogin()
-      // Navigate directly — no emit; the parent never listened anyway
       ui.setView('authenticated-view')
     }
   }, 1500)
