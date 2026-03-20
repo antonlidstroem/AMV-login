@@ -1,6 +1,6 @@
 <template>
   <div class="bg-views p-4 rounded-4 mb-3 mt-5">
-    <AppLogo />
+    <!-- <AppLogo /> -->
     <h2 class="mt-4 py-2">{{ t('resetPassword') }}</h2>
 
     <div class="d-flex justify-content-center align-items-center mb-5" style="height: 118px;">
