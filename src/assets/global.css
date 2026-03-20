@@ -113,6 +113,8 @@ label {
   flex-direction: row;
   overflow: hidden;
   box-shadow: var(--shadow);
+
+  
 }
 
 @media (max-width: 768px) {
@@ -164,10 +166,10 @@ label {
   position: relative;
   min-height: 100%;
 }
-
+/* 
 @media (min-width: 769px) {
   .right-page { height: 846px; }
-}
+} */
 
 @media (max-width: 768px) {
   .right-page {
@@ -497,11 +499,15 @@ input.form-control { width: 100%; }
 .language-selector {
   position: relative;
   z-index: 20;
-  width: 100px;
+  /* Tvinga containern till 100px */
+  width: 100px !important; 
 }
 
 @media (min-width: 769px) {
-  .language-selector { width: 140px; }
+  .language-selector { 
+    width: auto; /* Ändrat från 140px */
+    min-width: 120px; /* Ger en stabil botten utan att tvinga fram bredd */
+  }
 }
 
 /* Language dropdown matches its trigger button width */
@@ -705,4 +711,64 @@ input.form-control { width: 100%; }
 .popup-fade-enter-from,
 .popup-fade-leave-to {
   opacity: 0;
+}
+
+/* Behållaren för input + ikoner */
+.position-relative {
+  width: 100%;
+}
+/* Den vänstra lås-ikonen */
+.input-icon-left {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6c757d;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.password-toggle-icon {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6c757d;
+  cursor: pointer;
+  z-index: 10;
+  padding: 0.25rem;
+}
+
+.password-toggle-icon:hover {
+  color: #0d6efd; /* Bootstrap blue vid hover */
+}
+
+/* Säkerställ att texten inte krockar med ikonerna */
+.form-control.ps-5 {
+  padding-left: 3rem !important;
+}
+.form-control.pe-5 {
+  padding-right: 3rem !important;
+}
+
+/* Om du har en error-border klass */
+.error-border {
+  border-color: #dc3545 !important;
+  box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25) !important;
+}
+
+
+/* Döljer "ögat" i Edge och Internet Explorer */
+input::-ms-reveal,
+input::-ms-clear {
+  display: none;
+}
+
+/* Döljer liknande funktioner i vissa Webkit-webbläsare */
+input::-webkit-contacts-auto-fill-button,
+input::-webkit-credentials-auto-fill-button {
+  visibility: hidden;
+  pointer-events: none;
+  position: absolute;
+  right: 0;
 }

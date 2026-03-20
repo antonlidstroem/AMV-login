@@ -23,12 +23,12 @@ import AuthLayoutRight from '../components/AuthLayoutRight.vue'
 </script>
 
 <style scoped>
-/* Desktop: fixed height so the card never grows or shrinks regardless of content */
+
 @media (min-width: 768px) {
   .main-container {
-    height: 720px;
+    height: 800px;
     min-height: 720px;
-    max-height: 720px;
+    max-height: 800px;
     overflow: hidden;
   }
 }

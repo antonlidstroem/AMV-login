@@ -5,40 +5,45 @@
 
     <div v-if="errorMsg" class="error-banner mb-3">{{ errorMsg }}</div>
 
-    <!-- Real-time password check — shown after first submit attempt if rules are failing -->
     <AuthPasswordCheck v-if="shouldShowValidation" :password="p1" class="mb-3" />
 
-    <label class="mb-2">{{ t('newPassword') }}</label>
-    <div class="position-relative mb-2">
-      <i class="bi bi-lock-fill input-icon"></i>
+    <!-- Nytt lösenord -->
+    <label class="mb-2 d-block text-start">{{ t('newPassword') }}</label>
+    <div class="position-relative mb-3">
+      <i class="bi bi-lock-fill input-icon-left"></i>
       <input
-        :type="showEye ? 'text' : 'password'"
+        :type="showEye1 ? 'text' : 'password'"
         v-model="p1"
-        class="form-size form-control ps-5 pe-5"
+        class="form-control form-size ps-5 pe-5"
         :class="inputClass"
         autocomplete="new-password"
       />
       <i
-        :class="['bi', showEye ? 'bi-eye-slash' : 'bi-eye', 'password-toggle-icon']"
-        @click="showEye = !showEye"
+        :class="['bi', showEye1 ? 'bi-eye-slash' : 'bi-eye', 'password-toggle-icon']"
+        @click="showEye1 = !showEye1"
       ></i>
     </div>
 
-    <label class="mb-2">{{ t('confirmPassword') }}</label>
+    <!-- Bekräfta lösenord -->
+    <label class="mb-2 d-block text-start">{{ t('confirmPassword') }}</label>
     <div class="position-relative mb-4">
-      <i class="bi bi-lock-fill input-icon"></i>
+      <i class="bi bi-lock-fill input-icon-left"></i>
       <input
-        type="password"
+        :type="showEye2 ? 'text' : 'password'"
         v-model="p2"
-        class="form-size form-control ps-5"
+        class="form-control form-size ps-5 pe-5"
         :class="inputClass"
         autocomplete="new-password"
       />
+      <i
+        :class="['bi', showEye2 ? 'bi-eye-slash' : 'bi-eye', 'password-toggle-icon']"
+        @click="showEye2 = !showEye2"
+      ></i>
     </div>
 
-    <a href="#" class="password-link d-block mb-3" @click.prevent="ui.toggleDemands()">
-      <i class="bi bi-question-circle"></i> {{ t('passwordRequirements') }}
-    </a>
+   <a href="#" class="password-link d-block mb-3 text-end" @click.prevent="ui.toggleDemands()">
+  <i class="bi bi-question-circle"></i> {{ t('passwordRequirements') }}
+</a>
 
     <button class="btn-custom w-100" @click="change" type="button">
       {{ t('changePassword') }}
@@ -64,7 +69,8 @@ const popup = usePopupStore()
 
 const p1 = ref('')
 const p2 = ref('')
-const showEye = ref(false)
+const showEye1 = ref(false) // Första fältet
+const showEye2 = ref(false)
 const errorMsg = ref('')
 const hasAttemptedChange = ref(false)
 

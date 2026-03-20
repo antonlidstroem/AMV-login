@@ -1,5 +1,12 @@
 <template>
-  <div class="bg-views d-flex flex-column align-items-center justify-content-center h-100 rounded-4">
+  
+
+
+
+  <div class="bg-views d-flex flex-column align-items-center justify-content-start h-100 rounded-4 pt-5">
+
+    <AppLogo class="mb-5" />
+
     <div class="w-100 px-1">
       <!-- 2FA special view -->
       <div v-if="ui.currentView === 'auth-2fa-verify'" class="d-flex flex-column gap-3 w-100">
@@ -32,6 +39,7 @@ import { useAuthStore } from '../modules/stores/auth'
 import { useUIStore } from '../modules/stores/ui'
 import type { Component } from 'vue'
 import type { ViewType } from '../modules/types/views'
+import AppLogo from './common/AppLogo.vue'
 
 import AuthLoginForm from './auth/AuthLoginForm.vue'
 import AuthPasswordResetRequest from './auth/reset-password/AuthPasswordResetRequest.vue'
