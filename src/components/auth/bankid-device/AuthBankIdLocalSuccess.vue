@@ -26,9 +26,6 @@ const authStore = useAuthStore()
 onMounted(() => {
   setTimeout(() => {
     if (authStore.pendingUser || authStore.user) {
-      // Sets isLoggedIn = true → App.vue watcher pushes to /dashboard.
-      // Do NOT call ui.setView('authenticated-view') here — that creates a
-      // duplicate router.push which Vue Router cancels, leaving a blank screen.
       authStore.confirmLogin()
     }
   }, 1500)

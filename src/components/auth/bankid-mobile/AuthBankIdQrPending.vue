@@ -4,7 +4,7 @@
     <h2>{{ t('loginWithMobileBankID') }}</h2>
     <p class="mb-5">{{ t('waitingForAuth') }}</p>
 
-    <div class="d-flex justify-content-center mb-4">
+    <div class="d-flex justify-content-center align-items-center mb-5" style="height: 200px;">
       <AppSpinner />
     </div>
 

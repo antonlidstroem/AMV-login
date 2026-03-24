@@ -4,8 +4,9 @@
     <h2>{{ t('loginWithMobileBankID') }}</h2>
     <p class="mb-5">{{ t('scanQRCode') }}</p>
 
-    <div class="qr-wrapper mb-5">
-      <div v-if="isQrLoaded" class="fake-qr"></div>
+<div class="qr-wrapper mb-5" style="height: 200px;"> 
+  <div v-if="isQrLoaded" class="fake-qr"></div>
+
       <div
         v-else
         class="qr-placeholder d-flex align-items-center justify-content-center border rounded-3"

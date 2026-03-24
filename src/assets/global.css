@@ -183,7 +183,17 @@ label {
 }
 
 /* FORM CARDS (bg-views) */
-.bg-views { background: transparent; }
+.bg-views {
+  background: transparent;
+  min-height: 360px; 
+  display: flex;
+  flex-direction: column;
+}
+
+/* Gör att innehållet fördelas jämnt så att indikatorn/knappar landar rätt */
+.bg-views > *:last-child {
+  margin-top: auto; 
+}
 
 @media (max-width: 768px) {
   .bg-views { 
