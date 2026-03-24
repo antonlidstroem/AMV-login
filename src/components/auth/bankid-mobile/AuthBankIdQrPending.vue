@@ -46,11 +46,6 @@ const authStore = useAuthStore()
 const ui = useUIStore()
 const { t } = useI18n()
 
-// The status watcher is intentionally NOT here.
-// AuthLayoutLeft owns the centralised bankIdStatus watcher and handles
-// the USER_SIGN → QrPending and COMPLETE → QrSuccess transitions.
-// Having a second watcher here caused race conditions and double navigation.
-
 const handleGoBack = () => {
   authStore.stopPolling()
   ui.setView('login')
@@ -62,8 +57,6 @@ const handleSwitchToLocal = () => {
 }
 
 onUnmounted(() => {
-  // Polling naturally ends when COMPLETE is reached (isPolling = false).
-  // Only call stopPolling if it's still running (user navigated back).
   if (authStore.isPolling) {
     authStore.stopPolling()
   }

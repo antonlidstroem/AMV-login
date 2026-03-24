@@ -17,6 +17,7 @@ export interface BaseTranslations {
   clickHere: string;
   close: string;
   closeWindow: string;
+  codeApproved: string;
   confirmPassword: string;
   contact: string;
   contactLoginInfo: string;
@@ -71,6 +72,7 @@ export interface BaseTranslations {
   send: string;
   sending: string;
   sendingMessage: string;
+  sendingNewCode: string;
   sendMessage: string;
   sendNewCode: string;
   sendNewReset: string;
@@ -78,6 +80,7 @@ export interface BaseTranslations {
   showPasswordDemands: string;
   toLoginPage: string;
   username: string;
+  verifyingCode: string;
   verifyWithCode: string;
   waitingForAuth: string;
   waitingForBankID: string;

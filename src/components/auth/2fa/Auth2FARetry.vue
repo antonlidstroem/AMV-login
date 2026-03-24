@@ -9,37 +9,43 @@
       :disabled="authStore.isLoading"
       type="button"
     >
-      <span v-if="authStore.isLoading" class="spinner-border spinner-border-sm me-2"></span>
       {{ t('sendNewCode') }}
     </button>
   </div>
 </template>
 
 <script setup lang="ts">
+import { markRaw } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '../../../modules/stores/auth'
 import { usePopupStore } from '../../../modules/stores/popup'
-
-
-const popup = usePopupStore()
+import AppSuccess from '../../common/AppSuccess.vue'
 
 const { t } = useI18n()
 const authStore = useAuthStore()
+const popup = usePopupStore()
 
 
 const handleResend = async () => {
+
+  popup.show({
+    title: t('sendingNewCode'), 
+    loading: true
+  })
+
   try {
     await authStore.resendCode()
 
-    // Success feedback is kept as a popup
     popup.show({
-      title: 'Ny kod har skickats!',
-      icon: 'bi bi-check-circle',
-      buttons: [{ label: 'Stäng', action: () => popup.hide() }]
+      title: t('newCodeSent'),
+      loading: false,
+      component: markRaw(AppSuccess),   
     })
+    setTimeout(() => popup.hide(), 1500)
 
   } catch (err) {
     console.error(err)
+    popup.hide()
   }
 }
 </script>

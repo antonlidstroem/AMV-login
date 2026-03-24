@@ -27,16 +27,19 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, markRaw } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '../../../modules/stores/auth'
 import { useUIStore } from '../../../modules/stores/ui'
+import { usePopupStore } from '../../../modules/stores/popup'
 import AppBackLink from '../../common/AppBackLink.vue'
 import AppLogo from '../../common/AppLogo.vue'
+import AppSuccess from '../../common/AppSuccess.vue'
 
 const { t } = useI18n()
 const auth = useAuthStore()
 const ui = useUIStore()
+const popup = usePopupStore()
 
 const digits = ref<string[]>(['', '', '', ''])
 const inputRefs = ref<HTMLInputElement[]>([])
@@ -44,13 +47,29 @@ const inputRefs = ref<HTMLInputElement[]>([])
 const verify = async () => {
   const code = digits.value.join('')
   if (code.length < 4 || auth.isLoading) return
+
+  popup.show({
+    title: t('verifyingCode'), 
+    loading: true
+  })
+
   try {
     await auth.verify2FA(code)
-    // confirmLogin() inside verify2FA sets isLoggedIn = true.
-    // The App.vue watcher on isLoggedIn is the single driver that pushes to /dashboard.
-    // Do NOT call ui.setView here — that causes a duplicate router.push which Vue Router
-    // cancels as a duplicated navigation, leaving the screen blank.
+
+    popup.show({
+      title: t('codeApproved'), 
+      loading: false,
+      component: markRaw(AppSuccess) 
+    })
+
+    setTimeout(() => {
+      popup.hide()
+      
+      auth.confirmLogin() 
+    }, 1500)
+  
   } catch {
+    popup.hide()
     digits.value.splice(0, 4, '', '', '', '')
     inputRefs.value[0]?.focus()
   }

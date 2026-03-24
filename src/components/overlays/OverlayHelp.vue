@@ -4,14 +4,14 @@
     style="background-color: rgba(100,100,100,0.80); width: 90%; max-width: 900px; margin: 0 auto; display: flex; flex-direction: column;"
   >
     <div class="position-relative mb-3">
-      <h2 class="text-white text-center m-0">{{ t('helpTitle') }}</h2>
+      <h2 class="text-white text-center m-0 mb-3">{{ t('helpTitle') }}</h2>
       <AppIconButtonClose
         @close="ui.closeOverlays()"
         style="position: absolute; right: -10px; top: -10px; margin: 0 !important;"
       />
     </div>
 
-    <h2 class="text-white text-center mt-4 mb-4 py-2">{{ panelTitle }}</h2>
+    <!-- <h2 class="text-white text-center mt-4 mb-4 py-2">{{ panelTitle }}</h2> -->
 
     <div v-if="!selectedTopic" class="d-flex flex-column gap-2 flex-grow-1 overflow-auto px-4">
       <SecondaryButton

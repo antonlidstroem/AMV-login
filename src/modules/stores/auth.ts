@@ -63,6 +63,7 @@ export const useAuthStore = defineStore('auth', {
           if (data.status === 'COMPLETE') {
             this.pendingUser = data.user
             this.isPolling = false
+            this.bankIdStatus = 'COMPLETE'
             break
           }
 
@@ -83,7 +84,7 @@ export const useAuthStore = defineStore('auth', {
       this.error = null
       try {
         await apiClient.verifyCode(code)
-        this.confirmLogin()
+        // this.confirmLogin()
         return true
       } catch (err: any) {
         this.error = err.message || 'Ogiltig kod'

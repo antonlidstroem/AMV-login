@@ -13,19 +13,40 @@ import './assets/global.css'
 /**
  * Funktion för att förbereda appen (MSW i DEV-läge)
  */
+// src/main.ts
+// src/main.ts
 async function prepareApp() {
   if (import.meta.env.DEV) {
     try {
       const { worker } = await import('./modules/mock/browser')
+      
       return await worker.start({
-        serviceWorker: { url: '/mockServiceWorker.js' },
-        onUnhandledRequest: 'bypass',
+        serviceWorker: {
+          url: '/mockServiceWorker.js',
+        },
+        // Vi ändrar denna för att vara mer "tyst" och snabbare
+        onUnhandledRequest(req, print) {
+          const url = new URL(req.url)
+
+          // 1. Om det är en intern Vite-fil (t.ex. .vue, .ts, @vite/client), ignorera helt
+          if (url.pathname.includes('.') || url.pathname.includes('@vite')) {
+            return 
+          }
+
+          // 2. Om det är ett API-anrop vi inte har mockat, varna
+          if (url.pathname.startsWith('/api/')) {
+            print.warning()
+            return
+          }
+
+          // 3. För allt annat (som din root-url /), säg åt MSW att inte röra det
+          return 
+        },
       })
     } catch (err) {
-      console.error('[MSW] Kunde inte starta mock-tjänsten:', err)
+      console.error('[MSW] Kunde inte starta:', err)
     }
   }
-  return Promise.resolve()
 }
 
 // Starta appen

@@ -33,13 +33,13 @@ import { usePopupStore } from './modules/stores/popup'
 import AppPopupGeneric from './components/common/AppPopupGeneric.vue'
 import AppSpinner from './components/common/AppSpinner.vue'
 import { watch } from 'vue'
-import { useRouter, useRoute } from 'vue-router' // <--- FIX: Här lade jag till useRoute
+import { useRouter, useRoute } from 'vue-router' 
 import { useAuthStore } from './modules/stores/auth'
 
 const authStore = useAuthStore()
 const popup = usePopupStore()
 const router = useRouter()
-const route = useRoute() // Nu kommer denna rad att fungera!
+const route = useRoute() 
 
 watch(() => authStore.isLoggedIn, (loggedIn) => {
   if (loggedIn && route.path !== '/dashboard') {
