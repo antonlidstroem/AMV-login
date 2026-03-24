@@ -1,8 +1,8 @@
 <template>
-  <div v-if="password" class="password-check p-3 rounded-3 mb-3">
+  <div v-if="password" class="password-check p-3 rounded-3 mb-2">
     <strong>{{ t('passwordRequirements') }}:</strong>
     <ul class="list-unstyled mt-2">
-      <li v-for="rule in rules" :key="rule.id" class="d-flex align-items-center mb-2">
+      <li v-for="rule in rules" :key="rule.id" class="d-flex align-items-center mb-1">
         <i v-if="rule.test(password)" class="bi bi-check-circle me-2 text-success fs-5"></i>
         <i v-else class="bi bi-exclamation-circle me-2 text-danger fs-5"></i>
         <span :class="{ 'text-success': rule.test(password) }">
@@ -38,10 +38,5 @@ const getRuleLabel = (key: RuleTranslationKey, value?: number | string): string 
 </script>
 
 <style scoped>
-.password-check {
-  background: var(--Error-Pink, #ffeaea);
-  border-radius: 0.5rem;
-  color: #4c4c4b;
-}
-.text-success { color: #28a745 !important; }
+
 </style>

@@ -1,7 +1,7 @@
 import type { RuleTranslationKey } from '../../../modules/i18n/password-rules-translations';
 
 export const passwordConfig = {
-  minLength: 12,
+  minLength: 8,
   requireLowercase: false,
   requireUppercase: true,
   minNumbers: 1,

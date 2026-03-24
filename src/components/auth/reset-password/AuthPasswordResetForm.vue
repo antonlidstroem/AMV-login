@@ -5,7 +5,7 @@
 
     <div v-if="errorMsg" class="error-banner mb-3">{{ errorMsg }}</div>
 
-    <AuthPasswordCheck v-if="shouldShowValidation" :password="p1" class="mb-3" />
+    
 
     <!-- Nytt lösenord -->
     <label class="mb-2 d-block text-start">{{ t('newPassword') }}</label>
@@ -40,6 +40,9 @@
         @click="showEye2 = !showEye2"
       ></i>
     </div>
+
+    <AuthPasswordCheck v-if="shouldShowValidation" :password="p1" class="mb-3" />
+
 
    <a href="#" class="password-link d-block mb-3 text-end" @click.prevent="ui.toggleDemands()">
   <i class="bi bi-question-circle"></i> {{ t('passwordRequirements') }}

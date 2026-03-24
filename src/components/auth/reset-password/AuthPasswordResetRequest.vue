@@ -1,10 +1,7 @@
 <template>
   <div class="bg-views p-4 rounded-4 mb-3">
-    <div class="mb-4">
-      <AppLogo />
-    </div>
+    <AppLogo />
 
-    
 
     <h1 class="mb-3">{{ t('forgotPassword') }}</h1>
     <p class="text-muted mb-4">{{ t('resetPasswordDescription') }}</p>
@@ -27,7 +24,7 @@
           {{ t('enterValidEmail') }}
         </div>
       </div>
-          <div class="mb-4">
+          <div>
           <AppBackLink :label="t('back')" @click="ui.setView('login')" />
           </div>
       <button type="submit" class="btn-custom w-100 mt-2">{{ t('sendReset') }}</button>

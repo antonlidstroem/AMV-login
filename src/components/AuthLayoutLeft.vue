@@ -1,6 +1,6 @@
 <template>
   
-<div class="auth-left-panel d-flex flex-column align-items-center justify-content-start h-100 pt-5">
+<div class="auth-left-panel d-flex flex-column align-items-center justify-content-start h-100 pt-2">
 
     <!-- <AppLogo class="mb-5" /> -->
 
@@ -13,7 +13,7 @@
 
       <!-- Password reset sent: two stacked cards -->
       <div v-else-if="ui.currentView === 'auth-password-reset-sent'">
-        <div class="reset-password-wrapper d-flex flex-column">
+        <div class="d-flex flex-column">
           <AuthPasswordResetSent :email="emailForRetry" />
           <AuthPasswordResetRetry :email="emailForRetry" />
         </div>
