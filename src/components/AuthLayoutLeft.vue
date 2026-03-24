@@ -1,6 +1,6 @@
 <template>
   
-<div class="auth-left-panel d-flex flex-column align-items-center justify-content-start h-100 pt-2">
+<div class="auth-left-panel d-flex flex-column align-items-center justify-content-start h-100 pt-3">
 
     <!-- <AppLogo class="mb-5" /> -->
 

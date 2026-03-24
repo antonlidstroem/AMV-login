@@ -1,16 +1,19 @@
 <template>
   <div class="bg-views p-4 rounded-4 mb-3">
-    <h4>{{ t('noCodeReceived') }}</h4>
-    <p>{{ t('waitingForCode') }} {{ t('contactUs') }}</p>
-    
-    <button 
-      class="btn-custom" 
-      @click="handleResend" 
-      :disabled="authStore.isLoading"
-      type="button"
-    >
-      {{ t('sendNewCode') }}
-    </button>
+    <div>
+      <h4 class="mb-3">{{ t('noCodeReceived') }}</h4>
+      <p class="mb-5">{{ t('waitingForCode') }} {{ t('contactUs') }}</p>
+      
+      <button 
+        class="btn-custom " 
+        @click="handleResend" 
+        :disabled="authStore.isLoading"
+        type="button"
+      >
+        {{ t('sendNewCode') }}
+      </button>
+    </div>
+    <div></div>
   </div>
 </template>
 
