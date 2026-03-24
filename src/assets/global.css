@@ -241,6 +241,9 @@ label {
 /* Primary action button */
 .btn-custom {
   min-width: 120px;
+  max-width: 27rem;
+  margin-left: auto;
+  margin-right: auto;
   background: var(--green-gradient);
   color: white;
   border: none;
@@ -258,6 +261,7 @@ label {
   font-size: 16px;
   line-height: 1;
   cursor: pointer;
+  
 }
 .btn-custom:hover  { filter: brightness(1.1); }
 .btn-custom:active { transform: scale(0.98); }
@@ -355,10 +359,26 @@ label {
 input.form-control { width: 100%; }
 
 .form-size {
+  
   height: 48px;
   display: flex;
   align-items: center;
   border-radius: 6px;
+}
+
+/* Wrapper för att hålla ihop label och input */
+.form-group-custom {
+  width: 100%;
+  max-width: 27rem; /* Samma som dina knappar */
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left; /* Tvingar texten (label) till vänster */
+}
+
+/* Säkerställ att label beter sig som ett blockelement */
+.form-label {
+  display: block;
+  width: 100%;
 }
 
 .position-relative {
@@ -550,7 +570,7 @@ input.form-control { width: 100%; }
     min-width: 140px !important;
     left: 0;
   }
-  .language-selector { margin-left: auto; }
+  .language-selector { margin-left: auto; min-width: 100px; }
 }
 
 /* ================================================================
@@ -622,14 +642,14 @@ input.form-control { width: 100%; }
 }
 .password-link:hover { text-decoration: underline; }
 
-.bankid-link {
+/* .bankid-link {
   color: var(--links);
   font-size: 14px;
   font-weight: 500;
   text-decoration: none;
   white-space: nowrap;
 }
-.bankid-link:hover { text-decoration: underline; }
+.bankid-link:hover { text-decoration: underline; } */
 
 .bankid-icon { height: 30px; width: auto; }
 

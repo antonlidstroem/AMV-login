@@ -1,6 +1,6 @@
 <template>
   <div class="right-page" :style="backgroundStyle">
-    <div class="fixed-top-bar">
+    <div>
       <div class="top-controls d-flex justify-content-center align-items-center gap-2 p-3 w-100">
 
         <!-- Desktop buttons -->
@@ -14,7 +14,7 @@
         </div>
 
         <!-- Mobile hamburger -->
-        <div class="action-dropdown position-relative d-md-none flex-grow-1 ms-2" @click.stop>
+        <div class="action-dropdown position-relative d-md-none flex-grow-1 ms-1" @click.stop>
           <button
             @click="showActionMenu = !showActionMenu"
             class="btn-secondary-custom btn-transparent"
@@ -36,7 +36,7 @@
         <div class="language-selector position-relative" @click.stop>
           <button
             @click="showLanguageMenu = !showLanguageMenu"
-            class="btn-secondary-custom d-flex align-items-center gap-2 w-100"
+            class="btn-secondary-custom d-flex align-items-center gap-1 w-100"
             type="button"
           >
             <span :class="[flagClasses[locale], 'd-inline-block']" style="width:24px;height:16px;"></span>

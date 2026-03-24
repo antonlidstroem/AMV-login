@@ -8,7 +8,7 @@
     <div class="col-12 col-md-6 d-flex p-0">
       <AuthLayoutRight class="flex-fill d-flex flex-column">
         <template #mobile-left>
-          <div class="d-flex d-md-none w-100 justify-content-center align-items-start py-3 px-2">
+          <div class="d-flex d-md-none w-100 justify-content-center align-items-start py-0 px-2">
             <AuthLayoutLeft class="w-100" style="max-width: 460px; width: 100%;" />
           </div>
         </template>
