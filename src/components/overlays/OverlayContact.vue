@@ -80,17 +80,14 @@
       <button type="submit" class="btn-custom border border-white mt-2">
         {{ t('sendMessage') }}
       </button>
-
-      <div class="text-center mt-auto pt-3">
-        <SecondaryButton
-          :label="t('closeWindow')"
-          icon="bi bi-x-circle-fill"
-          class="btn-modal mx-auto"
-          @action="ui.closeOverlays()"
-        />
-      </div>
     </form>
+
+    <div class="d-flex justify-content-center mt-auto pt-3">
+      <AppButtonCloseWindow />
+    </div>
+
   </div>
+  
 </template>
 
 <script setup lang="ts">
@@ -99,9 +96,9 @@ import { useI18n } from 'vue-i18n'
 import { apiClient } from '../../modules/services/api-client'
 import { useUIStore } from '../../modules/stores/ui'
 import { usePopupStore } from '../../modules/stores/popup'
-import SecondaryButton from '../common/AppButtonSecondary.vue'
 import AppIconButtonClose from '../common/AppIconButtonClose.vue'
 import AppSuccess from '../common/AppSuccess.vue'
+import AppButtonCloseWindow from '../common/AppButtonCloseWindow.vue'
 
 const { t } = useI18n()
 const ui = useUIStore()

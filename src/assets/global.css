@@ -303,22 +303,40 @@ label {
   align-items: center;
 }
 
-/* Modal close / action button */
 .btn-modal {
+  /* Använd !important för att vinna över d-flex eller w-100 */
+  width: 180px !important; 
+  min-width: 180px !important;
+  max-width: 180px !important;
+  
   height: 44px;
-  min-width: 160px;
-  display: flex;
+  display: inline-flex !important; /* Förhindrar att den blir block-element */
   align-items: center;
   justify-content: center;
+  
+  /* Centrering om den ligger ensam */
+  margin-left: auto;
+  margin-right: auto;
+
   background: transparent;
-  color: white;
+  color: white !important;
   border: 1px solid white;
   border-radius: 6px;
-  padding: 6px 16px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background 0.2s;
+  padding: 6px 12px;
+  white-space: nowrap; /* Förhindrar att texten radbryts och trycker ut bredden */
+  overflow: hidden;
 }
+
+/* Mobil-fix: Om 180px är för brett för mycket små skärmar */
+@media (max-width: 400px) {
+  .btn-modal {
+    width: 140px !important;
+    min-width: 140px !important;
+    font-size: 12px;
+  }
+}
+
+
 .btn-modal:hover { background: rgba(255, 255, 255, 0.15); }
 
 /* Dev-only simulation button */

@@ -3,11 +3,14 @@
     class="contact-panel position-relative rounded-4 text-white p-2 border border-white"
     style="background-color: rgba(100,100,100,0.80); width: 90%; max-width: 900px; margin: 0 auto; display: flex; flex-direction: column;"
   >
-    <div class="position-relative mb-3">
-      <h2 class="text-white text-center m-0 mb-3">{{ t('helpTitle') }}</h2>
+    <div class="position-relative mb-3 px-5 pt-2"> 
+      <h2 class="text-white text-center m-0">
+        {{ selectedTopic ? selectedTopic.label : t('helpTitle') }}
+      </h2>
+      
       <AppIconButtonClose
         @close="ui.closeOverlays()"
-        style="position: absolute; right: -10px; top: -10px; margin: 0 !important;"
+        style="position: absolute; right: 0; top: 0; margin: 0 !important;"
       />
     </div>
 
@@ -31,16 +34,16 @@
         v-if="selectedTopic"
         :label="t('goBack')"
         icon="bi bi-arrow-left"
-        class="mt-auto px-4 btn-modal"
+        class="btn-modal" 
         @action="backToTopics"
       />
-      <SecondaryButton
-        :label="t('closeWindow')"
-        icon="bi bi-x-circle-fill"
-        class="btn-modal"
-        @action="ui.closeOverlays()"
-      />
+      
+      <AppButtonCloseWindow />
     </div>
+
+
+
+   
   </div>
 </template>
 
@@ -53,6 +56,7 @@ import { helpTopics } from '../../modules/i18n/help-topics-config'
 import type { HelpTopicDefinition } from '../../modules/i18n/help-topics-config'
 import AppIconButtonClose from '../common/AppIconButtonClose.vue'
 import SecondaryButton from '../common/AppButtonSecondary.vue'
+import AppButtonCloseWindow from '../common/AppButtonCloseWindow.vue'
 
 interface HelpTopic { id: string; label: string; content: string }
 
