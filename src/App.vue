@@ -1,113 +1,86 @@
 <template>
   <div class="page-wrapper min-vh-100 d-md-flex justify-content-md-center align-items-md-center">
     
-    <div v-if="!isLoggedIn" class="main-container d-flex flex-column flex-md-row shadow rounded-5 w-100 overflow-hidden p-0"
-         style="max-width:1120px; width:100%;">
-      
-      <LPage
-        class="d-none d-md-flex flex-fill"
-        :currentView="currentView"
-        @change-view="handleViewChange" 
-        @show-password-demands="showDemandsInRPage = !showDemandsInRPage"
-        @trigger-error="handleLoginError"
-      />
-      <div class="col-12 col-md-6 d-flex p-0">
-        <RPage
-          class="flex-fill d-flex flex-column"
-          :currentView="currentView"
-          :externalShowDemands="showDemandsInRPage"
-          :force-open-contact="contactTrigger" 
-          @change-view="handleViewChange"
-          @contact-opened="contactTrigger = false"
-          @close-demands="showDemandsInRPage = false"
-        >
-          <template #mobile-left>
-            <div class="d-block d-md-none w-100 d-flex justify-content-center align-items-start py-3 px-2">
-              <LPage
-                class="w-100 h-100"
-                style="max-width: 460px; max-height: 90vh; border-radius: 20px; overflow: hidden;"
-                :currentView="currentView"
-                @change-view="handleViewChange"
-                @trigger-error="handleLoginError"
-                @show-password-demands="showDemandsInRPage = !showDemandsInRPage"
-              />
-            </div>
-          </template>
-        </RPage>
-      </div>
-    </div>
+    <router-view v-slot="{ Component }">
+      <transition name="fade" mode="out-in">
+        <component :is="Component" />
+      </transition>
+    </router-view>
 
-    <LoginView v-else @logout="isLoggedIn = false" />
-
-    <ErrPopup 
-      v-model:visible="errorState.visible"
-      :icon="errorState.icon"
-      :message="errorState.message"
-      :buttonLabel="errorState.buttonLabel"
-      @action="errorState.action"
-    />
-
+    <AppPopupGeneric
+      v-model:visible="popup.visible"
+      :title="popup.title"
+      :loading="popup.loading"
+      :buttons="popup.buttons"
+    >
+      <template #icon>
+        <transition name="popup-media" mode="out-in">
+          <AppSpinner v-if="popup.loading" color="white" key="spinner" />
+          <component 
+            v-else-if="popup.component" 
+            :is="popup.component" 
+            color="white" 
+          />
+          <i v-else-if="popup.icon" :class="popup.icon"></i>
+        </transition>
+      </template>
+    </AppPopupGeneric>
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref, reactive } from 'vue'
-import LPage from './components/LPage.vue'
-import RPage from './components/RPage.vue'
-import type { ViewType } from './types/views'
-import LoginView from './views/LoginView.vue' 
-import ErrPopup from './components/common/Err-Popup.vue'
+<script setup lang="ts">
+import { usePopupStore } from './modules/stores/popup'
+import AppPopupGeneric from './components/common/AppPopupGeneric.vue'
+import AppSpinner from './components/common/AppSpinner.vue'
+import { watch } from 'vue'
+import { useRouter, useRoute } from 'vue-router' 
+import { useAuthStore } from './modules/stores/auth'
 
-export default defineComponent({
-  name: 'App',
-  components: { LPage, RPage, LoginView, ErrPopup },
-  setup() {
-    const currentView = ref<ViewType>('login')
-    const showDemandsInRPage = ref(false)
-    const isLoggedIn = ref(false)
+const authStore = useAuthStore()
+const popup = usePopupStore()
+const router = useRouter()
+const route = useRoute() 
 
-   
-    const handleViewChange = (view: ViewType) => {
-      // Vi kollar om strängen är 'loginview'
-      if (view === 'loginview') {
-        isLoggedIn.value = true
-      } else {
-        currentView.value = view
-      }
-    }
-
-    const contactTrigger = ref(false);
-    const errorState = reactive({
-      visible: false,
-      icon: '',
-      message: '',
-      buttonLabel: '',
-      action: () => {}
-    });
-
-    const handleLoginError = () => {
-      errorState.icon = 'bi bi-shield-exclamation';
-      errorState.message = 'Inloggningen misslyckades. Kontrollera att du har BankID-appen öppen.';
-      errorState.buttonLabel = 'Kontakta support';
-      errorState.visible = true;
-      
-      // Här definierar vi vad som händer när man trycker på knappen
-      errorState.action = () => {
-        errorState.visible = false;
-        contactTrigger.value = true; // Detta triggar ContactModal i RPage
-      };
-    };
-
-
-    return {
-      currentView,
-      showDemandsInRPage,
-      isLoggedIn,
-      handleViewChange,
-      contactTrigger,  
-      errorState,      
-      handleLoginError
-    }
+watch(() => authStore.isLoggedIn, (loggedIn) => {
+  if (loggedIn && route.path !== '/dashboard') {
+    router.push('/dashboard')
+  } else if (!loggedIn && route.path !== '/') {
+    router.push('/')
   }
-})
+}, { immediate: true })
 </script>
+
+<style>
+/* Transition för sidbyten */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+/* Transition för ikoner/spinners inuti popupen */
+.popup-media-enter-active,
+.popup-media-leave-active {
+  transition: all 0.3s ease;
+}
+
+.popup-media-enter-from {
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+.popup-media-leave-to {
+  opacity: 0;
+  transform: scale(1.2);
+}
+
+/* Bas-styling för att säkerställa att wrapper tar hela höjden */
+.page-wrapper {
+  background-color: #f8f9fa;
+  overflow-x: hidden;
+}
+</style>

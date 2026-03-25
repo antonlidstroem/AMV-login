@@ -1,0 +1,803 @@
+/* ================================================================
+   AMV-Login – Global styles
+   Based on original with targeted fixes:
+   - Fixed rgbargba typo on .btn-secondary-custom
+   - .logo-top margin-bottom: 60px → 28px (too tall on 846px panel)
+   - .bankid-link added (was used but never defined)
+   - .bg-AuthLayoutLeft gets horizontal padding on desktop
+   - Mobile .bg-views: border-radius removed (full-width cards)
+   - Removed duplicate .code-input and .btn-secondary-custom blocks
+   - .divider fixed (no longer needs <br> inside)
+   - .top-controls: tighter padding on mobile
+   - label font-size: 18px → 16px (less cramped)
+   ================================================================ */
+
+/* ================================================================
+   VARIABLES
+   ================================================================ */
+:root {
+  --error:                 #862B2B;
+  --errorBox:              #FFEAEA;
+  --success:               #80AC2F;
+  --varning:               #F56046;
+  --box:                   rgba(73, 81, 64, 0.25);
+  --box2:                  rgba(41, 60, 8, 0.4);
+  --green-gradient:         linear-gradient(90deg, #486515, #628A1E);
+  --background-gradient:    linear-gradient(180deg, #FCFCFC 0%, #EDECEC 100%);
+  --secondaryButtonBorder: #ADB2A3;
+  --secondaryButton:       #4C4C4B;
+  --shadow:                0px 4px 4px 0px #00000040;
+  --menuBackground:        #293C08E5;
+  --menuBorder:            #ADB2A3;
+  --links:                 #2F74AE;
+  --text-color:            #5A5A5A;
+}
+
+/* ================================================================
+   RESET / BASE
+   ================================================================ */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--text-color);
+}
+
+body *:not([class]) { color: #4C4C4B; }
+
+/* Säkerställ att body inte skrollar dubbelt på mobil */
+@media (max-width: 768px) {
+  body, html {
+    overflow: hidden;
+    height: 100%;
+  }
+}
+
+/* ================================================================
+   TYPOGRAPHY
+   ================================================================ */
+h1, h2 {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 500;
+  font-size: 22px;
+  line-height: 1.2;
+  letter-spacing: 0;
+  color: var(--text-color);
+  margin: 0 0 0.5rem 0;
+}
+
+label {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 500;
+  /* FIX: was 18px — slightly reduced to 16px to reduce vertical crowding while remaining clearly readable */
+  font-size: 16px;
+  line-height: 1;
+  letter-spacing: 0;
+  color: var(--text-color);
+}
+
+.menu-label {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  color: var(--text-color);
+}
+
+.varning-text {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1;
+  color: white;
+}
+
+/* ================================================================
+   PAGE SHELL & LAYOUT
+   ================================================================ */
+.page-wrapper { min-height: 100vh; }
+
+@media (min-width: 769px) {
+  .page-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.main-container {
+  width: 1120px;
+  max-width: 100%;
+  background: var(--background-gradient);
+  border-radius: 30px;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+@media (min-width: 769px) {
+  .main-container {
+    min-height: 800px; 
+    height: auto; 
+    overflow: visible; 
+  }
+}
+
+@media (max-width: 768px) {
+  .main-container {
+    flex-direction: column;
+    width: 100vw;
+    min-height: 100dvh; 
+    height: auto; 
+    background: none;
+    border-radius: 0;
+    box-shadow: none;
+    overflow: visible;
+  }
+
+  .page-wrapper > div {
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+}
+
+/* ================================================================
+   PANELS (LEFT, RIGHT & FORM CARDS)
+   ================================================================ */
+
+/* LEFT PANEL (bg-AuthLayoutLeft) */
+/* .bg-AuthLayoutLeft {
+  background: var(--background-gradient);
+  padding: 1.25rem 1.5rem;
+  overflow-y: auto;
+}
+
+@media (max-width: 768px) {
+  .bg-AuthLayoutLeft {
+    background: transparent !important;
+    padding: 0;
+    overflow-y: visible;
+  }
+} */
+
+/* RIGHT PANEL */
+.right-page {
+  position: relative;
+  min-height: 100%;
+}
+
+@media (max-width: 768px) {
+  .right-page {
+    height: 100dvh !important;
+    overflow-y: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+}
+
+/* FORM CARDS (bg-views) */
+.bg-views {
+  background: transparent;
+  
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 769px) {
+  .bg-views {
+    min-height: 200px; 
+  }
+}
+
+/* Gör att innehållet fördelas jämnt så att indikatorn/knappar landar rätt */
+.bg-views > *:last-child {
+  margin-top: auto; 
+}
+
+@media (max-width: 768px) {
+  .bg-views { 
+    background: var(--background-gradient); 
+    /* FIX: full-width form cards on mobile don't need rounded corners */
+    border-radius: 1 !important; 
+  }
+}
+
+/* Text colors inside form cards */
+.bg-views,
+.bg-views p,
+.bg-views span,
+.bg-views label,
+.bg-views h1,
+.bg-views h2,
+.bg-views h3,
+.bg-views h4,
+.bg-views h5,
+.bg-views h6 { color: #4C4C4B; }
+
+/* Items inside form cards that stay white */
+.bg-views .error-banner,
+.bg-views .btn-custom,
+.bg-views .help-modal,
+.bg-views .help-panel,
+.bg-views .contact-panel,
+.bg-views .contact-panel strong,
+.bg-views .contact-panel li { color: white !important; }
+
+/* ================================================================
+   LOGO
+   ================================================================ */
+.logo-top {
+  width: 260px;
+  max-width: 100%;
+  display: block;
+  margin: 5px auto 35px auto;
+}
+
+/* ================================================================
+   BUTTONS
+   ================================================================ */
+
+/* Primary action button */
+.btn-custom {
+  min-width: 120px;
+  max-width: 27rem;
+  margin-left: auto;
+  margin-right: auto;
+  background: var(--green-gradient);
+  color: white;
+  border: none;
+  padding: 6px 16px;
+  border-radius: 6px;
+  transition: all 0.2s ease-in-out;
+  width: 100%;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  
+}
+.btn-custom:hover  { filter: brightness(1.1); }
+.btn-custom:active { transform: scale(0.98); }
+
+/* Secondary / overlay button (AuthLayoutRight top-controls) */
+.btn-secondary-custom {
+  background: rgba(33, 33, 30, 0.3);
+  border: 1px solid #fff;
+  color: white !important;
+  padding: 6px 12px;
+  font-size: 13px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 40px;
+  transition: all 0.2s ease-in-out;
+}
+.btn-secondary-custom:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: #fff !important;
+}
+.btn-secondary-custom:active {
+  background: rgba(255, 255, 255, 0.4);
+  transform: scale(0.96);
+}
+
+/* Transparent icon button (hamburger menu) */
+.btn-transparent {
+  background: none !important;
+  border: none !important;
+  padding: 0 !important;
+  width: auto !important;
+  height: auto !important;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn-modal {
+  /* Använd !important för att vinna över d-flex eller w-100 */
+  width: 180px !important; 
+  min-width: 180px !important;
+  max-width: 180px !important;
+  
+  height: 44px;
+  display: inline-flex !important; /* Förhindrar att den blir block-element */
+  align-items: center;
+  justify-content: center;
+  
+  /* Centrering om den ligger ensam */
+  margin-left: auto;
+  margin-right: auto;
+
+  background: transparent;
+  color: white !important;
+  border: 1px solid white;
+  border-radius: 6px;
+  padding: 6px 12px;
+  white-space: nowrap; /* Förhindrar att texten radbryts och trycker ut bredden */
+  overflow: hidden;
+}
+
+/* Mobil-fix: Om 180px är för brett för mycket små skärmar */
+@media (max-width: 400px) {
+  .btn-modal {
+    width: 140px !important;
+    min-width: 140px !important;
+    font-size: 12px;
+  }
+}
+
+
+.btn-modal:hover { background: rgba(255, 255, 255, 0.15); }
+
+/* Dev-only simulation button */
+.btn-temp {
+  background: #eee;
+  border: 1px solid #ccc;
+  padding: 6px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 13px;
+  width: 100%;
+  color: #555;
+}
+.btn-temp:hover { background: #ddd; }
+
+/* Green modal close */
+.btn-close {
+  background: var(--green-gradient);
+  color: white;
+  border: none;
+  padding: 6px 16px;
+  border-radius: 6px;
+  width: 100%;
+  text-align: center;
+  cursor: pointer;
+}
+.btn-close:hover { filter: brightness(1.1); }
+
+.btn-wrapper {
+  width: 100%;
+  display: block;
+  text-align: center;
+}
+
+/* ================================================================
+   FORM ELEMENTS & INPUTS
+   ================================================================ */
+input.form-control { width: 100%; }
+
+.form-size {
+  
+  height: 48px;
+  display: flex;
+  align-items: center;
+  border-radius: 6px;
+}
+
+/* Wrapper för att hålla ihop label och input */
+.form-group-custom {
+  width: 100%;
+  max-width: 27rem; /* Samma som dina knappar */
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left; /* Tvingar texten (label) till vänster */
+}
+
+/* Säkerställ att label beter sig som ett blockelement */
+.form-label {
+  display: block;
+  width: 100%;
+}
+
+.position-relative {
+  width: 100%;
+}
+
+.input-icon {
+  position: absolute;
+  top: 50%;
+  left: 16px;
+  transform: translateY(-50%);
+  font-size: 17px;
+  color: var(--text-color);
+  pointer-events: none;
+}
+
+/* .input-icon-left {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6c757d;
+  z-index: 10;
+  pointer-events: none;
+} */
+
+.password-toggle-icon {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6c757d;
+  cursor: pointer;
+  z-index: 10;
+  padding: 0.25rem;
+}
+.password-toggle-icon:hover { color: #0d6efd; }
+
+/* Padding adjustments for inputs with icons */
+.form-control.ps-5 { padding-left: 3rem !important; }
+.form-control.pe-5 { padding-right: 3rem !important; }
+
+/* 2FA code input boxes */
+.code-input {
+  width: 50px;
+  height: 70px;
+  font-size: 32px;
+  font-weight: 600;
+  border-radius: 12px;
+  text-align: center;
+  flex: 0 0 auto;
+  border: 1px solid #ccc;
+  background-color: white;
+  transition: border-color 0.15s;
+}
+.code-input:focus {
+  outline: none;
+  box-shadow: none;
+  border-color: var(--success);
+}
+
+/* ================================================================
+   VALIDATION & ERRORS
+   ================================================================ */
+.error-border { border: 2px solid var(--error) !important; }
+.success-border { border: 2px solid var(--success) !important; }
+
+/* Bootstrap-style error override */
+/* .error-border {
+  border-color: #dc3545 !important;
+  box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25) !important;
+} */
+
+.error-banner {
+  background: var(--error);
+  color: white !important;
+  padding: 10px 14px;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  animation: shake 0.3s ease;
+}
+
+/* ================================================================
+   CONTROLS & NAVIGATION
+   ================================================================ */
+.top-controls {
+  position: relative;
+  z-index: 20;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  /* FIX: tighter vertical padding on mobile */
+  padding: 0.5rem 0.75rem;
+}
+
+@media (min-width: 769px) {
+  .top-controls {
+    justify-content: center;
+    padding: 0.75rem 1rem;
+  }
+}
+
+.top-controls-sticky-wrapper {
+  position: sticky;
+  top: 0;
+  z-index: 1020;
+  background: transparent;
+}
+
+@media (max-width: 768px) {
+  .mobile-controls {
+    width: 100%;
+    padding: 0.5rem 1rem;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+/* ================================================================
+   DROPDOWN MENUS (Language & Action)
+   ================================================================ */
+.dropdown-menu-custom {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  background: rgba(41, 60, 8, 0.9);
+  border: 2px solid #ADB2A3;
+  border-radius: 10px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.25), 0 2px 6px rgba(0,0,0,0.25);
+  padding: 8px 0;
+  z-index: 100;
+  overflow: hidden;
+  display: none;
+  animation: popupScale 0.15s ease-out forwards;
+}
+
+.dropdown-menu-custom.show { display: block; }
+
+.dropdown-menu-custom button {
+  width: 100%;
+  padding: 8px 12px;
+  background: transparent;
+  border: none;
+  color: white;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.dropdown-menu-custom button:hover,
+.dropdown-menu-custom button.active { background: rgba(255,255,255,0.15); }
+
+.dropdown-menu-custom button span {
+  flex-shrink: 0;
+  width: 24px;
+  height: 16px;
+}
+
+/* LANGUAGE SELECTOR */
+.language-selector {
+  position: relative;
+  z-index: 20;
+  width: 100px !important; 
+}
+
+@media (min-width: 769px) {
+  .language-selector { 
+    min-width: 120px;
+  }
+}
+
+.language-selector .dropdown-menu-custom {
+  width: 100% !important;
+  min-width: 100% !important;
+}
+
+/* HAMBURGER / ACTION DROPDOWN */
+.action-dropdown { position: relative; }
+
+@media (max-width: 768px) {
+  .action-dropdown { margin-right: auto; }
+  .action-dropdown .dropdown-menu-custom {
+    width: 140px !important;
+    min-width: 140px !important;
+    left: 0;
+  }
+  .language-selector { margin-left: auto; min-width: 100px; }
+}
+
+/* ================================================================
+   MODAL PANELS & OVERLAYS
+   ================================================================ */
+.help-modal,
+.help-panel {
+  background-color: rgba(33, 33, 33, 0.7);
+  border-radius: 10px;
+  color: white;
+}
+
+.help-modal {
+  width: 90%;
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.help-panel-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.help-panel {
+  width: 100%;
+  max-width: 800px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.close-circle {
+  background: none;
+  color: white;
+  font-size: 2rem;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border: none;
+  cursor: pointer;
+}
+
+.overlay-panel {
+  position: absolute;
+  top: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+  z-index: 100;
+}
+
+/* ================================================================
+   LINKS & DIVIDERS
+   ================================================================ */
+.password-link {
+  color: var(--links);
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+}
+.password-link:hover { text-decoration: underline; }
+
+/* .bankid-link {
+  color: var(--links);
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.bankid-link:hover { text-decoration: underline; } */
+
+.bankid-icon { height: 30px; width: auto; }
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--secondaryButton);
+  margin: 0.25rem 0;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #ccc;
+}
+
+.divider h2,
+.divider h4 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  color: var(--text-color);
+}
+
+/* ================================================================
+   SPECIAL FEATURES (QR, RESET PASSWORD)
+   ================================================================ */
+
+/* QR CODE */
+.qr-wrapper { display: flex; justify-content: center; }
+
+.fake-qr {
+  width: 180px;
+  height: 180px;
+  background: repeating-linear-gradient(45deg, #000, #000 6px, #fff 6px, #fff 12px);
+  border: 6px solid #000;
+}
+
+/* RESET PASSWORD LAYOUT */
+/* .reset-password-wrapper {
+  display: flex;
+  flex-direction: column;
+} */
+
+.no-email-received-wrapper { margin-top: 1rem; }
+
+@media (min-width: 769px) {
+  .reset-password-wrapper {
+    flex-direction: row;
+    gap: 0.75rem;
+    align-items: flex-start;
+  }
+  .reset-password-wrapper > * { flex: 1 1 0; }
+  .no-email-received-wrapper  { margin-top: 0; }
+}
+
+/* ================================================================
+   ANIMATIONS
+   ================================================================ */
+@keyframes shake {
+  0%   { transform: translateX(0); }
+  25%  { transform: translateX(-6px); }
+  50%  { transform: translateX(6px); }
+  75%  { transform: translateX(-4px); }
+  100% { transform: translateX(0); }
+}
+
+@keyframes popupScale {
+  from { opacity: 0; transform: scaleY(0.88); transform-origin: top; }
+  to   { opacity: 1; transform: scaleY(1);    transform-origin: top; }
+}
+
+.popup-media-enter-active,
+.popup-media-leave-active {
+  transition: all 0.25s ease;
+}
+
+.popup-media-enter-from {
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+.popup-media-leave-to {
+  opacity: 0;
+  transform: scale(1.1);
+}
+
+.popup-fade-enter-active,
+.popup-fade-leave-active {
+  transition: opacity 0.25s ease;
+}
+
+.popup-fade-enter-from,
+.popup-fade-leave-to {
+  opacity: 0;
+}
+
+/* ================================================================
+   BROWSER FIXES
+   ================================================================ */
+
+/* Döljer "ögat" i Edge och Internet Explorer */
+input::-ms-reveal,
+input::-ms-clear {
+  display: none;
+}
+
+/* Döljer liknande funktioner i vissa Webkit-webbläsare */
+input::-webkit-contacts-auto-fill-button,
+input::-webkit-credentials-auto-fill-button {
+  visibility: hidden;
+  pointer-events: none;
+  position: absolute;
+  right: 0;
+}
+
+.password-check {
+  background: var(--Error-Pink, #ffeaea);
+  border-radius: 0.5rem;
+  color: #4c4c4b;
+  font-size: 0.6rem;
+}
+.text-success { color: #28a745 !important; }
