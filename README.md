@@ -68,14 +68,3 @@ Project Structure
 ├── package.json    
 └── vite.config.ts  
 
-
-
-
-License
-
-MIT
-
-
----
-
-## 📘 README — **DevInsights**
