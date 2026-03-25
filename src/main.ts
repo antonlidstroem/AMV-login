@@ -10,13 +10,11 @@ import 'bootstrap-icons/font/bootstrap-icons.css'
 import 'flag-icons/css/flag-icons.min.css'
 import './assets/global.css'
 
-/**
- * Funktion för att förbereda appen (MSW i DEV-läge)
- */
-// src/main.ts
-// src/main.ts
+
 async function prepareApp() {
-  if (import.meta.env.DEV) {
+  const useMocks = import.meta.env.VITE_USE_MSW === 'true'
+
+  if (useMocks) {
     try {
       const { worker } = await import('./modules/mock/browser')
       
@@ -24,29 +22,27 @@ async function prepareApp() {
         serviceWorker: {
           url: '/mockServiceWorker.js',
         },
-        // Vi ändrar denna för att vara mer "tyst" och snabbare
         onUnhandledRequest(req, print) {
           const url = new URL(req.url)
 
-          // 1. Om det är en intern Vite-fil (t.ex. .vue, .ts, @vite/client), ignorera helt
-          if (url.pathname.includes('.') || url.pathname.includes('@vite')) {
+          // 1. Om anropet INTE går till /api, ignorera det helt (bypass).
+          // Detta gör att MSW inte ens försöker "titta" på din index-sida eller assets.
+          if (!url.pathname.startsWith('/api/')) {
             return 
           }
 
-          // 2. Om det är ett API-anrop vi inte har mockat, varna
-          if (url.pathname.startsWith('/api/')) {
-            print.warning()
-            return
-          }
-
-          // 3. För allt annat (som din root-url /), säg åt MSW att inte röra det
-          return 
+          // 2. Om det är ett /api/-anrop som du har GLÖMT att skriva en handler för, varna.
+          print.warning()
         },
       })
     } catch (err) {
       console.error('[MSW] Kunde inte starta:', err)
     }
   }
+  
+  // Om useMocks är false (dvs vi vill köra mot backend), 
+  // så gör vi ingenting och låter appen fortsätta.
+  return Promise.resolve()
 }
 
 // Starta appen

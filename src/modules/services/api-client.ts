@@ -15,7 +15,7 @@ export interface LoginResponse {
 
 // ── Axios instance ─────────────────────────────────────────────────────────────
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: import.meta.env.VITE_API_URL, 
   headers: { 'Content-Type': 'application/json' },
 })
 
@@ -23,6 +23,7 @@ const api = axios.create({
 api.interceptors.response.use(
   (response) => response.data,
   (error) => {
+    console.error('API Error:', error.response?.data || error.message)
     const message = error.response?.data?.message || 'Ett oväntat fel uppstod'
     return Promise.reject({ status: error.response?.status, message })
   },

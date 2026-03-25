@@ -16,6 +16,25 @@ AMV-login is a simple authentication frontend built with Vue 3 and Vite. It prov
 - npm or yarn
 - Modern browser for testing
 
+## Configure password demands
+-   Go to src/components/overlays/password-demands/password-rules.ts
+-   Change settings in passwordConfig
+
+## Configure translations
+-   Add or adjust property in interface: src/modules/i18n/types.ts
+-   Add or adjust translations in: src/modules/i18n/translations.ts 
+
+## Add help-topics
+-   Add or adjust help topics in: src/modules/i18n/help-topics-config.ts
+-   Add or adjust translations in src/modules/i18n/help-translations.ts
+
+## Switch between MSW (mock) and backend
+-   Control target and point to backend port in: vite.config.ts
+-   Change VITE_USE_MSW (false = backend, true = MSW) in: .env
+-   Restart Vite
+-   Start backend (if backend)
+-   Verify - press F12 in browser while running server. If mock: "MSW Mocking enabled"
+
 ## Installation
 
 Clone the repo and install dependencies:
@@ -48,9 +67,9 @@ Project Structure
 ├── index.html      
 ├── package.json    
 └── vite.config.ts  
-Contributing
 
-Contributions are welcome. Fork the project and submit a pull request.
+
+
 
 License
 
