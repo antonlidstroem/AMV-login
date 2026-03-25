@@ -28,8 +28,6 @@ const authStore = useAuthStore()
 onMounted(() => {
   setTimeout(() => {
     if (authStore.pendingUser || authStore.user) {
-      // Sets isLoggedIn = true → App.vue watcher navigates to /dashboard.
-      // No ui.setView call — that would create a duplicate push.
       authStore.confirmLogin()
     }
   }, 1500)

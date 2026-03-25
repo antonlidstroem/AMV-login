@@ -22,8 +22,6 @@ import type { RuleTranslationKey } from '../../../modules/i18n/password-rules-tr
 defineProps<{ password: string }>()
 
 const { t, locale } = useI18n()
-
-// This must be declared so the template's v-for="rule in rules" works
 const rules = passwordRules
 
 const getRuleLabel = (key: RuleTranslationKey, value?: number | string): string => {

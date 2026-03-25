@@ -69,7 +69,6 @@
 
     <div class="scrollable-content">
       <div class="content-padding">
-        <!-- Overlays close themselves via ui.closeOverlays() — no @close listener needed -->
         <OverlayContact v-if="ui.showContact" />
         <OverlayHelp v-if="ui.showHelp" />
         <OverlayPasswordDemands v-if="ui.showDemands" />

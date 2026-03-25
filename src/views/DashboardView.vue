@@ -17,8 +17,8 @@ const ui = useUIStore()
 const router = useRouter()
 
 const handleLogout = () => {
-  auth.logout()    // Sätter isLoggedIn = false
-  ui.reset()       // Sätter currentView = 'login'
-  router.push('/') // Hoppar till login-routen
+  auth.logout()    
+  ui.reset()      
+  router.push('/') 
 }
 </script>

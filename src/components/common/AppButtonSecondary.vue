@@ -10,7 +10,6 @@
 </template>
 
 <script setup lang="ts">
-// Vi behöver inte importera defineProps eller defineEmits, de är inbyggda
 withDefaults(defineProps<{
   label?: string
   icon?: string

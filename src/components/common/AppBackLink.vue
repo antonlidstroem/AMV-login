@@ -13,11 +13,6 @@
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 
-/**
- * Both 'label' and 'text' are accepted for backwards compatibility.
- * 'label' takes precedence; 'text' is the legacy alias.
- * If neither is provided, the i18n 'back' key is used as the default.
- */
 const props = defineProps<{
   label?: string
   text?: string

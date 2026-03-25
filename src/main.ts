@@ -25,13 +25,10 @@ async function prepareApp() {
         onUnhandledRequest(req, print) {
           const url = new URL(req.url)
 
-          // 1. Om anropet INTE går till /api, ignorera det helt (bypass).
-          // Detta gör att MSW inte ens försöker "titta" på din index-sida eller assets.
           if (!url.pathname.startsWith('/api/')) {
             return 
           }
 
-          // 2. Om det är ett /api/-anrop som du har GLÖMT att skriva en handler för, varna.
           print.warning()
         },
       })
@@ -40,12 +37,9 @@ async function prepareApp() {
     }
   }
   
-  // Om useMocks är false (dvs vi vill köra mot backend), 
-  // så gör vi ingenting och låter appen fortsätta.
   return Promise.resolve()
 }
 
-// Starta appen
 prepareApp().then(() => {
   const app = createApp(App)
 

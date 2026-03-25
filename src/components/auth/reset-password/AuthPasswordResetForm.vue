@@ -69,7 +69,7 @@ const popup = usePopupStore()
 
 const p1 = ref('')
 const p2 = ref('')
-const showEye1 = ref(false) // Första fältet
+const showEye1 = ref(false) 
 const showEye2 = ref(false)
 const errorMsg = ref('')
 const hasAttemptedChange = ref(false)

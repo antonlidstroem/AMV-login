@@ -98,10 +98,9 @@ const onPaste = (e: ClipboardEvent) => {
 </script>
 
 <style scoped>
-/* Jag trimmade ner koden lite här för att matcha din globala stil bättre */
 .code-input {
   width: 50px;
-  height: 70px; /* Samma höjd som i din globala CSS */
+  height: 70px;
   font-size: 32px;
   font-weight: 600;
   border: 1px solid #ccc;

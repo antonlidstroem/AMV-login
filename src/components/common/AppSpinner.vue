@@ -11,8 +11,6 @@ const props = defineProps<{
   color?: string
 }>()
 
-// Vi skapar en computed property som faller tillbaka på din mörkgrå textfärg
-// om ingen färg skickas in.
 const spinnerColor = computed(() => props.color || 'var(--text-color)')
 </script>
 
@@ -41,8 +39,6 @@ const spinnerColor = computed(() => props.color || 'var(--text-color)')
   width: 6.4px;
   height: 17.6px;
   border-radius: 20%;
-  
-  /* FIX: Här binder vi färgen direkt till vår computed property! */
   background-color: v-bind(spinnerColor);
 }
 

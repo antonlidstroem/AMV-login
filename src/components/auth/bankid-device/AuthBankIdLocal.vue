@@ -46,8 +46,6 @@ const { t } = useI18n()
 const authStore = useAuthStore()
 const ui = useUIStore()
 
-// Guard against stale navigation: if the user navigates away before
-// loginWithBankId() resolves, the async closure must not call ui.setView.
 let isMounted = true
 
 onMounted(async () => {
@@ -70,8 +68,6 @@ const handleGoBack = () => {
   ui.setView('login')
 }
 
-// Stop the in-progress authenticate call from navigating to local-success
-// after the user has already switched to the QR flow.
 const handleSwitchToQr = () => {
   isMounted = false
   authStore.resetLoading()

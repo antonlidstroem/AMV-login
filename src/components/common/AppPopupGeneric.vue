@@ -27,7 +27,6 @@
 
 <script setup lang="ts">
 import { onMounted, onUnmounted } from 'vue'
-// Removed: unused import AppSpinner (spinner is passed via the icon slot from App.vue)
 
 interface Button {
   label: string

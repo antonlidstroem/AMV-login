@@ -84,7 +84,6 @@ export const useAuthStore = defineStore('auth', {
       this.error = null
       try {
         await apiClient.verifyCode(code)
-        // this.confirmLogin()
         return true
       } catch (err: any) {
         this.error = err.message || 'Ogiltig kod'
@@ -152,12 +151,10 @@ export const useAuthStore = defineStore('auth', {
       this.bankIdStatus = 'IDLE'
     },
 
-    /** Use this instead of mutating error directly from components. */
     clearError() {
       this.error = null
     },
 
-    /** Use this instead of mutating isLoading directly from components. */
     resetLoading() {
       this.isLoading = false
     },

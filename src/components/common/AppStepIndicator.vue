@@ -28,26 +28,22 @@ const props = defineProps<{
 
 
 
-/* Mycket säkrare selector som träffar ikonerna inuti din wrapper */
 .step-icon-wrapper i {
-  font-size: 1.8rem; /* Justera denna för önskad storlek (t.ex. 40px) */
+  font-size: 1.8rem; 
   display: flex;
   align-items: center;
   justify-content: center;
   line-height: 1;
 }
 
-/* Färg för det aktiva steget (Grön) */
 .active-step {
-  color: var(--success); /* Använder din globala gröna färg */
+  color: var(--success); 
 }
 
-/* Färg för inaktiva steg (Grå) */
 .inactive-step {
   color: #ADB2A3;
 }
 
-/* Stil för pilen */
 .step-arrow {
   color: #ADB2A3;
   font-size: 1.5rem;

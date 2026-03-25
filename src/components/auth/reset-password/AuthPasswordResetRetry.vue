@@ -4,7 +4,6 @@
       <h1 class="mb-4">{{ t('resetPasswordEmailNotDelivered') }}</h1>
       <p class="mb-4">{{ t('resetPasswordEmailNotDeliveredHelp') }}</p>
       <button class="btn-custom w-100 mt-2 mb-2" @click="send" type="button">{{ t('resendEmail') }}</button>
-      <!-- Fixed: use :label (not :text) and ui.setView() instead of orphan emit -->
       <div class="d-flex justify-content-end">
         <AppBackLink :label="t('back')" @click="ui.setView('login')" />
       </div>
@@ -42,7 +41,6 @@ const send = async () => {
       buttons: [{ label: t('okClose'), action: () => popup.hide() }],
     })
   } catch {
-    // Fixed: replace alert() with the popup system
     popup.show({
       title: t('errorTitle'),
       icon: 'bi bi-exclamation-triangle',

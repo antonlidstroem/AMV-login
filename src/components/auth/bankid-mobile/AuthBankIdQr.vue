@@ -65,8 +65,7 @@ const handleGoBack = () => {
   ui.setView('login')
 }
 
-// Stop polling explicitly before switching device — onUnmounted must NOT stop
-// polling when we're in a USER_SIGN flow transition (bug 6).
+
 const handleSwitchToLocal = () => {
   authStore.stopPolling()
   ui.setView('auth-bankid-local')

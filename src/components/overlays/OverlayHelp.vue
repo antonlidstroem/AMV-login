@@ -14,8 +14,6 @@
       />
     </div>
 
-    <!-- <h2 class="text-white text-center mt-4 mb-4 py-2">{{ panelTitle }}</h2> -->
-
     <div v-if="!selectedTopic" class="d-flex flex-column gap-2 flex-grow-1 overflow-auto px-4">
       <SecondaryButton
         v-for="topic in topics"
@@ -39,11 +37,7 @@
       />
       
       <AppButtonCloseWindow />
-    </div>
-
-
-
-   
+    </div> 
   </div>
 </template>
 
