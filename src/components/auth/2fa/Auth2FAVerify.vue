@@ -1,76 +1,111 @@
+<template>
+  <div class="bg-views p-4 rounded-4 mb-3">
+    <AppLogo />
+    
+    <div class="form-group-custom">
+      <h4 class="mb-2">{{ t('verifyWithCode') }}</h4>
+      <p class="mb-4">{{ t('enterPinCode') }}</p>
+
+      <div v-if="auth.error" class="error-banner mb-3">{{ auth.error }}</div>
+
+      <div class="d-flex gap-3 mb-4 justify-content-center">
+        <input
+          v-for="(d, i) in digits"
+          :key="i"
+          ref="inputRefs"
+          :value="digits[i]"
+          maxlength="1"
+          type="tel"
+          class="text-center code-input"
+          :class="{ 'error-border': auth.error }"
+          @input="onInput(i, $event)"
+          @paste.prevent="onPaste"
+          :disabled="auth.isLoading"
+        />
+      </div>
+
+      <div class="d-flex justify-content-end">
+        <AppBackLink :label="t('back')" @click="ui.setView('login')" />
+      </div>
+    </div>
+  </div>
+</template>
+
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref, markRaw } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { apiClient } from '../../../modules/services/api-client'
+import { useAuthStore } from '../../../modules/stores/auth'
+import { useUIStore } from '../../../modules/stores/ui'
+import { usePopupStore } from '../../../modules/stores/popup'
 import AppBackLink from '../../common/AppBackLink.vue'
 import AppLogo from '../../common/AppLogo.vue'
+import AppSuccess from '../../common/AppSuccess.vue'
 
-const emit = defineEmits(['change-view', 'show-popup'])
 const { t } = useI18n()
+const auth = useAuthStore()
+const ui = useUIStore()
+const popup = usePopupStore()
 
-const digits = reactive(['', '', '', ''])
-const error = ref(false)
-const loading = ref(false)
+const digits = ref<string[]>(['', '', '', ''])
 const inputRefs = ref<HTMLInputElement[]>([])
 
 const verify = async () => {
-  const code = digits.join('')
-  if (code.length < 4 || loading.value) return
+  const code = digits.value.join('')
+  if (code.length < 4 || auth.isLoading) return
 
-  loading.value = true
-  emit('show-popup', { title: t('loginIn'), loading: true })
+  popup.show({
+    title: t('verifyingCode'), 
+    loading: true
+  })
 
   try {
-    await apiClient.verifyCode(code)
-    emit('show-popup', { visible: false })
+    await auth.verify2FA(code)
+
+    popup.show({
+      title: t('codeApproved'), 
+      loading: false,
+      component: markRaw(AppSuccess) 
+    })
+
+    setTimeout(() => {
+      popup.hide()
       
-    // Ändra från 'DashboardView' till 'authenticated-view' 
-    // så att App.vue vet att det är dags att logga in på riktigt
-    emit('change-view', 'authenticated-view') 
-    
-  } catch (err) {
-    emit('show-popup', { visible: false }) 
-        error.value = true
-        digits.fill('') // Rensa siffrorna så användaren kan försöka igen
-        inputRefs.value[0]?.focus()
-      } finally {
-        loading.value = false
-      }
-    }
-
-const onInput = (index: number) => {
-  error.value = false
+      auth.confirmLogin() 
+    }, 1500)
   
-  // Vi hämtar värdet eller en tom sträng om det mot förmodan vore undefined
-  const val = digits[index] ?? '' 
-  digits[index] = val.replace(/\D/g, '').slice(0, 1)
-
-  // Samma sak här, använd valfritt chaining för att vara säker
-  if (digits[index] && index < 3) {
-    inputRefs.value[index + 1]?.focus()
+  } catch {
+    popup.hide()
+    digits.value.splice(0, 4, '', '', '', '')
+    inputRefs.value[0]?.focus()
   }
-  
-  if (digits.every(d => d !== '')) verify()
+}
+
+const onInput = (index: number, event: Event) => {
+  auth.clearError()
+  const raw = (event.target as HTMLInputElement).value
+  const clean = raw.replace(/\D/g, '').slice(0, 1)
+  digits.value.splice(index, 1, clean)
+  ;(event.target as HTMLInputElement).value = clean
+  if (clean && index < 3) inputRefs.value[index + 1]?.focus()
+  if (digits.value.every(d => d !== '')) verify()
 }
 
 const onPaste = (e: ClipboardEvent) => {
   const pasted = (e.clipboardData?.getData('text') ?? '').replace(/\D/g, '').slice(0, 4)
-  pasted.split('').forEach((ch, i) => { digits[i] = ch })
+  pasted.split('').forEach((ch, i) => digits.value.splice(i, 1, ch))
   if (pasted.length === 4) verify()
 }
 </script>
 
-<template>
-  <div class="bg-views p-4 rounded-4 mb-3">
-    <AppLogo />
-    <h4>{{ t('verifyWithCode') }}</h4>
-    <p>{{ t('enterPinCode') }}</p>
-    <div v-if="error" class="error-banner">{{ t('wrongCodeTryAgain') }}</div>
-    <div class="d-flex gap-3 mb-3 justify-content-center">
-      <input v-for="(d, i) in digits" :key="i" ref="inputRefs" v-model="digits[i]" maxlength="1" 
-             type="tel" class="text-center code-input" :class="{ 'error-border': error }"
-             @input="onInput(i)" @paste.prevent="onPaste" />
-    </div>
-    <AppBackLink :label="t('back')" @click="emit('change-view', 'login')" />
-  </div>
-</template>
+<style scoped>
+/* Jag trimmade ner koden lite här för att matcha din globala stil bättre */
+.code-input {
+  width: 50px;
+  height: 70px; /* Samma höjd som i din globala CSS */
+  font-size: 32px;
+  font-weight: 600;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  background-color: white;
+}
+</style>

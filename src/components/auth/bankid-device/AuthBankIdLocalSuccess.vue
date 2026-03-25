@@ -1,39 +1,35 @@
 <template>
   <div class="bg-views p-4 rounded-4 mb-3">
     <AppLogo />
+    <div class="form-group-custom text-center">
+      <h2 class="mb-2">{{ t('loginWithBankID') }}</h2>
+      <p class="mb-5">{{ t('securityCodeApproved') }}</p>
 
-    <h2>{{ t('loginWithBankID') }}</h2>
+      <div class="d-flex justify-content-center align-items-center mb-5" style="height: 120px;">
+        <AppSuccess />
+      </div>
 
-    <p>{{ t('securityCodeApproved') }}</p>
-
-    <div class="d-flex justify-content-center align-items-center mb-5" style="height: 118px;">
-    <AppSuccess />
+      <AppStepIndicator :total-steps="2" :active-step="2" />
     </div>
-
-    <AppStepIndicator :total-steps="2" :active-step="2" />
-
   </div>
 </template>
 
 <script setup lang="ts">
 import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useAuthStore } from '../../../modules/stores/auth'
 import AppLogo from '../../common/AppLogo.vue'
 import AppSuccess from '../../common/AppSuccess.vue'
 import AppStepIndicator from '../../common/AppStepIndicator.vue'
-import type { AuthUser } from '../../../modules/stores/auth'
 
 const { t } = useI18n()
-const isDev = import.meta.env.DEV
-const emit = defineEmits<{ 
-  (e: 'change-view', view: string, payload?: AuthUser): void 
-}>()
+const authStore = useAuthStore()
 
 onMounted(() => {
   setTimeout(() => {
-    const bankIdUser = { username: 'BankID-användare', name: 'Sven Svensson' }
-
-    emit('change-view', 'authenticated-view', bankIdUser)
-  }, 2000)
+    if (authStore.pendingUser || authStore.user) {
+      authStore.confirmLogin()
+    }
+  }, 1500)
 })
 </script>

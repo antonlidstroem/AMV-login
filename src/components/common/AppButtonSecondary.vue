@@ -1,27 +1,31 @@
 <template>
   <button
     :type="buttonType"
-    class="btn btn-secondary-custom"
+    class="btn-secondary-custom" 
     @click="$emit('action')"
   >
-    <i v-if="icon" :class="[icon, 'me-2 fs-6']"></i>
-    {{ label }}
+    <i v-if="icon" :class="[icon, label ? 'me-2' : '']" class="fs-6"></i>
+    <span class="text-white" v-if="label">{{ label }}</span>
   </button>
 </template>
 
-<script lang="ts">
-import { defineComponent, type PropType } from 'vue'
-
-export default defineComponent({
-  name: 'BaseButton',
-  props: {
-    label: { type: String, required: true },
-    icon: { type: String, default: '' },
-    buttonType: {
-      type: String as PropType<'button' | 'submit' | 'reset'>,
-      default: 'button'
-    }
-  },
-  emits: ['action']
+<script setup lang="ts">
+// Vi behöver inte importera defineProps eller defineEmits, de är inbyggda
+withDefaults(defineProps<{
+  label?: string
+  icon?: string
+  buttonType?: 'button' | 'submit' | 'reset'
+}>(), {
+  label: '',
+  icon: '',
+  buttonType: 'button',
 })
+
+defineEmits<{ (e: 'action'): void }>()
 </script>
+
+<style scoped>
+/* Flytta gärna in den specifika stilen här om du vill ha den "scoped", 
+  men för att dina globala klasser ska fungera behåller vi dem som de är.
+*/
+</style>

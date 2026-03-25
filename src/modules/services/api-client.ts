@@ -1,51 +1,64 @@
 import axios from 'axios'
 
-// --- 1. Definiera typerna för dina svar ---
+// ── Types ──────────────────────────────────────────────────────────────────────
 export interface AuthUser {
-  id: string;
-  username: string;
-  // Lägg till fler fält om din backend skickar mer (t.ex. email, roll)
+  id: string
+  username: string
+  name?: string
+  bankIdStatus: 'IDLE' | 'OUTSTANDING' | 'USER_SIGN' | 'COMPLETE'
 }
 
 export interface LoginResponse {
-  user: AuthUser;
-  token?: string;
+  user: AuthUser
+  token?: string
 }
 
-// --- 2. Skapa instansen ---
+// ── Axios instance ─────────────────────────────────────────────────────────────
 const api = axios.create({
-  //ÄNDRA TILL BACKENDS URL FÖR ATT KOPPLA PÅ
-  baseURL: '/api', 
-  headers: { 'Content-Type': 'application/json' }
+  baseURL: '/api',
+  headers: { 'Content-Type': 'application/json' },
 })
 
-// --- 3. Interceptor (Unwrapper) ---
+// ── Response interceptor ───────────────────────────────────────────────────────
 api.interceptors.response.use(
-  (response) => {
-    if (response.status === 204) return null
-    return response.data 
-  },
+  (response) => response.data,
   (error) => {
     const message = error.response?.data?.message || 'Ett oväntat fel uppstod'
-    return Promise.reject({ 
-      status: error.response?.status, 
-      message 
-    })
-  }
+    return Promise.reject({ status: error.response?.status, message })
+  },
 )
 
-// --- 4. Exportera klienten med typer ---
+// ── Exported client ────────────────────────────────────────────────────────────
 export const apiClient = {
- 
-  login: (username: string, password: string) => 
-    api.post('/login', { username, password }) as unknown as Promise<LoginResponse>,
+  instance: api,
 
-  verifyCode: (code: string) => 
-    api.post('/verify-code', { code }) as unknown as Promise<{ success: boolean }>,
+  async resetPassword(token: string, password: string): Promise<any> {
+    return api.post('/reset-password', { token, password })
+  },
 
-  resetPassword: (password: string) => 
-    api.post('/reset-password', { password }) as unknown as Promise<{ success: boolean }>,
+  /** Fixed: endpoint matches the MSW handler registered at /api/contact */
+  async sendContactMessage(data: { name: string; email: string; message: string }): Promise<any> {
+    return api.post('/contact', data)
+  },
 
-  sendContactMessage: (payload: { name: string; email: string; message: string }) => 
-    api.post('/contact', payload) as unknown as Promise<{ message: string }>
+  login: (credentials: { username: string; password: string }) =>
+    api.post<any, LoginResponse>('/login', credentials),
+
+  authenticateBankId: () =>
+    api.post<any, { user: AuthUser; status: string }>('/bankid/authenticate'),
+
+  collectBankId: () =>
+    api.post<any, { user: AuthUser; status: any }>('/bankid/collect'),
+
+  verifyCode: (code: string) =>
+    api.post('/verify-code', { code }),
+
+  requestPasswordReset: (email: string) =>
+    api.post('/password-reset-request', { email }),
+
+  resendPasswordReset: (email: string) =>
+    api.post('/password-reset-resend', { email }),
+
+  resendCode: () =>
+    api.post('/resend-code'),
 }

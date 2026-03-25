@@ -1,39 +1,66 @@
 <template>
-  <div class="right-page-container" :style="backgroundStyle">
-    <div class="fixed-top-bar">
+  <div class="right-page" :style="backgroundStyle">
+    <div>
       <div class="top-controls d-flex justify-content-center align-items-center gap-2 p-3 w-100">
-        
+
+        <!-- Desktop buttons -->
         <div class="d-none d-md-flex">
-          <button @click="toggleContact" class="btn-secondary-custom flex-grow-1 me-2" type="button">
+          <button @click="ui.toggleContact()" class="btn-secondary-custom flex-grow-1 me-2" type="button">
             <i class="bi bi-at text-white fs-5"></i>{{ t('contact') }}
           </button>
-          <button @click="toggleHelp" class="btn-secondary-custom flex-grow-1 mx-2" type="button">
+          <button @click="ui.toggleHelp()" class="btn-secondary-custom flex-grow-1 mx-2" type="button">
             <i class="bi bi-question-circle text-white"></i>{{ t('help') }}
           </button>
         </div>
 
-        <div class="language-selector position-relative">
-          <button @click="showLanguageMenu = !showLanguageMenu" class="btn-secondary-custom d-flex align-items-center gap-2 w-100" type="button">
+        <!-- Mobile hamburger -->
+        <div class="action-dropdown position-relative d-md-none flex-grow-1 ms-1" @click.stop>
+          <button
+            @click="showActionMenu = !showActionMenu"
+            class="btn-secondary-custom btn-transparent"
+            type="button"
+          >
+            <i class="bi bi-list fs-1"></i>
+          </button>
+          <div class="dropdown-menu-custom" :class="{ show: showActionMenu }">
+            <button @click="ui.toggleContact(); showActionMenu = false" type="button">
+              <i class="bi bi-at me-2"></i>{{ t('contact') }}
+            </button>
+            <button @click="ui.toggleHelp(); showActionMenu = false" type="button">
+              <i class="bi bi-question-circle me-2"></i>{{ t('help') }}
+            </button>
+          </div>
+        </div>
+
+        <!-- Language selector -->
+        <div class="language-selector position-relative" @click.stop>
+          <button
+            @click="showLanguageMenu = !showLanguageMenu"
+            class="btn-secondary-custom d-flex align-items-center gap-1 w-100"
+            type="button"
+          >
             <span :class="[flagClasses[locale], 'd-inline-block']" style="width:24px;height:16px;"></span>
             <span class="d-none d-md-inline">{{ (languageNames as any)[locale] }}</span>
-            <span class="d-md-none d-flex align-items-center gap-1 text-nowrap">
-              {{ shortLanguageNames[locale] }}
-              <i class="bi bi-caret-down-fill" style="font-size: 0.7rem;"></i>
+            <span class="d-md-none">
+              {{ shortLanguageNames[locale] }} <i class="bi bi-caret-down-fill small"></i>
             </span>
           </button>
-          
+
           <div class="dropdown-menu-custom w-100" :class="{ show: showLanguageMenu }">
-            <button 
-              v-for="(name, code) in languageNames" 
-              :key="code" 
-              @click="selectLanguage(code as string)" 
-              :class="{ active: locale === code }" 
-              class="w-100" 
+            <button
+              v-for="(name, code) in languageNames"
+              :key="code"
+              @click="selectLanguage(code as string)"
+              :class="{ active: locale === code }"
+              class="w-100"
               type="button"
             >
-              <span :class="[flagClasses[code as string], 'd-inline-block']" style="width:24px;height:16px;"></span>
-              <span class="d-none d-md-inline">{{ name }}</span>
-              <span class="d-md-none">{{ shortLanguageNames[code as string] }}</span>
+              <span
+                :class="[flagClasses[code as string], 'd-inline-block']"
+                style="width:24px;height:16px;"
+              ></span>
+              <span class="d-none d-md-inline ms-2">{{ name }}</span>
+              <span class="d-md-none ms-2">{{ shortLanguageNames[code as string] }}</span>
             </button>
           </div>
         </div>
@@ -42,10 +69,12 @@
 
     <div class="scrollable-content">
       <div class="content-padding">
-        <OverlayContact v-if="showContact" @close="showContact = false" @show-popup="emit('show-popup', $event)" />
-        <OverlayHelp v-if="showHelp" @close="showHelp = false" />
-        <OverlayPasswordDemands v-if="showOverlayPasswordDemands" @close="handleCloseOverlayPasswordDemands" @show-popup="emit('show-popup', $event)" />
-        <div v-show="!shouldHideMobileContent" class="mobile-left-page">
+        <!-- Overlays close themselves via ui.closeOverlays() — no @close listener needed -->
+        <OverlayContact v-if="ui.showContact" />
+        <OverlayHelp v-if="ui.showHelp" />
+        <OverlayPasswordDemands v-if="ui.showDemands" />
+
+        <div v-show="!ui.anyOverlayOpen" class="mobile-left-page">
           <slot name="mobile-left"></slot>
         </div>
       </div>
@@ -54,39 +83,26 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useUIStore } from '../modules/stores/ui'
 import { languageNames } from '../modules/i18n/translations'
 import OverlayContact from './overlays/OverlayContact.vue'
 import OverlayHelp from './overlays/OverlayHelp.vue'
 import OverlayPasswordDemands from './overlays/password-demands/OverlayPasswordDemands.vue'
 import bgImage from '../assets/auth-background.jpg'
 
-const props = defineProps<{
-  currentView: string,
-  externalShowDemands?: boolean,
-  forceOpenContact?: boolean
-}>()
-
-const emit = defineEmits(['change-view', 'close-demands', 'contact-opened', 'show-popup'])
-
-// VIKTIGT: Vi hämtar 't' och 'locale' från det officiella biblioteket.
-// Det finns inget 'state' eller 'changeLang' här längre, det är därför det kraschade förut.
 const { t, locale } = useI18n()
+const ui = useUIStore()
 
-const flagClasses: Record<string, string> = { sv: 'fi fi-se', en: 'fi fi-gb'}
-const shortLanguageNames: Record<string, string> = { sv: 'SE', en: 'GB' }
-
-const showContact = ref(false)
-const showHelp = ref(false)
 const showLanguageMenu = ref(false)
 const showActionMenu = ref(false)
-const showOverlayPasswordDemands = ref(false)
 
-// HÄR ÄR LOGIKEN FÖR SPRÅKBYTET:
-// Istället för changeLang(code) sätter vi nu locale.value = code
-const selectLanguage = (langCode: string) => {
-  locale.value = langCode // Detta ändrar språket i hela appen!
+const flagClasses: Record<string, string> = { sv: 'fi fi-se', en: 'fi fi-gb' }
+const shortLanguageNames: Record<string, string> = { sv: 'SE', en: 'GB' }
+
+const selectLanguage = (lang: string) => {
+  locale.value = lang
   showLanguageMenu.value = false
 }
 
@@ -94,77 +110,13 @@ const backgroundStyle = computed(() => ({
   backgroundImage: `url(${bgImage})`,
   backgroundSize: 'cover',
   backgroundPosition: 'center',
-  backgroundAttachment: 'fixed'
 }))
 
-// --- Övrig logik för menyer ---
-const toggleContact = () => {
-  showContact.value = !showContact.value
-  if (showContact.value) { showHelp.value = false; showOverlayPasswordDemands.value = false; emit('close-demands'); }
+const handleGlobalClick = () => {
   showLanguageMenu.value = false
+  showActionMenu.value = false
 }
 
-const toggleHelp = () => {
-  showHelp.value = !showHelp.value
-  if (showHelp.value) { showContact.value = false; showOverlayPasswordDemands.value = false; emit('close-demands'); }
-  showLanguageMenu.value = false
-}
-
-const handleMobileContact = () => { showActionMenu.value = false; toggleContact(); }
-const handleMobileHelp = () => { showActionMenu.value = false; toggleHelp(); }
-const handleCloseOverlayPasswordDemands = () => { showOverlayPasswordDemands.value = false; emit('close-demands'); }
-
-const handleGlobalClick = (e: MouseEvent) => {
-  const target = e.target as HTMLElement
-  if (!target.closest('.language-selector')) showLanguageMenu.value = false
-  if (!target.closest('.action-dropdown')) showActionMenu.value = false
-}
-
-onMounted(() => document.addEventListener('click', handleGlobalClick, true))
-onUnmounted(() => document.removeEventListener('click', handleGlobalClick, true))
-
-const shouldHideMobileContent = computed(() => showContact.value || showHelp.value || showOverlayPasswordDemands.value)
+onMounted(() => document.addEventListener('click', handleGlobalClick))
+onUnmounted(() => document.removeEventListener('click', handleGlobalClick))
 </script>
-
-<style scoped>
-/* Behållaren fyller hela högra sidan */
-.right-page-container {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  width: 100%;
-  overflow: hidden; /* Förhindrar att själva containern skrollar */
-  position: relative;
-}
-
-/* Toppfälten sitter fast */
-.fixed-top-bar {
-  flex: 0 0 auto;
-  z-index: 100;
-  background: transparent;
-}
-
-/* Innehållet tar upp resten av platsen och skrollar internt */
-.scrollable-content {
-  flex: 1 1 auto;
-  overflow-y: auto;
-  overflow-x: hidden;
-  display: flex;
-  flex-direction: column;
-  /* Detta gör att innehållet klipper precis vid toppfältets slut */
-}
-
-.content-padding {
-  padding: 1rem;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-@media (max-width: 768px) {
-  .right-page-container {
-    height: 100dvh; 
-  }
-}
-</style>

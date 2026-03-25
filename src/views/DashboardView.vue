@@ -1,24 +1,24 @@
 <template>
   <div class="dashboard-container p-5 text-center">
     <h1 class="text-dark">Välkommen, {{ auth.user?.name || auth.user?.username }}!</h1>
-    <p class="text-muted">Du är inloggad med kontot: {{ auth.user?.username }}</p>
-    
-    <button class="btn btn-danger mt-4" type="button" @click="$emit('logout')">
+    <button class="btn btn-danger mt-4" type="button" @click="handleLogout">
       Logga ut
     </button>
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup lang="ts">
 import { useAuthStore } from '../modules/stores/auth'
+import { useUIStore } from '../modules/stores/ui'
+import { useRouter } from 'vue-router'
 
-export default defineComponent({
-  name: 'LoginView',
-  emits: ['logout'],
-  setup() {
-    const auth = useAuthStore() // Hämta storen här
-    return { auth }
-  }
-})
+const auth = useAuthStore()
+const ui = useUIStore()
+const router = useRouter()
+
+const handleLogout = () => {
+  auth.logout()    // Sätter isLoggedIn = false
+  ui.reset()       // Sätter currentView = 'login'
+  router.push('/') // Hoppar till login-routen
+}
 </script>

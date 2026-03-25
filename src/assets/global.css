@@ -22,8 +22,8 @@
   --varning:               #F56046;
   --box:                   rgba(73, 81, 64, 0.25);
   --box2:                  rgba(41, 60, 8, 0.4);
-  --green-gradient:        linear-gradient(90deg, #486515, #628A1E);
-  --background-gradient:   linear-gradient(180deg, #FCFCFC 0%, #EDECEC 100%);
+  --green-gradient:         linear-gradient(90deg, #486515, #628A1E);
+  --background-gradient:    linear-gradient(180deg, #FCFCFC 0%, #EDECEC 100%);
   --secondaryButtonBorder: #ADB2A3;
   --secondaryButton:       #4C4C4B;
   --shadow:                0px 4px 4px 0px #00000040;
@@ -50,6 +50,14 @@ body {
 
 body *:not([class]) { color: #4C4C4B; }
 
+/* Säkerställ att body inte skrollar dubbelt på mobil */
+@media (max-width: 768px) {
+  body, html {
+    overflow: hidden;
+    height: 100%;
+  }
+}
+
 /* ================================================================
    TYPOGRAPHY
    ================================================================ */
@@ -66,8 +74,7 @@ h1, h2 {
 label {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: 500;
-  /* FIX: was 18px — slightly reduced to 16px to reduce vertical crowding
-     while remaining clearly readable */
+  /* FIX: was 18px — slightly reduced to 16px to reduce vertical crowding while remaining clearly readable */
   font-size: 16px;
   line-height: 1;
   letter-spacing: 0;
@@ -92,7 +99,7 @@ label {
 }
 
 /* ================================================================
-   PAGE SHELL
+   PAGE SHELL & LAYOUT
    ================================================================ */
 .page-wrapper { min-height: 100vh; }
 
@@ -115,6 +122,14 @@ label {
   box-shadow: var(--shadow);
 }
 
+@media (min-width: 769px) {
+  .main-container {
+    min-height: 800px; 
+    height: auto; 
+    overflow: visible; 
+  }
+}
+
 @media (max-width: 768px) {
   .main-container {
     flex-direction: column;
@@ -131,80 +146,70 @@ label {
     border-radius: 0 !important;
     box-shadow: none !important;
   }
-
-  /* FIX: full-width form cards on mobile don't need rounded corners */
-  .bg-views { border-radius: 1 !important; }
 }
 
 /* ================================================================
-   LEFT PANEL  (bg-AuthLayoutLeft)
+   PANELS (LEFT, RIGHT & FORM CARDS)
    ================================================================ */
-.bg-AuthLayoutLeft {
+
+/* LEFT PANEL (bg-AuthLayoutLeft) */
+/* .bg-AuthLayoutLeft {
   background: var(--background-gradient);
-  /* FIX: horizontal padding so white form cards don't sit flush against
-     the left-panel edge on desktop */
   padding: 1.25rem 1.5rem;
   overflow-y: auto;
 }
 
 @media (max-width: 768px) {
-  /* On mobile the AuthLayoutLeft floats over the background image — transparent */
   .bg-AuthLayoutLeft {
     background: transparent !important;
     padding: 0;
     overflow-y: visible;
   }
-}
+} */
 
-/* ================================================================
-   RIGHT PANEL & MOBILE FIXES
-   ================================================================ */
-
+/* RIGHT PANEL */
 .right-page {
   position: relative;
   min-height: 100%;
 }
 
-@media (min-width: 769px) {
-  .right-page { height: 846px; }
-}
-
 @media (max-width: 768px) {
-  /* Här skedde felet förut - ingen nästling tillåten */
   .right-page {
     height: 100dvh !important;
     overflow-y: auto !important;
     display: flex !important;
     flex-direction: column !important;
   }
+}
 
-  .top-controls-sticky-wrapper {
-    position: sticky;
-    top: 0;
-    z-index: 1020;
-    background: transparent;
+/* FORM CARDS (bg-views) */
+.bg-views {
+  background: transparent;
+  
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 769px) {
+  .bg-views {
+    min-height: 200px; 
   }
 }
 
-/* Säkerställ att body inte skrollar dubbelt på mobil */
+/* Gör att innehållet fördelas jämnt så att indikatorn/knappar landar rätt */
+.bg-views > *:last-child {
+  margin-top: auto; 
+}
+
 @media (max-width: 768px) {
-  body, html {
-    overflow: hidden;
-    height: 100%;
+  .bg-views { 
+    background: var(--background-gradient); 
+    /* FIX: full-width form cards on mobile don't need rounded corners */
+    border-radius: 1 !important; 
   }
 }
 
-
-/* ================================================================
-   FORM CARDS  (bg-views)
-   ================================================================ */
-.bg-views { background: transparent; }
-
-@media (max-width: 768px) {
-  .bg-views { background: var(--background-gradient); }
-}
-
-/* Default text colour for all content inside form cards */
+/* Text colors inside form cards */
 .bg-views,
 .bg-views p,
 .bg-views span,
@@ -232,9 +237,7 @@ label {
   width: 260px;
   max-width: 100%;
   display: block;
-  /* FIX: was 60px bottom margin — far too much on a 846px tall panel.
-     28px gives proper breathing room without wasting vertical space. */
-  margin: 15px auto 28px auto;
+  margin: 5px auto 35px auto;
 }
 
 /* ================================================================
@@ -244,6 +247,9 @@ label {
 /* Primary action button */
 .btn-custom {
   min-width: 120px;
+  max-width: 27rem;
+  margin-left: auto;
+  margin-right: auto;
   background: var(--green-gradient);
   color: white;
   border: none;
@@ -261,14 +267,13 @@ label {
   font-size: 16px;
   line-height: 1;
   cursor: pointer;
+  
 }
 .btn-custom:hover  { filter: brightness(1.1); }
 .btn-custom:active { transform: scale(0.98); }
 
 /* Secondary / overlay button (AuthLayoutRight top-controls) */
 .btn-secondary-custom {
-  /* FIX: was `rgbargba(0,0,0,0.4)` — invalid CSS (two function names merged).
-     Corrected to rgba. */
   background: rgba(33, 33, 30, 0.3);
   border: 1px solid #fff;
   color: white !important;
@@ -304,22 +309,40 @@ label {
   align-items: center;
 }
 
-/* Modal close / action button */
 .btn-modal {
+  /* Använd !important för att vinna över d-flex eller w-100 */
+  width: 180px !important; 
+  min-width: 180px !important;
+  max-width: 180px !important;
+  
   height: 44px;
-  min-width: 160px;
-  display: flex;
+  display: inline-flex !important; /* Förhindrar att den blir block-element */
   align-items: center;
   justify-content: center;
+  
+  /* Centrering om den ligger ensam */
+  margin-left: auto;
+  margin-right: auto;
+
   background: transparent;
-  color: white;
+  color: white !important;
   border: 1px solid white;
   border-radius: 6px;
-  padding: 6px 16px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background 0.2s;
+  padding: 6px 12px;
+  white-space: nowrap; /* Förhindrar att texten radbryts och trycker ut bredden */
+  overflow: hidden;
 }
+
+/* Mobil-fix: Om 180px är för brett för mycket små skärmar */
+@media (max-width: 400px) {
+  .btn-modal {
+    width: 140px !important;
+    min-width: 140px !important;
+    font-size: 12px;
+  }
+}
+
+
 .btn-modal:hover { background: rgba(255, 255, 255, 0.15); }
 
 /* Dev-only simulation button */
@@ -355,15 +378,35 @@ label {
 }
 
 /* ================================================================
-   FORM ELEMENTS
+   FORM ELEMENTS & INPUTS
    ================================================================ */
 input.form-control { width: 100%; }
 
 .form-size {
+  
   height: 48px;
   display: flex;
   align-items: center;
   border-radius: 6px;
+}
+
+/* Wrapper för att hålla ihop label och input */
+.form-group-custom {
+  width: 100%;
+  max-width: 27rem; /* Samma som dina knappar */
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left; /* Tvingar texten (label) till vänster */
+}
+
+/* Säkerställ att label beter sig som ett blockelement */
+.form-label {
+  display: block;
+  width: 100%;
+}
+
+.position-relative {
+  width: 100%;
 }
 
 .input-icon {
@@ -376,7 +419,33 @@ input.form-control { width: 100%; }
   pointer-events: none;
 }
 
-/* 2FA code input boxes — single definitive block */
+/* .input-icon-left {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6c757d;
+  z-index: 10;
+  pointer-events: none;
+} */
+
+.password-toggle-icon {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6c757d;
+  cursor: pointer;
+  z-index: 10;
+  padding: 0.25rem;
+}
+.password-toggle-icon:hover { color: #0d6efd; }
+
+/* Padding adjustments for inputs with icons */
+.form-control.ps-5 { padding-left: 3rem !important; }
+.form-control.pe-5 { padding-right: 3rem !important; }
+
+/* 2FA code input boxes */
 .code-input {
   width: 50px;
   height: 70px;
@@ -396,14 +465,17 @@ input.form-control { width: 100%; }
 }
 
 /* ================================================================
-   VALIDATION BORDERS
+   VALIDATION & ERRORS
    ================================================================ */
-.error-border   { border: 2px solid var(--error)   !important; }
-.success-border { border: 2px solid var(--success)  !important; }
+.error-border { border: 2px solid var(--error) !important; }
+.success-border { border: 2px solid var(--success) !important; }
 
-/* ================================================================
-   ERROR BANNER
-   ================================================================ */
+/* Bootstrap-style error override */
+/* .error-border {
+  border-color: #dc3545 !important;
+  box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25) !important;
+} */
+
 .error-banner {
   background: var(--error);
   color: white !important;
@@ -413,16 +485,8 @@ input.form-control { width: 100%; }
   animation: shake 0.3s ease;
 }
 
-@keyframes shake {
-  0%   { transform: translateX(0); }
-  25%  { transform: translateX(-6px); }
-  50%  { transform: translateX(6px); }
-  75%  { transform: translateX(-4px); }
-  100% { transform: translateX(0); }
-}
-
 /* ================================================================
-   TOP CONTROLS BAR
+   CONTROLS & NAVIGATION
    ================================================================ */
 .top-controls {
   position: relative;
@@ -432,8 +496,7 @@ input.form-control { width: 100%; }
   align-items: center;
   gap: 0.5rem;
   width: 100%;
-  /* FIX: was not defined here — tighter vertical padding on mobile
-     so the controls bar doesn't eat too much of the background image */
+  /* FIX: tighter vertical padding on mobile */
   padding: 0.5rem 0.75rem;
 }
 
@@ -444,8 +507,24 @@ input.form-control { width: 100%; }
   }
 }
 
+.top-controls-sticky-wrapper {
+  position: sticky;
+  top: 0;
+  z-index: 1020;
+  background: transparent;
+}
+
+@media (max-width: 768px) {
+  .mobile-controls {
+    width: 100%;
+    padding: 0.5rem 1rem;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
 /* ================================================================
-   DROPDOWN MENUS (language + hamburger)
+   DROPDOWN MENUS (Language & Action)
    ================================================================ */
 .dropdown-menu-custom {
   position: absolute;
@@ -487,47 +566,39 @@ input.form-control { width: 100%; }
   height: 16px;
 }
 
-@keyframes popupScale {
-  from { opacity: 0; transform: scaleY(0.88); transform-origin: top; }
-  to   { opacity: 1; transform: scaleY(1);    transform-origin: top; }
-}
-
-/* ================================================================
-   LANGUAGE SELECTOR
-   ================================================================ */
+/* LANGUAGE SELECTOR */
 .language-selector {
   position: relative;
   z-index: 20;
-  width: 100px;
+  width: 100px !important; 
 }
 
 @media (min-width: 769px) {
-  .language-selector { width: 140px; }
+  .language-selector { 
+    min-width: 120px;
+  }
 }
 
-/* Language dropdown matches its trigger button width */
 .language-selector .dropdown-menu-custom {
   width: 100% !important;
   min-width: 100% !important;
 }
 
-/* Hamburger action-dropdown */
+/* HAMBURGER / ACTION DROPDOWN */
 .action-dropdown { position: relative; }
 
 @media (max-width: 768px) {
   .action-dropdown { margin-right: auto; }
-
   .action-dropdown .dropdown-menu-custom {
     width: 140px !important;
     min-width: 140px !important;
     left: 0;
   }
-
-  .language-selector { margin-left: auto; }
+  .language-selector { margin-left: auto; min-width: 100px; }
 }
 
 /* ================================================================
-   MODAL PANELS  (Contact, Help, Password Demands)
+   MODAL PANELS & OVERLAYS
    ================================================================ */
 .help-modal,
 .help-panel {
@@ -572,9 +643,6 @@ input.form-control { width: 100%; }
   cursor: pointer;
 }
 
-/* ================================================================
-   OVERLAY PANEL  (generic centred absolute overlay)
-   ================================================================ */
 .overlay-panel {
   position: absolute;
   top: 60px;
@@ -588,22 +656,8 @@ input.form-control { width: 100%; }
 }
 
 /* ================================================================
-   QR CODE
+   LINKS & DIVIDERS
    ================================================================ */
-.qr-wrapper { display: flex; justify-content: center; }
-
-.fake-qr {
-  width: 180px;
-  height: 180px;
-  background: repeating-linear-gradient(45deg, #000, #000 6px, #fff 6px, #fff 12px);
-  border: 6px solid #000;
-}
-
-/* ================================================================
-   LINKS
-   ================================================================ */
-
-/* "Glömt lösenord?" / password requirements link */
 .password-link {
   color: var(--links);
   font-size: 14px;
@@ -612,15 +666,14 @@ input.form-control { width: 100%; }
 }
 .password-link:hover { text-decoration: underline; }
 
-
-.bankid-link {
+/* .bankid-link {
   color: var(--links);
   font-size: 14px;
   font-weight: 500;
   text-decoration: none;
   white-space: nowrap;
 }
-.bankid-link:hover { text-decoration: underline; }
+.bankid-link:hover { text-decoration: underline; } */
 
 .bankid-icon { height: 30px; width: auto; }
 
@@ -650,16 +703,27 @@ input.form-control { width: 100%; }
 }
 
 /* ================================================================
-   RESET PASSWORD LAYOUT
+   SPECIAL FEATURES (QR, RESET PASSWORD)
    ================================================================ */
-.reset-password-wrapper {
+
+/* QR CODE */
+.qr-wrapper { display: flex; justify-content: center; }
+
+.fake-qr {
+  width: 180px;
+  height: 180px;
+  background: repeating-linear-gradient(45deg, #000, #000 6px, #fff 6px, #fff 12px);
+  border: 6px solid #000;
+}
+
+/* RESET PASSWORD LAYOUT */
+/* .reset-password-wrapper {
   display: flex;
   flex-direction: column;
-}
+} */
 
 .no-email-received-wrapper { margin-top: 1rem; }
 
-/* Desktop: the two cards sit side-by-side as one module */
 @media (min-width: 769px) {
   .reset-password-wrapper {
     flex-direction: row;
@@ -671,18 +735,21 @@ input.form-control { width: 100%; }
 }
 
 /* ================================================================
-   MOBILE CONTROLS
+   ANIMATIONS
    ================================================================ */
-@media (max-width: 768px) {
-  .mobile-controls {
-    width: 100%;
-    padding: 0.5rem 1rem;
-    justify-content: space-between;
-    align-items: center;
-  }
+@keyframes shake {
+  0%   { transform: translateX(0); }
+  25%  { transform: translateX(-6px); }
+  50%  { transform: translateX(6px); }
+  75%  { transform: translateX(-4px); }
+  100% { transform: translateX(0); }
 }
 
-/* Animation för att byta innehåll inuti popupen */
+@keyframes popupScale {
+  from { opacity: 0; transform: scaleY(0.88); transform-origin: top; }
+  to   { opacity: 1; transform: scaleY(1);    transform-origin: top; }
+}
+
 .popup-media-enter-active,
 .popup-media-leave-active {
   transition: all 0.25s ease;
@@ -707,3 +774,30 @@ input.form-control { width: 100%; }
 .popup-fade-leave-to {
   opacity: 0;
 }
+
+/* ================================================================
+   BROWSER FIXES
+   ================================================================ */
+
+/* Döljer "ögat" i Edge och Internet Explorer */
+input::-ms-reveal,
+input::-ms-clear {
+  display: none;
+}
+
+/* Döljer liknande funktioner i vissa Webkit-webbläsare */
+input::-webkit-contacts-auto-fill-button,
+input::-webkit-credentials-auto-fill-button {
+  visibility: hidden;
+  pointer-events: none;
+  position: absolute;
+  right: 0;
+}
+
+.password-check {
+  background: var(--Error-Pink, #ffeaea);
+  border-radius: 0.5rem;
+  color: #4c4c4b;
+  font-size: 0.6rem;
+}
+.text-success { color: #28a745 !important; }
