@@ -21,14 +21,11 @@
       </li>
     </ul>
 
-    <div class="text-center mt-auto">
-      <SecondaryButton
-        :label="t('closeWindow')"
-        icon="bi bi-x-circle-fill"
-        class="btn-modal mx-auto"
-        @action="ui.closeOverlays()"
-      />
+    
+    <div class="d-flex justify-content-center mt-auto pt-3">
+      <AppButtonCloseWindow />
     </div>
+    
   </div>
 </template>
 
@@ -44,7 +41,7 @@ import {
 import { passwordRuleTranslations } from '../../../modules/i18n/password-rules-translations'
 import type { RuleTranslationKey } from '../../../modules/i18n/password-rules-translations'
 import AppIconButtonClose from '../../common/AppIconButtonClose.vue'
-import SecondaryButton from '../../common/AppButtonSecondary.vue'
+import AppButtonCloseWindow from '../../common/AppButtonCloseWindow.vue'
 
 const { t, locale } = useI18n()
 const ui = useUIStore()

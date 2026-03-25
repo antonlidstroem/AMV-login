@@ -1,12 +1,20 @@
 <template>
-  <div class="bg-views p-4 rounded-4">
-    <h1 class="mb-4">{{ t('resetPasswordEmailNotDelivered') }}</h1>
-    <p class="mb-4">{{ t('resetPasswordEmailNotDeliveredHelp') }}</p>
-    <button class="btn-custom w-100 mt-2 mb-2" @click="send" type="button">{{ t('resendEmail') }}</button>
-    <!-- Fixed: use :label (not :text) and ui.setView() instead of orphan emit -->
-    <AppBackLink :label="t('back')" @click="ui.setView('login')" />
+  <div class="bg-views p-3 rounded-4 mb-3">
+    <div class="form-group-custom">
+      <h1 class="mb-4">{{ t('resetPasswordEmailNotDelivered') }}</h1>
+      <p class="mb-4">{{ t('resetPasswordEmailNotDeliveredHelp') }}</p>
+      <button class="btn-custom w-100 mt-2 mb-2" @click="send" type="button">{{ t('resendEmail') }}</button>
+      <!-- Fixed: use :label (not :text) and ui.setView() instead of orphan emit -->
+      <div class="d-flex justify-content-end">
+        <AppBackLink :label="t('back')" @click="ui.setView('login')" />
+      </div>
+    </div>
   </div>
 </template>
+
+
+     
+
 
 <script setup lang="ts">
 import { markRaw } from 'vue'

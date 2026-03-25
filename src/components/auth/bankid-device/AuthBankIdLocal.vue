@@ -1,30 +1,32 @@
 <template>
   <div class="bg-views p-4 rounded-4 mb-3">
     <AppLogo />
-    <h2>{{ t('loginWithBankID') }}</h2>
-    <p class="mb-5">{{ t('enterSecurityCode') }}</p>
+    <div class="form-group-custom">
+      <h2 class="mb-2">{{ t('loginWithBankID') }}</h2>
+      <p class="mb-5">{{ t('enterSecurityCode') }}</p>
 
-    <div class="d-flex justify-content-center mb-5">
-      <AppSpinner />
+      <div class="d-flex justify-content-center mb-5" style="height: 60px;">
+        <AppSpinner />
+      </div>
+
+      <AppStepIndicator :total-steps="2" :active-step="1" class="mb-4" />
+
+      <div class="d-flex justify-content-between align-items-center mb-5">
+        <AppBackLink :label="t('back')" @click="handleGoBack" />
+        <AppBankIdLink :label="t('aboutMobileBankID')" />
+      </div>
+
+      <div class="divider mb-4"><h4>{{ t('orBankId') }}</h4></div>
+
+      <button
+        @click="handleSwitchToQr"
+        class="btn-custom w-100 d-flex align-items-center justify-content-start gap-2"
+        type="button"
+      >
+        <img :src="bankIdLogo" width="25" height="24" alt="BankID" />
+        {{ t('mobileBankID') }}
+      </button>
     </div>
-
-    <AppStepIndicator :total-steps="2" :active-step="1" />
-
-    <div class="d-flex justify-content-between align-items-center mt-3 mb-5">
-      <AppBackLink :label="t('back')" @click="handleGoBack" />
-      <AppBankIdLink :label="t('aboutMobileBankID')" />
-    </div>
-
-    <div class="divider mb-3"><h4>{{ t('orBankId') }}</h4></div>
-
-    <button
-      @click="handleSwitchToQr"
-      class="btn-custom d-flex align-items-center justify-content-start gap-2 mb-3"
-      type="button"
-    >
-      <img :src="bankIdLogo" width="25" height="24" alt="BankID" />
-      {{ t('mobileBankID') }}
-    </button>
   </div>
 </template>
 

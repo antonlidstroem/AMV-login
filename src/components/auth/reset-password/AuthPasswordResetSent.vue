@@ -1,21 +1,24 @@
 <template>
-  <div class="bg-views p-4 rounded-4">
+  <div class="bg-views p-3 rounded-4 mb-3">
     <AppLogo />
-    <h2 class="mt-4 py-2">{{ t('resetPassword') }}</h2>
+    
+    <div class="form-group-custom">
+      <h2 class="mt-4 mb-3">{{ t('resetPassword') }}</h2>
 
-    <div class="d-flex justify-content-center align-items-center mb-3" style="height: 118px;">
-      <AppSuccess />
+      <div class="d-flex justify-content-center align-items-center mb-4" style="height: 120px;">
+        <AppSuccess />
+      </div>
+
+      <p class="mb-3 text-center">{{ sentMessage }}</p>
+
+      <button class="btn-custom w-100 mb-3" @click="ui.setView('login')" type="button">
+        {{ t('goToStart') }}
+      </button>
+
+      <button v-if="isDev" class="btn-temp w-100" @click="ui.setView('new-password')" type="button">
+        Simulera lösenordsåterställning
+      </button>
     </div>
-
-    <p>{{ sentMessage }}</p>
-
-
-    <button class="btn-custom w-100 mt-2 mb-2" @click="ui.setView('login')" type="button">
-      {{ t('goToStart') }}
-    </button>
-    <button v-if="isDev" class="btn-temp" @click="ui.setView('new-password')" type="button">
-      Simulera lösenordsåterställning
-    </button>
   </div>
 </template>
 

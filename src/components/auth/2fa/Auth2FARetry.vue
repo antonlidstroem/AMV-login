@@ -1,6 +1,6 @@
 <template>
   <div class="bg-views p-4 rounded-4 mb-3">
-    <div>
+    <div class="form-group-custom">
       <h4 class="mb-3">{{ t('noCodeReceived') }}</h4>
       <p class="mb-5">{{ t('waitingForCode') }} {{ t('contactUs') }}</p>
       

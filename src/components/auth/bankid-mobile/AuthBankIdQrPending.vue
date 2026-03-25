@@ -1,32 +1,36 @@
 <template>
   <div class="bg-views p-4 rounded-4">
     <AppLogo />
-    <h2>{{ t('loginWithMobileBankID') }}</h2>
-    <p class="mb-5">{{ t('waitingForAuth') }}</p>
+    <div class="form-group-custom">
+      <h2 class="mb-2">{{ t('loginWithMobileBankID') }}</h2>
+      <p class="mb-5">{{ t('waitingForAuth') }}</p>
 
-    <div class="d-flex justify-content-center align-items-center mb-5" style="height: 200px;">
-      <AppSpinner />
+      <div class="d-flex justify-content-center align-items-center mb-5" style="height: 180px;">
+        <AppSpinner />
+      </div>
+
+      <AppStepIndicator :total-steps="3" :active-step="2" class="mb-4" />
+
+      <div class="d-flex justify-content-between align-items-center mb-5">
+        <AppBackLink :label="t('back')" @click="handleGoBack" />
+        <AppBankIdLink :label="t('aboutMobileBankID')" />
+      </div>
+
+      <div class="divider mb-4">
+        <hr class="flex-grow-1" />
+        <span class="px-2 small">{{ t('or') }}</span>
+        <hr class="flex-grow-1" />
+      </div>
+
+      <button
+        @click="handleSwitchToLocal"
+        class="btn-custom w-100 d-flex align-items-center justify-content-start gap-2"
+        type="button"
+      >
+        <img :src="bankIdLogo" class="bankid-icon" alt="BankID" />
+        {{ t('bankIDThisDevice') }}
+      </button>
     </div>
-
-    <AppStepIndicator :total-steps="3" :active-step="2" />
-
-    <div class="d-flex justify-content-between align-items-center mt-3">
-      <AppBackLink :label="t('back')" @click="handleGoBack" />
-      <AppBankIdLink :label="t('aboutMobileBankID')" />
-    </div>
-
-    <div class="divider my-3">
-      <hr class="flex-grow-1" /><span class="px-2 small">{{ t('or') }}</span><hr class="flex-grow-1" />
-    </div>
-
-    <button
-      @click="handleSwitchToLocal"
-      class="btn-custom d-flex align-items-center justify-content-start gap-2 mb-3"
-      type="button"
-    >
-      <img :src="bankIdLogo" class="bankid-icon" alt="BankID" />
-      {{ t('bankIDThisDevice') }}
-    </button>
   </div>
 </template>
 

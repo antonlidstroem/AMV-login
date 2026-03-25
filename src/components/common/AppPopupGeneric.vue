@@ -82,7 +82,7 @@ onUnmounted(() => document.removeEventListener('keydown', onKeydown))
   color: white;
   padding: 32px;
   border-radius: 15px;
-  width: 320px;
+  width: 300px;
   max-width: 90%;
   text-align: center;
   display: flex;

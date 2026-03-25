@@ -1,56 +1,53 @@
 <template>
-  <div class="bg-views p-4 rounded-4 mb-3">
+  <div class="bg-views p-3 rounded-4 mb-3">
     <AppLogo />
-    <h4 class="mb-4">{{ t('enterNewPassword') }}</h4>
-
-    <div v-if="errorMsg" class="error-banner mb-3">{{ errorMsg }}</div>
-
     
+    <div class="form-group-custom">
+      <h4 class="mb-4">{{ t('enterNewPassword') }}</h4>
+      <div v-if="errorMsg" class="error-banner mb-3">{{ errorMsg }}</div>
 
-    <!-- Nytt lösenord -->
-    <label class="mb-2 d-block text-start">{{ t('newPassword') }}</label>
-    <div class="position-relative mb-3">
-      <i class="bi bi-lock-fill input-icon-left"></i>
-      <input
-        :type="showEye1 ? 'text' : 'password'"
-        v-model="p1"
-        class="form-control form-size ps-5 pe-5"
-        :class="inputClass"
-        autocomplete="new-password"
-      />
-      <i
-        :class="['bi', showEye1 ? 'bi-eye-slash' : 'bi-eye', 'password-toggle-icon']"
-        @click="showEye1 = !showEye1"
-      ></i>
+      <label class="form-label mb-1">{{ t('newPassword') }}</label>
+      <div class="position-relative mb-3">
+        <i class="bi bi-lock-fill input-icon"></i>
+        <input
+          :type="showEye1 ? 'text' : 'password'"
+          v-model="p1"
+          class="form-control form-size ps-5 pe-5"
+          :class="inputClass"
+          autocomplete="new-password"
+        />
+        <i
+          :class="['bi', showEye1 ? 'bi-eye-slash' : 'bi-eye', 'password-toggle-icon']"
+          @click="showEye1 = !showEye1"
+        ></i>
+      </div>
+
+      <label class="form-label mb-1">{{ t('confirmPassword') }}</label>
+      <div class="position-relative mb-3">
+        <i class="bi bi-lock-fill input-icon"></i>
+        <input
+          :type="showEye2 ? 'text' : 'password'"
+          v-model="p2"
+          class="form-control form-size ps-5 pe-5"
+          :class="inputClass"
+          autocomplete="new-password"
+        />
+        <i
+          :class="['bi', showEye2 ? 'bi-eye-slash' : 'bi-eye', 'password-toggle-icon']"
+          @click="showEye2 = !showEye2"
+        ></i>
+      </div>
+
+      <AuthPasswordCheck v-if="shouldShowValidation" :password="p1" class="mb-3" />
+
+      <a href="#" class="password-link d-block mb-3 text-end" @click.prevent="ui.toggleDemands()">
+        <i class="bi bi-question-circle"></i> {{ t('passwordRequirements') }}
+      </a>
+
+      <button class="btn-custom w-100" @click="change" type="button">
+        {{ t('changePassword') }}
+      </button>
     </div>
-
-    <!-- Bekräfta lösenord -->
-    <label class="mb-2 d-block text-start">{{ t('confirmPassword') }}</label>
-    <div class="position-relative mb-4">
-      <i class="bi bi-lock-fill input-icon-left"></i>
-      <input
-        :type="showEye2 ? 'text' : 'password'"
-        v-model="p2"
-        class="form-control form-size ps-5 pe-5"
-        :class="inputClass"
-        autocomplete="new-password"
-      />
-      <i
-        :class="['bi', showEye2 ? 'bi-eye-slash' : 'bi-eye', 'password-toggle-icon']"
-        @click="showEye2 = !showEye2"
-      ></i>
-    </div>
-
-    <AuthPasswordCheck v-if="shouldShowValidation" :password="p1" class="mb-3" />
-
-
-   <a href="#" class="password-link d-block mb-3 text-end" @click.prevent="ui.toggleDemands()">
-  <i class="bi bi-question-circle"></i> {{ t('passwordRequirements') }}
-</a>
-
-    <button class="btn-custom w-100" @click="change" type="button">
-      {{ t('changePassword') }}
-    </button>
   </div>
 </template>
 

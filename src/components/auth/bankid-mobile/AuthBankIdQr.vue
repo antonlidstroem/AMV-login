@@ -1,44 +1,43 @@
 <template>
   <div class="bg-views p-4 rounded-4 mb-3">
     <AppLogo />
-    <h2>{{ t('loginWithMobileBankID') }}</h2>
-    <p class="mb-5">{{ t('scanQRCode') }}</p>
+    <div class="form-group-custom">
+      <h2 class="mb-2">{{ t('loginWithMobileBankID') }}</h2>
+      <p class="mb-4">{{ t('scanQRCode') }}</p>
 
-<div class="qr-wrapper mb-5" style="height: 200px;"> 
-  <div v-if="isQrLoaded" class="fake-qr"></div>
-
-      <div
-        v-else
-        class="qr-placeholder d-flex align-items-center justify-content-center border rounded-3"
-        style="height: 200px; background: rgba(0,0,0,0.1);"
-      >
-        <div class="spinner-border text-light" role="status">
-          <span class="visually-hidden">Loading...</span>
+      <div class="qr-wrapper mb-5 d-flex justify-content-center"> 
+        <div v-if="isQrLoaded" class="fake-qr"></div>
+        <div
+          v-else
+          class="qr-placeholder d-flex align-items-center justify-content-center border rounded-3 w-100"
+          style="height: 200px; max-width: 200px; background: rgba(0,0,0,0.1);"
+        >
+          <div class="spinner-border text-light" role="status"></div>
         </div>
       </div>
+
+      <AppStepIndicator :total-steps="3" :active-step="1" class="mb-4" />
+
+      <div class="d-flex justify-content-between align-items-center mb-5">
+        <AppBackLink :label="t('back')" @click="handleGoBack" />
+        <AppBankIdLink :label="t('aboutMobileBankID')" />
+      </div>
+
+      <div class="divider mb-4">
+        <hr class="flex-grow-1" />
+        <span class="px-2 small">{{ t('or') }}</span>
+        <hr class="flex-grow-1" />
+      </div>
+
+      <button
+        @click="handleSwitchToLocal"
+        class="btn-custom w-100 d-flex align-items-center justify-content-start gap-2"
+        type="button"
+      >
+        <img :src="bankIdLogo" class="bankid-icon" alt="BankID" />
+        {{ t('bankIDThisDevice') }}
+      </button>
     </div>
-
-    <AppStepIndicator :total-steps="3" :active-step="1" />
-
-    <div class="d-flex justify-content-between align-items-center mt-3">
-      <AppBackLink :label="t('back')" @click="handleGoBack" />
-      <AppBankIdLink :label="t('aboutMobileBankID')" />
-    </div>
-
-    <div class="d-flex align-items-center my-3">
-      <hr class="flex-grow-1" />
-      <span class="px-2 small">{{ t('or') }}</span>
-      <hr class="flex-grow-1" />
-    </div>
-
-    <button
-      @click="handleSwitchToLocal"
-      class="btn-custom d-flex align-items-center justify-content-start gap-2 mb-3"
-      type="button"
-    >
-      <img :src="bankIdLogo" class="bankid-icon" alt="BankID" />
-      {{ t('bankIDThisDevice') }}
-    </button>
   </div>
 </template>
 

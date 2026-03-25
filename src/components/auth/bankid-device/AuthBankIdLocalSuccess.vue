@@ -1,14 +1,16 @@
 <template>
   <div class="bg-views p-4 rounded-4 mb-3">
     <AppLogo />
-    <h2>{{ t('loginWithBankID') }}</h2>
-    <p class="mb-5">{{ t('securityCodeApproved') }}</p>
+    <div class="form-group-custom text-center">
+      <h2 class="mb-2">{{ t('loginWithBankID') }}</h2>
+      <p class="mb-5">{{ t('securityCodeApproved') }}</p>
 
-    <div class="d-flex justify-content-center align-items-center mb-5" style="height: 118px;">
-      <AppSuccess />
+      <div class="d-flex justify-content-center align-items-center mb-5" style="height: 120px;">
+        <AppSuccess />
+      </div>
+
+      <AppStepIndicator :total-steps="2" :active-step="2" />
     </div>
-
-    <AppStepIndicator :total-steps="2" :active-step="2" />
   </div>
 </template>
 

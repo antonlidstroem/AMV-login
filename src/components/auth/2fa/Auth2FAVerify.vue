@@ -1,28 +1,33 @@
 <template>
   <div class="bg-views p-4 rounded-4 mb-3">
     <AppLogo />
-    <h4>{{ t('verifyWithCode') }}</h4>
-    <p>{{ t('enterPinCode') }}</p>
+    
+    <div class="form-group-custom">
+      <h4 class="mb-2">{{ t('verifyWithCode') }}</h4>
+      <p class="mb-4">{{ t('enterPinCode') }}</p>
 
-    <div v-if="auth.error" class="error-banner mb-3">{{ auth.error }}</div>
+      <div v-if="auth.error" class="error-banner mb-3">{{ auth.error }}</div>
 
-    <div class="d-flex gap-3 mb-3 justify-content-center">
-      <input
-        v-for="(d, i) in digits"
-        :key="i"
-        ref="inputRefs"
-        :value="digits[i]"
-        maxlength="1"
-        type="tel"
-        class="text-center code-input"
-        :class="{ 'error-border': auth.error }"
-        @input="onInput(i, $event)"
-        @paste.prevent="onPaste"
-        :disabled="auth.isLoading"
-      />
+      <div class="d-flex gap-3 mb-4 justify-content-center">
+        <input
+          v-for="(d, i) in digits"
+          :key="i"
+          ref="inputRefs"
+          :value="digits[i]"
+          maxlength="1"
+          type="tel"
+          class="text-center code-input"
+          :class="{ 'error-border': auth.error }"
+          @input="onInput(i, $event)"
+          @paste.prevent="onPaste"
+          :disabled="auth.isLoading"
+        />
+      </div>
+
+      <div class="d-flex justify-content-end">
+        <AppBackLink :label="t('back')" @click="ui.setView('login')" />
+      </div>
     </div>
-
-    <AppBackLink :label="t('back')" @click="ui.setView('login')" />
   </div>
 </template>
 
@@ -93,12 +98,14 @@ const onPaste = (e: ClipboardEvent) => {
 </script>
 
 <style scoped>
+/* Jag trimmade ner koden lite här för att matcha din globala stil bättre */
 .code-input {
   width: 50px;
-  height: 60px;
-  font-size: 1.5rem;
-  border: 1px solid #ced4da;
-  border-radius: 8px;
+  height: 70px; /* Samma höjd som i din globala CSS */
+  font-size: 32px;
+  font-weight: 600;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  background-color: white;
 }
-.error-border { border-color: #dc3545; }
 </style>
